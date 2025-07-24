@@ -1,5 +1,12 @@
 import Ship from "../classes/Ship";
 
+test("Ship initialization fails with invalid length", () => {
+  const invalidLengths = [1, 0, 6, 10, -3];
+  invalidLengths.forEach((length) => {
+    expect(() => new Ship(length)).toThrow();
+  });
+});
+
 test("Ship gets hit, incrementing timesHit by 1", () => {
   const ship = new Ship();
   const initialTimesHit = ship.timesHit;
