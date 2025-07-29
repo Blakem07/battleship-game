@@ -27,3 +27,43 @@ test("Gameboard places hoizontal ships correctly", () => {
     expect(gameboard.grid[row][column + i]).toBe("S");
   }
 });
+
+test("Gameboard throws error if specified postion already has a ship.", () => {
+  const gameboard = new Gameboard();
+
+  const column = 0;
+  const row = 0;
+  const length = 5;
+
+  gameboard.placeShipHorizontal(column, row, length);
+
+  expect(() => {
+    gameboard.placeShipHorizontal(column, row, length);
+  }).toThrow();
+});
+
+test("Gameboard throws error if the specified column and row position is invalid", () => {
+  const gameboard = new Gameboard();
+
+  const column = 22;
+  const row = 45;
+  const length = 5;
+
+  // Expect an error when an invalid position is passed to the method
+  expect(() => {
+    gameboard.placeShipHorizontal(column, row, length);
+  }).toThrow();
+});
+
+test("Gameboard throws error if the ship placed does not fit horizontally", () => {
+  const gameboard = new Gameboard();
+
+  const column = 9;
+  const row = 0;
+  const length = 5;
+
+  // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
+  expect(() => {
+    gameboard.placeShipHorizontal(column, row, length);
+  }).toThrow();
+});

@@ -1,5 +1,5 @@
 export default class Gameboard {
-  static BOARD_ROWS = 3;
+  static BOARD_ROWS = 10;
   static BOARD_COLS = 10;
 
   constructor() {
@@ -29,6 +29,28 @@ export default class Gameboard {
    */
 
   placeShipHorizontal(column, row, length) {
+    const spaceLeft = Gameboard.BOARD_COLS - column;
+
+    if (
+      column < 0 ||
+      column > Gameboard.BOARD_COLS ||
+      row < 0 ||
+      row > Gameboard.BOARD_ROWS
+    ) {
+      throw new Error("The ship has been placed in an out of bounds position.");
+    }
+
+    for (let i = column; i < column + length; i++) {
+      if (this.grid[row][i] == "S") {
+        throw new Error(`A ship already occupies row: ${row} column: ${i}`);
+      }
+    }
+
+    if (length > spaceLeft) {
+      throw new Error(
+        "Not enough horizontal space left for the ship to be placed."
+      );
+    }
     for (let i = 0; i < length; i++) {
       this.grid[row][column + i] = "S";
     }
