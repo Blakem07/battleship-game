@@ -19,7 +19,7 @@ export default class Gameboard {
     return grid;
   }
   /**
-   * PlaceShipHorizontal.
+   * PlaceShipHorizontal method.
    *
    * Places a ship on the board property within the gameboard instance.
    *
@@ -53,6 +53,22 @@ export default class Gameboard {
     }
     for (let i = 0; i < length; i++) {
       this.grid[row][column + i] = "S";
+    }
+  }
+
+  /**
+   * RecieveAttack method.
+   *
+   * Takes a pair of coordinates and determines whether or not
+   * a ship has been hit.
+   *
+   * @param {number} column - Starting column (x-coordinate)
+   * @param {number} row - Starting row (y-coordinate)
+   * @return {bool} - Returns true if a ship has been hit
+   */
+  recieveAttack(column, row) {
+    if (this.grid[column][row] == "S") {
+      return true;
     }
   }
 }

@@ -12,6 +12,8 @@ test("Gameboard initializes with correct dimensions", () => {
   }
 });
 
+// Tests for PlaceShipHorizontal method.
+
 test("Gameboard places hoizontal ships correctly", () => {
   const gameboard = new Gameboard();
 
@@ -66,4 +68,18 @@ test("Gameboard throws error if the ship placed does not fit horizontally", () =
   expect(() => {
     gameboard.placeShipHorizontal(column, row, length);
   }).toThrow();
+});
+
+// Tests for RecieveAttackMethod.
+
+test("Gameboard successfully determines the attack hit a ship.", () => {
+  const gameboard = new Gameboard();
+
+  const column = 0;
+  const row = 0;
+  const length = 5;
+
+  gameboard.placeShipHorizontal(column, row, length);
+
+  expect(gameboard.recieveAttack(column, row, length)).toBe(true);
 });
