@@ -7,6 +7,7 @@ export default class Gameboard {
   constructor() {
     this.grid = this.initGameboard();
     this.missedAttacks = {};
+    this.landedAttacks = {};
   }
 
   initGameboard() {
@@ -91,11 +92,20 @@ export default class Gameboard {
     const key = `${row},${column}`;
 
     if (!this.isValidCoordinate(row, column)) {
-      throw new Error("This is invalid as the given position is out of bounds.");
+      throw new Error(
+        "This is invalid as the given position is out of bounds."
+      );
     }
 
-    if (this.grid[column][row] !== null) {
-      this.grid[column][row].hit();
+    if (this.landedAttacks[key]) {
+      throw new Error(
+        "Invalid attack, this position has been attacked before."
+      );
+    }
+
+    if (this.grid[row][column] !== null) {
+      this.grid[row][column].hit();
+      this.landedAttacks[key] = true;
       return true;
     } else {
       this.missedAttacks[key] = true;

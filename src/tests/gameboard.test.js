@@ -138,3 +138,18 @@ test("Gameboard records the coordinates of a missed attack its missedAttack prop
   expect(gameboard.recieveAttack(row, column)).toBe(false);
   expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
 });
+
+test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
+  const gameboard = new Gameboard();
+
+  const row = 3;
+  const column = 2;
+  const length = 5;
+
+  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.recieveAttack(row, column);
+
+  expect(() => {
+    gameboard.recieveAttack(row, column);
+  }).toThrow();
+});
