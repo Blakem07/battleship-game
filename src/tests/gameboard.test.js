@@ -18,12 +18,13 @@ test("Gameboard initializes with correct dimensions", () => {
 test("Gameboard places hoizontal ships correctly", () => {
   const gameboard = new Gameboard();
 
-  const column = 5;
   const row = 1;
+  const column = 5;
+
   const length = 5;
 
   // Place a ship of length 5 at row 1, column 5, horizontally
-  gameboard.placeShipHorizontal(column, row, length);
+  gameboard.placeShipHorizontal(row, column, length);
 
   let ship = new Ship(length);
 
@@ -40,10 +41,10 @@ test("Gameboard throws error if specified postion already has a ship.", () => {
   const row = 0;
   const length = 5;
 
-  gameboard.placeShipHorizontal(column, row, length);
+  gameboard.placeShipHorizontal(row, column, length);
 
   expect(() => {
-    gameboard.placeShipHorizontal(column, row, length);
+    gameboard.placeShipHorizontal(row, column, length);
   }).toThrow();
 });
 
@@ -56,7 +57,7 @@ test("Gameboard throws error if the specified column and row position is invalid
 
   // Expect an error when an invalid position is passed to the method
   expect(() => {
-    gameboard.placeShipHorizontal(column, row, length);
+    gameboard.placeShipHorizontal(row, column, length);
   }).toThrow();
 });
 
@@ -69,7 +70,7 @@ test("Gameboard throws error if the ship placed does not fit horizontally", () =
 
   // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
   expect(() => {
-    gameboard.placeShipHorizontal(column, row, length);
+    gameboard.placeShipHorizontal(row, column, length);
   }).toThrow();
 });
 
@@ -82,7 +83,7 @@ test("Gameboard grid indexes succesfully hold references to the new ship object"
 
   const ship = new Ship(length);
 
-  gameboard.placeShipHorizontal(column, row, length);
+  gameboard.placeShipHorizontal(row, column, length);
 
   for (let i = column; i < column + length; i++) {
     expect(gameboard.grid[row][i]).toStrictEqual(ship);
@@ -106,9 +107,9 @@ test("Gameboard successfully determines the attack hit a ship.", () => {
 test("Gameboard records the coordinates of a missed attack its missedAttack property", () => {
   const gameboard = new Gameboard();
 
-  const column = 2;
   const row = 3;
+  const column = 2;
 
-  expect(gameboard.recieveAttack(column, row)).toBe(false);
+  expect(gameboard.recieveAttack(row, column)).toBe(false);
   expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
 });

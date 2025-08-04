@@ -31,7 +31,7 @@ export default class Gameboard {
    * @param {number} length - Length of the ship
    */
 
-  placeShipHorizontal(column, row, length) {
+  placeShipHorizontal(row, column, length) {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 
     if (
@@ -75,7 +75,7 @@ export default class Gameboard {
    * @param {number} row - Starting row (y-coordinate)
    * @return {bool} - Returns true if a ship has been hit
    */
-  recieveAttack(column, row) {
+  recieveAttack(row, column) {
     const key = `${row},${column}`;
 
     if (this.grid[column][row] !== null) {
