@@ -1,3 +1,5 @@
+import Ship from "./Ship";
+
 export default class Gameboard {
   static BOARD_ROWS = 10;
   static BOARD_COLS = 10;
@@ -12,7 +14,7 @@ export default class Gameboard {
     for (let i = 0; i < Gameboard.BOARD_ROWS; i++) {
       grid[i] = Array(Gameboard.BOARD_COLS);
       for (let j = 0; j < Gameboard.BOARD_COLS; j++) {
-        grid[i][j] = "";
+        grid[i][j] = null;
       }
     }
 
@@ -41,7 +43,7 @@ export default class Gameboard {
     }
 
     for (let i = column; i < column + length; i++) {
-      if (this.grid[row][i] == "S") {
+      if (this.grid[row][i] !== null) {
         throw new Error(`A ship already occupies row: ${row} column: ${i}`);
       }
     }
@@ -51,8 +53,11 @@ export default class Gameboard {
         "Not enough horizontal space left for the ship to be placed."
       );
     }
+
+    let ship = new Ship(length);
+
     for (let i = 0; i < length; i++) {
-      this.grid[row][column + i] = "S";
+      this.grid[row][column + i] = ship;
     }
   }
 
@@ -67,7 +72,7 @@ export default class Gameboard {
    * @return {bool} - Returns true if a ship has been hit
    */
   recieveAttack(column, row) {
-    if (this.grid[column][row] == "S") {
+    if (this.grid[column][row] !== null) {
       return true;
     }
   }

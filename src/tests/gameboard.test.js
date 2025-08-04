@@ -1,4 +1,5 @@
 import Gameboard from "../classes/Gameboard";
+import Ship from "../classes/Ship";
 
 test("Gameboard initializes with correct dimensions", () => {
   const gameboard = new Gameboard(); // assumes board is created in the constructor
@@ -24,9 +25,11 @@ test("Gameboard places hoizontal ships correctly", () => {
   // Place a ship of length 5 at row 1, column 5, horizontally
   gameboard.placeShipHorizontal(column, row, length);
 
+  let ship = new Ship(length);
+
   // Assert that the ship has been placed on the correct coordinates
   for (let i = 0; i < length; i++) {
-    expect(gameboard.grid[row][column + i]).toBe("S");
+    expect(gameboard.grid[row][column + i]).toStrictEqual(ship);
   }
 });
 
@@ -68,6 +71,22 @@ test("Gameboard throws error if the ship placed does not fit horizontally", () =
   expect(() => {
     gameboard.placeShipHorizontal(column, row, length);
   }).toThrow();
+});
+
+test("Gameboard grid indexes succesfully hold references to the new ship object", () => {
+  const gameboard = new Gameboard();
+
+  const column = 0;
+  const row = 0;
+  const length = 5;
+
+  const ship = new Ship(length);
+
+  gameboard.placeShipHorizontal(column, row, length);
+
+  for (let i = column; i < column + length; i++) {
+    expect(gameboard.grid[row][i]).toStrictEqual(ship);
+  }
 });
 
 // Tests for RecieveAttackMethod.
