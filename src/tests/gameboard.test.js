@@ -100,5 +100,15 @@ test("Gameboard successfully determines the attack hit a ship.", () => {
 
   gameboard.placeShipHorizontal(column, row, length);
 
-  expect(gameboard.recieveAttack(column, row, length)).toBe(true);
+  expect(gameboard.recieveAttack(column, row)).toBe(true);
+});
+
+test("Gameboard records the coordinates of a missed attack its missedAttack property", () => {
+  const gameboard = new Gameboard();
+
+  const column = 2;
+  const row = 3;
+
+  expect(gameboard.recieveAttack(column, row)).toBe(false);
+  expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
 });

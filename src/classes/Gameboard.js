@@ -6,6 +6,7 @@ export default class Gameboard {
 
   constructor() {
     this.grid = this.initGameboard();
+    this.missedAttacks = {};
   }
 
   initGameboard() {
@@ -67,13 +68,22 @@ export default class Gameboard {
    * Takes a pair of coordinates and determines whether or not
    * a ship has been hit.
    *
+   * Has the hit ship call the hit function or records
+   * the coordinates of the missed shot to prevent repeat attacks.
+   *
    * @param {number} column - Starting column (x-coordinate)
    * @param {number} row - Starting row (y-coordinate)
    * @return {bool} - Returns true if a ship has been hit
    */
   recieveAttack(column, row) {
+    const key = `${row},${column}`;
+
     if (this.grid[column][row] !== null) {
+      this.grid[column][row].hit();
       return true;
+    } else {
+      this.missedAttacks[key] = true;
+      return false;
     }
   }
 }
