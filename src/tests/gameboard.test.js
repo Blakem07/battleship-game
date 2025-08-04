@@ -13,6 +13,31 @@ test("Gameboard initializes with correct dimensions", () => {
   }
 });
 
+// Tests for isValidCoordinate
+
+test("Valid coordinates inside grid", () => {
+  const gameboard = new Gameboard();
+
+  expect(gameboard.isValidCoordinate(0, 0)).toBe(true);
+  expect(gameboard.isValidCoordinate(1, 1)).toBe(true);
+});
+
+test("Invalid coordinates", () => {
+  const gameboard = new Gameboard();
+
+  expect(gameboard.isValidCoordinate(100, 100)).toBe(false);
+  expect(gameboard.isValidCoordinate(20, 20)).toBe(false);
+});
+
+test("invalid coordinates: wrong types", () => {
+  const gameboard = new Gameboard();
+
+  expect(gameboard.isValidCoordinate("1", 0)).toBe(false);
+  expect(gameboard.isValidCoordinate(null, 0)).toBe(false);
+  expect(gameboard.isValidCoordinate(undefined, 0)).toBe(false);
+  expect(gameboard.isValidCoordinate(NaN, 1)).toBe(false);
+});
+
 // Tests for PlaceShipHorizontal method.
 
 test("Gameboard places hoizontal ships correctly", () => {

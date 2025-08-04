@@ -21,6 +21,23 @@ export default class Gameboard {
 
     return grid;
   }
+
+  /**
+   * IsValidCoordinate method.
+   *
+   * Checks whether a coordinate exists within the grid.
+   */
+  isValidCoordinate(row, column) {
+    return (
+      typeof row === "number" &&
+      typeof column === "number" &&
+      row >= 0 &&
+      column >= 0 &&
+      column < this.grid.length &&
+      row < this.grid[column].length
+    );
+  }
+
   /**
    * PlaceShipHorizontal method.
    *
@@ -34,12 +51,7 @@ export default class Gameboard {
   placeShipHorizontal(row, column, length) {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 
-    if (
-      column < 0 ||
-      column > Gameboard.BOARD_COLS ||
-      row < 0 ||
-      row > Gameboard.BOARD_ROWS
-    ) {
+    if (!this.isValidCoordinate(row, column)) {
       throw new Error("The ship has been placed in an out of bounds position.");
     }
 
@@ -77,6 +89,10 @@ export default class Gameboard {
    */
   recieveAttack(row, column) {
     const key = `${row},${column}`;
+
+    if (!this.isValidCoordinate(row, column)) {
+      throw new Error("This is invalid as the given position is out of bounds.");
+    }
 
     if (this.grid[column][row] !== null) {
       this.grid[column][row].hit();
