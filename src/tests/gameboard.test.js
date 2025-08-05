@@ -40,7 +40,7 @@ test("invalid coordinates: wrong types", () => {
 
 // Tests for PlaceShipHorizontal method.
 
-test("Gameboard places hoizontal ships correctly", () => {
+test("Gameboard places horizontal ships correctly", () => {
   const gameboard = new Gameboard();
 
   const row = 1;
@@ -115,6 +115,22 @@ test("Gameboard grid indexes succesfully hold references to the new ship object"
   }
 });
 
+test("Gameboard adds ships to a ships dictionary after being placed.", () => {
+  const gameboard = new Gameboard();
+
+  gameboard.placeShipHorizontal(0, 0, 5); // Carrier
+  gameboard.placeShipHorizontal(1, 0, 4); // Battleship
+  gameboard.placeShipHorizontal(2, 0, 3); // Cruiser
+  gameboard.placeShipHorizontal(3, 0, 3); // Submarine
+  gameboard.placeShipHorizontal(4, 0, 2); // Destroyer
+
+  expect(gameboard.ships["carrier"].length).toBe(5);
+  expect(gameboard.ships["battleship"].length).toBe(4);
+  expect(gameboard.ships["cruiser"].length).toBe(3);
+  expect(gameboard.ships["submarine"].length).toBe(3);
+  expect(gameboard.ships["destroyer"].length).toBe(2);
+});
+
 // Tests for RecieveAttackMethod.
 
 test("Gameboard successfully determines the attack hit a ship.", () => {
@@ -152,4 +168,64 @@ test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
   expect(() => {
     gameboard.recieveAttack(row, column);
   }).toThrow();
+});
+
+// Tests for report ship status method.
+
+test("Gameboard returns true when all of their ships have been sunk.", () => {
+  const gameboard = new Gameboard();
+
+  const row = 5;
+  const column = 4;
+  const length = 5;
+
+  gameboard.placeShipHorizontal(row, column, length);
+
+  for (let i = 0; i <= length; i++) {
+    gameboard.recieveAttack(row, column + i);
+  }
+
+  expect(gameboard.reportShipStatus()).toBe(true);
+});
+
+// Tests for getShipNameByLength method.
+
+test("Gameboard returns the proper name of a ship based on its length", () => {
+  const gameboard = new Gameboard();
+
+  const shipNames = {
+    5: "carrier",
+    4: "battleship",
+    3: "cruiser",
+    2: "submarine",
+    1: "destroyer",
+  };
+
+  for (let i = 2; i <= 5; i++) {
+    expect(gameboard.getShipNameByLength(i)).toStrictEqual(shipNames[i]);
+  }
+});
+
+test("Gameboard's getShipNameByLength throws an error when length is not between 1 & 5", () => {
+  const gameboard = new Gameboard();
+
+  const invalidNumbers = [-1, 6, 10, 100];
+
+  for (const n of invalidNumbers) {
+    expect(() => {
+      gameboard.getShipNameByLength(n);
+    }).toThrow();
+  }
+});
+
+test("Gameboard's getShipNameByLength throws an error when its input is not a number.", () => {
+  const gameboard = new Gameboard();
+
+  const invalidInputs = [null, "1", undefined];
+
+  for (const n of invalidInputs) {
+    expect(() => {
+      gameboard.getShipNameByLength(n);
+    }).toThrow();
+  }
 });

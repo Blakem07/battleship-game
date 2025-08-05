@@ -39,6 +39,8 @@ export default class Gameboard {
     );
   }
 
+  //
+
   /**
    * PlaceShipHorizontal method.
    *
@@ -111,5 +113,46 @@ export default class Gameboard {
       this.missedAttacks[key] = true;
       return false;
     }
+  }
+
+  /**
+   * ReportShipStatus method.
+   *
+   * Reports whether or not all of their ships have been sunk.
+   *
+   * @return {bool} - Returns true or false depening on if all ships have been sunk.
+   */
+  reportShipStatus() {
+    return false;
+  }
+
+  /**
+   * GetShipNameByLength method
+   *
+   * Returns the name of a ship based on its length
+   *
+   * @param {number} - Length of a ship
+   * @return {string} - Name of the ship
+   */
+  getShipNameByLength(length) {
+    if (typeof length !== "number" || !Number.isInteger(length)) {
+      throw new Error("Length must be an integer number.");
+    }
+
+    if (length < 1 || length > 5) {
+      throw new Error(
+        "To get the name of a ship its length must be between 2 and 5"
+      );
+    }
+
+    const shipNames = {
+      5: "carrier",
+      4: "battleship",
+      3: "cruiser",
+      2: "submarine",
+      1: "destroyer",
+    };
+
+    return shipNames[length];
   }
 }
