@@ -49,9 +49,10 @@ export default class Gameboard {
    * @param {number} column - Starting column (x-coordinate)
    * @param {number} row - Starting row (y-coordinate)
    * @param {number} length - Length of the ship
+   * @param {string} shipName - Name of the ship
    */
 
-  placeShipHorizontal(row, column, length) {
+  placeShipHorizontal(row, column, length, shipName) {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 
     if (!this.isValidCoordinate(row, column)) {
@@ -68,6 +69,18 @@ export default class Gameboard {
       throw new Error(
         "Not enough horizontal space left for the ship to be placed."
       );
+    }
+
+    const validNames = [
+      "carrier",
+      "battleship",
+      "cruiser",
+      "submarine",
+      "destroyer",
+    ];
+
+    if (!validNames.includes(shipName)) {
+      throw new Error("The ship name passed as an arugment is invalid.");
     }
 
     let ship = new Ship(length);
@@ -124,35 +137,5 @@ export default class Gameboard {
    */
   reportShipStatus() {
     return false;
-  }
-
-  /**
-   * GetShipNameByLength method
-   *
-   * Returns the name of a ship based on its length
-   *
-   * @param {number} - Length of a ship
-   * @return {string} - Name of the ship
-   */
-  getShipNameByLength(length) {
-    if (typeof length !== "number" || !Number.isInteger(length)) {
-      throw new Error("Length must be an integer number.");
-    }
-
-    if (length < 1 || length > 5) {
-      throw new Error(
-        "To get the name of a ship its length must be between 2 and 5"
-      );
-    }
-
-    const shipNames = {
-      5: "carrier",
-      4: "battleship",
-      3: "cruiser",
-      2: "submarine",
-      1: "destroyer",
-    };
-
-    return shipNames[length];
   }
 }

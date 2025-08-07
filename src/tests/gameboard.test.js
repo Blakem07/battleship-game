@@ -1,3 +1,4 @@
+import { validate } from "webpack";
 import Gameboard from "../classes/Gameboard";
 import Ship from "../classes/Ship";
 
@@ -45,11 +46,10 @@ test("Gameboard places horizontal ships correctly", () => {
 
   const row = 1;
   const column = 5;
-
   const length = 5;
 
   // Place a ship of length 5 at row 1, column 5, horizontally
-  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
 
   let ship = new Ship(length);
 
@@ -66,10 +66,10 @@ test("Gameboard throws error if specified postion already has a ship.", () => {
   const row = 0;
   const length = 5;
 
-  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
 
   expect(() => {
-    gameboard.placeShipHorizontal(row, column, length);
+    gameboard.placeShipHorizontal(row, column, length, "carrier");
   }).toThrow();
 });
 
@@ -82,7 +82,7 @@ test("Gameboard throws error if the specified column and row position is invalid
 
   // Expect an error when an invalid position is passed to the method
   expect(() => {
-    gameboard.placeShipHorizontal(row, column, length);
+    gameboard.placeShipHorizontal(row, column, length, "carrier");
   }).toThrow();
 });
 
@@ -95,8 +95,53 @@ test("Gameboard throws error if the ship placed does not fit horizontally", () =
 
   // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
   expect(() => {
-    gameboard.placeShipHorizontal(row, column, length);
+    gameboard.placeShipHorizontal(row, column, length, "carrier");
   }).toThrow();
+});
+
+test("Gameboard's placeShipHorizontal rejects names not from the valid list", () => {
+  const column = 0;
+  const row = 0;
+
+  const invalidNames = [
+    "", // empty string
+    "carrier ", // trailing space
+    "battleship1", // typo
+    "sub-marine", // invalid format
+    null,
+    undefined,
+    123,
+    {},
+  ];
+
+  invalidNames.forEach((invalidName) => {
+    let gameboard = new Gameboard();
+
+    expect(() => {
+      gameboard.placeShipHorizontal(row, column, 5, invalidName);
+    }).toThrow();
+  });
+});
+
+test("Gameboard's placeShipHorizontal accepts names from the valid list", () => {
+  const column = 0;
+  const row = 0;
+
+  const validNames = [
+    "carrier",
+    "battleship",
+    "cruiser",
+    "submarine",
+    "destroyer",
+  ];
+
+  validNames.forEach((validName) => {
+    let gameboard = new Gameboard();
+
+    expect(() => {
+      gameboard.placeShipHorizontal(row, column, 5, validName);
+    }).not.toThrow();
+  });
 });
 
 test("Gameboard grid indexes succesfully hold references to the new ship object", () => {
@@ -108,7 +153,7 @@ test("Gameboard grid indexes succesfully hold references to the new ship object"
 
   const ship = new Ship(length);
 
-  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
 
   for (let i = column; i < column + length; i++) {
     expect(gameboard.grid[row][i]).toStrictEqual(ship);
@@ -118,11 +163,11 @@ test("Gameboard grid indexes succesfully hold references to the new ship object"
 test("Gameboard adds ships to a ships dictionary after being placed.", () => {
   const gameboard = new Gameboard();
 
-  gameboard.placeShipHorizontal(0, 0, 5); // Carrier
-  gameboard.placeShipHorizontal(1, 0, 4); // Battleship
-  gameboard.placeShipHorizontal(2, 0, 3); // Cruiser
-  gameboard.placeShipHorizontal(3, 0, 3); // Submarine
-  gameboard.placeShipHorizontal(4, 0, 2); // Destroyer
+  gameboard.placeShipHorizontal(0, 0, 5, "carrier"); // Carrier
+  gameboard.placeShipHorizontal(1, 0, 4, "battleship"); // Battleship
+  gameboard.placeShipHorizontal(2, 0, 3, "cruiser"); // Cruiser
+  gameboard.placeShipHorizontal(3, 0, 3, "submarine"); // Submarine
+  gameboard.placeShipHorizontal(4, 0, 2, "destroyer"); // Destroyer
 
   expect(gameboard.ships["carrier"].length).toBe(5);
   expect(gameboard.ships["battleship"].length).toBe(4);
@@ -140,7 +185,7 @@ test("Gameboard successfully determines the attack hit a ship.", () => {
   const row = 0;
   const length = 5;
 
-  gameboard.placeShipHorizontal(column, row, length);
+  gameboard.placeShipHorizontal(column, row, length, "carrier");
 
   expect(gameboard.recieveAttack(column, row)).toBe(true);
 });
@@ -162,7 +207,7 @@ test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
   const column = 2;
   const length = 5;
 
-  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
   gameboard.recieveAttack(row, column);
 
   expect(() => {
@@ -179,53 +224,11 @@ test("Gameboard returns true when all of their ships have been sunk.", () => {
   const column = 4;
   const length = 5;
 
-  gameboard.placeShipHorizontal(row, column, length);
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
 
   for (let i = 0; i <= length; i++) {
     gameboard.recieveAttack(row, column + i);
   }
 
   expect(gameboard.reportShipStatus()).toBe(true);
-});
-
-// Tests for getShipNameByLength method.
-
-test("Gameboard returns the proper name of a ship based on its length", () => {
-  const gameboard = new Gameboard();
-
-  const shipNames = {
-    5: "carrier",
-    4: "battleship",
-    3: "cruiser",
-    2: "submarine",
-    1: "destroyer",
-  };
-
-  for (let i = 2; i <= 5; i++) {
-    expect(gameboard.getShipNameByLength(i)).toStrictEqual(shipNames[i]);
-  }
-});
-
-test("Gameboard's getShipNameByLength throws an error when length is not between 1 & 5", () => {
-  const gameboard = new Gameboard();
-
-  const invalidNumbers = [-1, 6, 10, 100];
-
-  for (const n of invalidNumbers) {
-    expect(() => {
-      gameboard.getShipNameByLength(n);
-    }).toThrow();
-  }
-});
-
-test("Gameboard's getShipNameByLength throws an error when its input is not a number.", () => {
-  const gameboard = new Gameboard();
-
-  const invalidInputs = [null, "1", undefined];
-
-  for (const n of invalidInputs) {
-    expect(() => {
-      gameboard.getShipNameByLength(n);
-    }).toThrow();
-  }
 });
