@@ -160,7 +160,7 @@ test("Gameboard grid indexes succesfully hold references to the new ship object"
   }
 });
 
-test("Gameboard adds ships to a ships dictionary after being placed.", () => {
+test("Gameboard's placeShipHorizonal adds ships to a ships dictionary after being placed.", () => {
   const gameboard = new Gameboard();
 
   gameboard.placeShipHorizontal(0, 0, 5, "carrier"); // Carrier
@@ -217,7 +217,7 @@ test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
 
 // Tests for report ship status method.
 
-test("Gameboard returns true when all of their ships have been sunk.", () => {
+test("Gameboard's reportShipStatus method returns true when all of their ships have been sunk.", () => {
   const gameboard = new Gameboard();
 
   const row = 5;

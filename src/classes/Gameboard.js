@@ -8,6 +8,7 @@ export default class Gameboard {
     this.grid = this.initGameboard();
     this.missedAttacks = {};
     this.landedAttacks = {};
+    this.ships = {};
   }
 
   initGameboard() {
@@ -44,7 +45,8 @@ export default class Gameboard {
   /**
    * PlaceShipHorizontal method.
    *
-   * Places a ship on the board property within the gameboard instance.
+   * Places a ship on the board property within the gameboard instance and
+   *  adds them to the ships dictionary.
    *
    * @param {number} column - Starting column (x-coordinate)
    * @param {number} row - Starting row (y-coordinate)
@@ -88,6 +90,8 @@ export default class Gameboard {
     for (let i = 0; i < length; i++) {
       this.grid[row][column + i] = ship;
     }
+
+    this.ships[shipName] = ship;
   }
 
   /**
@@ -133,9 +137,14 @@ export default class Gameboard {
    *
    * Reports whether or not all of their ships have been sunk.
    *
-   * @return {bool} - Returns true or false depening on if all ships have been sunk.
+   * @return {boolean} - Returns true if all ships have been sunk, false otherwise.
    */
   reportShipStatus() {
-    return false;
+    for (let ship in this.ships) {
+      if (!this.ships[ship].isSunk()) {
+        return false;
+      }
+    }
+    return true;
   }
 }
