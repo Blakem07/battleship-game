@@ -232,3 +232,38 @@ test("Gameboard's reportShipStatus method returns true when all of their ships h
 
   expect(gameboard.reportShipStatus()).toBe(true);
 });
+
+test("Gameboard's reportShipStatus method returns false if no ships are sunk", () => {
+  const gameboard = new Gameboard();
+
+  const row = 5;
+  const column = 4;
+  const length = 5;
+
+  gameboard.placeShipHorizontal(row, column, length, "carrier");
+
+  expect(gameboard.reportShipStatus()).toBe(false);
+});
+
+test("Gameboard's reportShipStatus method returns false if some ships have been sunk.", () => {
+  const gameboard = new Gameboard();
+
+  gameboard.placeShipHorizontal(0, 0, 5, "carrier");
+  gameboard.placeShipHorizontal(1, 0, 4, "battleship");
+  gameboard.placeShipHorizontal(2, 0, 3, "cruiser");
+
+  for (let i = 0; i <= 5; i++) {
+    gameboard.recieveAttack(1, 0 + i);
+    gameboard.recieveAttack(2, 0 + i);
+  }
+
+  expect(gameboard.reportShipStatus()).toBe(false);
+});
+
+test("Gameboard's reportShipStatus method throws error if called without ships being placed on the board.", () => {
+  const gameboard = new Gameboard();
+
+  expect(() => {
+    gameboard.reportShipStatus();
+  }).toThrow();
+});
