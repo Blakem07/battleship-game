@@ -7,3 +7,17 @@ test("Player object initializes with a reference to their gameboard.", () => {
 
   expect(player.gameboard).toBe(gameboard);
 });
+
+// Tests for attack method
+
+test("Player's attack method calls the opponents gameboard.receive attack with the correct args.", () => {
+  const mockGameboard = {};
+  const player = new Player(mockGameboard);
+
+  const opponentMockGameboard = { receiveAttack: jest.fn() };
+  const opponent = new Player(opponentMockGameboard);
+
+  player.attack(opponent, 1, 1);
+
+  expect(opponentMockGameboard.receiveAttack).toBeCalledWith(1, 1);
+});

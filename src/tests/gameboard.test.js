@@ -1,4 +1,3 @@
-import { validate } from "webpack";
 import Gameboard from "../classes/Gameboard";
 import Ship from "../classes/Ship";
 
@@ -176,7 +175,7 @@ test("Gameboard's placeShipHorizonal adds ships to a ships dictionary after bein
   expect(gameboard.ships["destroyer"].length).toBe(2);
 });
 
-// Tests for RecieveAttackMethod.
+// Tests for ReceiveAttackMethod.
 
 test("Gameboard successfully determines the attack hit a ship.", () => {
   const gameboard = new Gameboard();
@@ -187,7 +186,7 @@ test("Gameboard successfully determines the attack hit a ship.", () => {
 
   gameboard.placeShipHorizontal(column, row, length, "carrier");
 
-  expect(gameboard.recieveAttack(column, row)).toBe(true);
+  expect(gameboard.receiveAttack(column, row)).toBe(true);
 });
 
 test("Gameboard records the coordinates of a missed attack its missedAttack property", () => {
@@ -196,7 +195,7 @@ test("Gameboard records the coordinates of a missed attack its missedAttack prop
   const row = 3;
   const column = 2;
 
-  expect(gameboard.recieveAttack(row, column)).toBe(false);
+  expect(gameboard.receiveAttack(row, column)).toBe(false);
   expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
 });
 
@@ -208,10 +207,10 @@ test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
   const length = 5;
 
   gameboard.placeShipHorizontal(row, column, length, "carrier");
-  gameboard.recieveAttack(row, column);
+  gameboard.receiveAttack(row, column);
 
   expect(() => {
-    gameboard.recieveAttack(row, column);
+    gameboard.receiveAttack(row, column);
   }).toThrow();
 });
 
@@ -227,7 +226,7 @@ test("Gameboard's reportShipStatus method returns true when all of their ships h
   gameboard.placeShipHorizontal(row, column, length, "carrier");
 
   for (let i = 0; i <= length; i++) {
-    gameboard.recieveAttack(row, column + i);
+    gameboard.receiveAttack(row, column + i);
   }
 
   expect(gameboard.reportShipStatus()).toBe(true);
@@ -253,8 +252,8 @@ test("Gameboard's reportShipStatus method returns false if some ships have been 
   gameboard.placeShipHorizontal(2, 0, 3, "cruiser");
 
   for (let i = 0; i <= 5; i++) {
-    gameboard.recieveAttack(1, 0 + i);
-    gameboard.recieveAttack(2, 0 + i);
+    gameboard.receiveAttack(1, 0 + i);
+    gameboard.receiveAttack(2, 0 + i);
   }
 
   expect(gameboard.reportShipStatus()).toBe(false);

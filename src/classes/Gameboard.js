@@ -95,7 +95,7 @@ export default class Gameboard {
   }
 
   /**
-   * RecieveAttack method.
+   * ReceiveAttack method.
    *
    * Takes a pair of coordinates and determines whether or not
    * a ship has been hit.
@@ -107,7 +107,7 @@ export default class Gameboard {
    * @param {number} row - Starting row (y-coordinate)
    * @return {bool} - Returns true if a ship has been hit
    */
-  recieveAttack(row, column) {
+  receiveAttack(row, column) {
     const key = `${row},${column}`;
 
     if (!this.isValidCoordinate(row, column)) {
