@@ -59,7 +59,7 @@ export default class Gameboard {
     column,
     length,
     shipName,
-    orientation = "horizontal"
+    direction = "horizontal"
   ) {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 

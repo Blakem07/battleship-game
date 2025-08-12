@@ -58,6 +58,23 @@ test("Gameboard places horizontal ships correctly", () => {
   }
 });
 
+test("Ensure thes ships are placed vertically by checking each grid reference is the same.", () => {
+  const gamebord = new Gameboard();
+
+  const row = 0;
+  const column = 2;
+  const length = 5;
+
+  gamebord.placeShipHorizontal(row, column, length, "carrier", "vertical");
+
+  const ship = gameboard.grid[row][column];
+
+  for (let i = 0; i < length; i++) {
+    expect(gameboard[row + 1][column]).not.toBe(null);
+    expect(gameboard[row + 1][column]).toBe(ship);
+  }
+});
+
 test("Gameboard throws error if specified postion already has a ship.", () => {
   const gameboard = new Gameboard();
 
