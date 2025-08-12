@@ -10,8 +10,25 @@ test("Computer is intialized with an instance of player.", () => {
 // Tests for attack method
 
 test("Computer.randomAttack method calls player.attack with random values.", () => {
-  const mockPlayer = {attack: jest.fn()};
+  const mockPlayer = { attack: jest.fn() };
   const computer = new Computer();
 
-  randomNumber =
+  // randomNumber =
+});
+
+// Tests for getRandomInt
+
+test("Computer.getRandomInt returns a number between two constraints.", () => {
+  const computer = new Computer();
+
+  const lowerLimit = 0;
+  const upperLimit = 10;
+
+  expect(computer.getRandomInt(upperLimit, lowerLimit)).toBeGreaterThan(
+    lowerLimit
+  );
+
+  expect(computer.getRandomInt(upperLimit, lowerLimit)).toBeLessThan(
+    upperLimit
+  );
 });
