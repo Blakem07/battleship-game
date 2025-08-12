@@ -21,3 +21,20 @@ test("Player's attack method calls the opponents gameboard.receive attack with t
 
   expect(opponentMockGameboard.receiveAttack).toBeCalledWith(1, 1);
 });
+
+// Tests for placeShip method
+
+test("Player.placeShip method calls gameboard.placeShip with the correct args.", () => {
+  const mockGameboard = { placeShip: jest.fn() };
+  const player = new Player(mockGameboard);
+
+  player.placeShip(0, 0, 5, "carrier", "vertical");
+
+  expect(mockGameboard.placeShip).toBeCalledWith(
+    0,
+    0,
+    5,
+    "carrier",
+    "vertical"
+  );
+});
