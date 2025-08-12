@@ -43,7 +43,7 @@ export default class Gameboard {
   //
 
   /**
-   * PlaceShipHorizontal method.
+   * PlaceShip method.
    *
    * Places a ship on the board property within the gameboard instance and
    *  adds them to the ships dictionary.
@@ -52,9 +52,10 @@ export default class Gameboard {
    * @param {number} row - Starting row (y-coordinate)
    * @param {number} length - Length of the ship
    * @param {string} shipName - Name of the ship
+   * @param {string} direction - Horizontal or vertical placement
    */
 
-  placeShipHorizontal(row, column, length, shipName, direction = "horizontal") {
+  placeShip(row, column, length, shipName, direction = "horizontal") {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 
     if (!this.isValidCoordinate(row, column)) {
