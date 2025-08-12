@@ -3,6 +3,18 @@ export default class Player {
     this.gameboard = gameboard;
   }
 
+  /**
+   * Attack method.
+   *
+   * Executes an attack on the opponent's gameboard at the given coordinates.
+   * This is a wrapper that delegates the attack to the opponent's gameboard,
+   * allowing the controller to interact through the Player interface.
+   *
+   * @param {Player} opponent - The opposing player being attacked
+   * @param {number} row - The row coordinate of the attack
+   * @param {number} column - The column coordinate of the attack
+   * @returns {*} Result from the opponent's gameboard.receiveAttack method
+   */
   attack(opponent, row, column) {
     return opponent.gameboard.receiveAttack(row, column);
   }
