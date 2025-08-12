@@ -54,7 +54,13 @@ export default class Gameboard {
    * @param {string} shipName - Name of the ship
    */
 
-  placeShipHorizontal(row, column, length, shipName) {
+  placeShipHorizontal(
+    row,
+    column,
+    length,
+    shipName,
+    orientation = "horizontal"
+  ) {
     const spaceLeft = Gameboard.BOARD_COLS - column;
 
     if (!this.isValidCoordinate(row, column)) {
@@ -91,7 +97,6 @@ export default class Gameboard {
       this.grid[row][column + i] = ship;
     }
 
-    
     this.ships[shipName] = ship;
   }
 
