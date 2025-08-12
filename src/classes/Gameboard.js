@@ -91,6 +91,7 @@ export default class Gameboard {
       this.grid[row][column + i] = ship;
     }
 
+    
     this.ships[shipName] = ship;
   }
 
