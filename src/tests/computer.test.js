@@ -9,11 +9,22 @@ test("Computer is intialized with an instance of player.", () => {
 
 // Tests for attack method
 
-test("Computer.randomAttack method calls player.attack with random values.", () => {
-  const mockPlayer = { attack: jest.fn() };
-  const computer = new Computer();
+test("Computer.randomAttack method calls player.attack and returns its results.", () => {
+  const mockPlayer = { attack: jest.fn().mockReturnValue("attack result") };
+  const computer = new Computer(mockPlayer);
+  const mockOpponent = {};
 
-  // randomNumber =
+  jest
+    .spyOn(computer, "getRandomInt")
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(7);
+
+  const result = computer.randomAttack(mockOpponent);
+
+  expect(computer.getRandomInt).toHaveBeenCalledTimes(2);
+  expect(computer.getRandomInt).toHaveBeenCalledWith(0, 10);
+  expect(computer.player.attack).toHaveBeenCalledWith(mockOpponent, 3, 7);
+  expect(result).toBe("attack result");
 });
 
 // Tests for getRandomInt
