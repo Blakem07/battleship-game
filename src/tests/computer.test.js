@@ -27,6 +27,50 @@ test("Computer.randomAttack method calls player.attack and returns its results."
   expect(result).toBe("attack result");
 });
 
+// Tests for placeShipsRandomly
+
+test("Computer.placeShipsRandomly calls player.placeShip for all 5 types of ship.", () => {
+  const mockPlayer = { placeShip: jest.fn() };
+  const computer = new Computer(mockPlayer);
+
+  jest.spyOn(computer, "getRandomInt");
+
+  computer.placeShipsRandomly();
+
+  expect(computer.getRandomInt).toHaveBeenCalledTimes(10);
+  expect(computer.getRandomInt).toHaveBeenCalledWith(0, 10);
+
+  const shipNames = [
+    "carrier",
+    "battleship",
+    "cruiser",
+    "submarine",
+    "destroyer",
+  ];
+
+  const shipLengths = {
+    carrier: 5,
+    battleship: 4,
+    cruiser: 3,
+    submarine: 3,
+    destroyer: 2,
+  };
+
+  expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
+
+  shipNames.forEach((shipName, index) => {
+    expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(
+      index + 1, // call number
+
+      expect.any(Number), // row
+      expect.any(Number), // column
+      shipLengths[shipName], // length
+      shipName, // ship name
+      expect.any(String) // direction
+    );
+  });
+});
+
 // Tests for getRandomInt
 
 test("Computer.getRandomInt returns a number between two constraints.", () => {
