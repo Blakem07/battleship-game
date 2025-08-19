@@ -42,11 +42,26 @@ export default class Computer {
     };
 
     shipNames.forEach((shipName) => {
-      let rX = this.getRandomInt(0, 10);
-      let rY = this.getRandomInt(0, 10);
-      let direction = rX % 2 === 0 ? "horizontal" : "vertical";
+      let placed = false;
 
-      this.player.placeShip(rX, rY, shipLengths[shipName], shipName, direction);
+      while (!placed) {
+        let rX = this.getRandomInt(0, 10);
+        let rY = this.getRandomInt(0, 10);
+        let direction = rX % 2 === 0 ? "horizontal" : "vertical";
+
+        try {
+          this.player.placeShip(
+            rX,
+            rY,
+            shipLengths[shipName],
+            shipName,
+            direction
+          );
+          placed = true; // success — exit loop
+        } catch (error) {
+          // Invalid placement; retry with new random coordinates
+        }
+      }
     });
   }
 
