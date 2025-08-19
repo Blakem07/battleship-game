@@ -71,6 +71,45 @@ test("Computer.placeShipsRandomly calls player.placeShip for all 5 types of ship
   });
 });
 
+test("Computer.placeShipsRandomly ensures continuation of ship placement after an invalid position is generated", () => {
+  const mockPlayer = {
+    placeShip: jest.fn((row, col, length, shipName, direction) => {
+      if (row === 10 && col === 8) {
+        throw new Error("Out of bounds");
+      }
+    }),
+  };
+
+  const computer = new Computer(mockPlayer);
+
+  jest
+    .spyOn(computer, "getRandomInt")
+    // First ship attempt (invalid horizontal placement)
+    .mockReturnValueOnce(10) // rX = 10 (even, horizontal, invalid—out of bounds)
+    .mockReturnValueOnce(8) // rY = 8 (column)
+
+    // Retry with valid vertical placement
+    .mockReturnValueOnce(3) // rX = 3 (odd, vertical)
+    .mockReturnValueOnce(5) // rY = 5 (column)
+
+    // Next ship (valid horizontal)
+    .mockReturnValueOnce(2) // rX = 2 (even, horizontal)
+    .mockReturnValueOnce(1) // rY = 1
+
+    // Next ship (valid vertical)
+    .mockReturnValueOnce(7) // rX = 7 (odd, vertical)
+    .mockReturnValueOnce(4) // rY = 4
+
+    // Last ship (valid horizontal)
+    .mockReturnValueOnce(4) // rX = 4 (even, horizontal)
+    .mockReturnValueOnce(0); // rY = 0
+
+  computer.placeShipsRandomly();
+
+  expect(mockPlayer.placeShip).toHaveBeenCalled();
+  expect(mockPlayer.placeShip.mock.calls.length).toBeGreaterThan(5);
+});
+
 // Tests for getRandomInt
 
 test("Computer.getRandomInt returns a number between two constraints.", () => {
