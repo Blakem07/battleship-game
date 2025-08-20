@@ -10,6 +10,8 @@ test("GameController is initialized with references to Player and Computer.", ()
   expect(gameController.computer).toBe(mockComputer);
 });
 
+// Tests for placeAllShips
+
 test("Gamecontroller.placeAllPlayerShips calls player.placeShips 5 times with correct args.", () => {
   const mockPlayer = { placeShip: jest.fn() };
   const mockComputer = {};
@@ -43,4 +45,23 @@ test("Gamecontroller.placeAllPlayerShips calls player.placeShips 5 times with co
   shipPositions.forEach((ship, index) => {
     expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(index + 1, ship);
   });
+});
+
+test("placeAllShips throws error when shipPositions is invalid or malformed", () => {
+  const mockPlayer = { placeShip: jest.fn() };
+  const mockComputer = {};
+
+  const gameController = new GameController(mockPlayer, mockComputer);
+
+  const invalidShipPositions = [
+    { row: 0, col: 0, length: 5, shipName: "carrier", direction: "horizontal" },
+    { row: 0, length: 5, shipName: "carrier", direction: "horizontal" },
+    {},
+    null,
+    "Ship Position",
+  ];
+
+  expect(() => {
+    gameController.placeAllShips(invalidShipPositions);
+  }).toThrow("Error, one of the ship positions has invalid keys");
 });
