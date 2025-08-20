@@ -79,6 +79,38 @@ test("Gameboard.placeShip throws an error when passed an invalid direction.", ()
   }).toThrow("Error an invalid direction has been passed to placeShip");
 });
 
+test("Gameboard.placeShip throws an error when length and ship name do not match.", () => {
+  const shipNames = [
+    "carrier",
+    "battleship",
+    "cruiser",
+    "submarine",
+    "destroyer",
+  ];
+
+  const invalidLengths = {
+    carrier: 2,
+    battleship: 3,
+    cruiser: 4,
+    submarine: 4,
+    destroyer: 5,
+  };
+
+  shipNames.forEach((shipName) => {
+    const gameboard = new Gameboard();
+
+    expect(() => {
+      gameboard.placeShip(
+        0,
+        0,
+        invalidLengths[shipName],
+        shipName,
+        "horizontal"
+      );
+    }).toThrow("Error ship length does not match");
+  });
+});
+
 test("Ensure thes ships are placed vertically by checking each grid reference is the same.", () => {
   const gameboard = new Gameboard();
 
