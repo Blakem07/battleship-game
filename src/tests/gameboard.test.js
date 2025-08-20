@@ -58,6 +58,14 @@ test("Gameboard places horizontal ships correctly", () => {
   }
 });
 
+test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
+  const gameboard = new Gameboard();
+
+  expect(() => {
+    gameboard.placeShip(0, 0, 5, "carrier", "Sideways");
+  }).toThrow("Error an invalid direction has been passed to placeShip");
+});
+
 test("Ensure thes ships are placed vertically by checking each grid reference is the same.", () => {
   const gameboard = new Gameboard();
 
