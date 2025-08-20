@@ -191,11 +191,19 @@ test("Gameboard's placeShip accepts names from the valid list", () => {
     "destroyer",
   ];
 
+  const shipLengths = {
+    carrier: 5,
+    battleship: 4,
+    cruiser: 3,
+    submarine: 3,
+    destroyer: 2,
+  };
+
   validNames.forEach((validName) => {
     let gameboard = new Gameboard();
 
     expect(() => {
-      gameboard.placeShip(row, column, 5, validName);
+      gameboard.placeShip(row, column, shipLengths[validName], validName);
     }).not.toThrow();
   });
 });
