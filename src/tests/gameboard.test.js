@@ -58,6 +58,19 @@ test("Gameboard places horizontal ships correctly", () => {
   }
 });
 
+test("Gameboard throws error if the specified column and row position is invalid", () => {
+  const gameboard = new Gameboard();
+
+  const column = 22;
+  const row = 45;
+  const length = 5;
+
+  // Expect an error when an invalid position is passed to the method
+  expect(() => {
+    gameboard.placeShip(row, column, length, "carrier");
+  }).toThrow();
+});
+
 test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
   const gameboard = new Gameboard();
 
@@ -92,19 +105,6 @@ test("Gameboard throws error if specified postion already has a ship.", () => {
 
   gameboard.placeShip(row, column, length, "carrier");
 
-  expect(() => {
-    gameboard.placeShip(row, column, length, "carrier");
-  }).toThrow();
-});
-
-test("Gameboard throws error if the specified column and row position is invalid", () => {
-  const gameboard = new Gameboard();
-
-  const column = 22;
-  const row = 45;
-  const length = 5;
-
-  // Expect an error when an invalid position is passed to the method
   expect(() => {
     gameboard.placeShip(row, column, length, "carrier");
   }).toThrow();
