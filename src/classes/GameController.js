@@ -5,17 +5,27 @@ export default class GameController {
     this.currentTurn = "player";
     this.gameOver = false;
   }
-  
+
   /**
    * placeAllShips method.
-   * 
+   *
    * This method places all ships for the player based on ship
    * positions passed to it by the UI.
-   * 
+   *
    * @param {Array} - shipPositions passed from UI
-  */
+   */
   placeAllShips(shipPositions) {
+    const validKeys = ["row", "col", "length", "shipName", "direction"];
+
     shipPositions.forEach((shipPosition) => {
+      if (
+        typeof shipPosition !== "object" ||
+        shipPosition === null ||
+        !validKeys.every((key) => key in shipPosition)
+      ) {
+        throw new Error("Error, one of the ship positions has invalid keys");
+      }
+
       this.player.placeShip(shipPosition);
     });
   }
