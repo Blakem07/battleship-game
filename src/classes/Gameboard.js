@@ -56,9 +56,20 @@ export default class Gameboard {
    */
 
   placeShip(row, column, length, shipName, direction = "horizontal") {
-    const spaceLeft = Gameboard.BOARD_COLS - column;
+    const validLengths = {
+      carrier: 5,
+      battleship: 4,
+      cruiser: 3,
+      submarine: 3,
+      destroyer: 2,
+    };
     const dir = direction.toUpperCase();
-    
+    const spaceLeft = Gameboard.BOARD_COLS - column;
+
+    if (length !== validLengths[shipName]) {
+      throw new Error("Error ship length does not match");
+    }
+
     if (!this.isValidCoordinate(row, column)) {
       throw new Error("The ship has been placed in an out of bounds position.");
     }
