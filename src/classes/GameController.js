@@ -7,14 +7,14 @@ export default class GameController {
   }
 
   /**
-   * placeAllShips method.
+   * placePlayerShips method.
    *
    * This method places all ships for the player based on ship
    * positions passed to it by the UI.
    *
    * @param {Array} - shipPositions passed from UI
    */
-  placeAllShips(shipPositions) {
+  placePlayerShips(shipPositions) {
     const validKeys = ["row", "col", "length", "shipName", "direction"];
 
     shipPositions.forEach((shipPosition) => {
