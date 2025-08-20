@@ -57,9 +57,16 @@ export default class Gameboard {
 
   placeShip(row, column, length, shipName, direction = "horizontal") {
     const spaceLeft = Gameboard.BOARD_COLS - column;
-
+    const dir = direction.toUpperCase();
+    
     if (!this.isValidCoordinate(row, column)) {
       throw new Error("The ship has been placed in an out of bounds position.");
+    }
+
+    if (dir !== "HORIZONTAL" && dir !== "VERTICAL") {
+      throw new Error(
+        "Error an invalid direction has been passed to placeShip"
+      );
     }
 
     for (let i = column; i < column + length; i++) {
