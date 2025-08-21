@@ -15,9 +15,10 @@ export default class Ship {
     destroyer: 2,
   };
 
+  #timesHit = 0;
+
   constructor(name) {
     this.name = name;
-    this.timesHit = 0;
   }
 
   get name() {
@@ -39,8 +40,12 @@ export default class Ship {
     return this._length;
   }
 
+  get timesHit() {
+    return this.#timesHit;
+  }
+
   hit() {
-    this.timesHit += 1;
+    this.#timesHit++;
   }
 
   isSunk() {
