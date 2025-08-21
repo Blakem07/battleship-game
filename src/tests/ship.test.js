@@ -7,6 +7,30 @@ test("Ship initialization fails with invalid length", () => {
   });
 });
 
+test("Ship Class intializes with valid name and lengths", () => {
+  const validNames = [
+    "carrier",
+    "battleship",
+    "cruiser",
+    "submarine",
+    "destroyer",
+  ];
+
+  const validLengths = {
+    carrier: 5,
+    battleship: 4,
+    cruiser: 3,
+    submarine: 3,
+    destroyer: 2,
+  };
+
+  validNames.forEach((name) => {
+    let ship = new Ship(name);
+    expect(ship.name).toBe(name);
+    expect(ship.length).toBe(validLengths[name]);
+  });
+});
+
 test("Ship gets hit, incrementing timesHit by 1", () => {
   const ship = new Ship();
   const initialTimesHit = ship.timesHit;
