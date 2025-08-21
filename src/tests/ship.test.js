@@ -1,51 +1,54 @@
 import Ship from "../classes/Ship";
 
-test("Ship initialization fails with invalid length", () => {
-  const invalidLengths = [1, 0, 6, 10, -3];
-  invalidLengths.forEach((length) => {
-    expect(() => new Ship(length)).toThrow();
+describe("Ship Class Tests", () => {
+  test("Ship Class initialization fails with invalid length", () => {
+    const invalidLengths = [1, 0, 6, 10, -3];
+    invalidLengths.forEach((length) => {
+      expect(() => new Ship(length)).toThrow();
+    });
   });
-});
 
-test("Ship Class intializes with valid name and lengths", () => {
-  const validNames = [
-    "carrier",
-    "battleship",
-    "cruiser",
-    "submarine",
-    "destroyer",
-  ];
+  test("Ship Class intializes with valid name and lengths", () => {
+    const validNames = [
+      "carrier",
+      "battleship",
+      "cruiser",
+      "submarine",
+      "destroyer",
+    ];
 
-  const validLengths = {
-    carrier: 5,
-    battleship: 4,
-    cruiser: 3,
-    submarine: 3,
-    destroyer: 2,
-  };
+    const validLengths = {
+      carrier: 5,
+      battleship: 4,
+      cruiser: 3,
+      submarine: 3,
+      destroyer: 2,
+    };
 
-  validNames.forEach((name) => {
-    let ship = new Ship(name);
-    expect(ship.name).toBe(name);
-    expect(ship.length).toBe(validLengths[name]);
+    validNames.forEach((name) => {
+      let ship = new Ship(name);
+      expect(ship.name).toBe(name);
+      expect(ship.length).toBe(validLengths[name]);
+    });
   });
-});
 
-test("Ship gets hit, incrementing timesHit by 1", () => {
-  const ship = new Ship(Ship.VALID_NAMES[0]);
-  const initialTimesHit = ship.timesHit;
-  ship.hit();
-  expect(ship.timesHit).toBe(initialTimesHit + 1);
-});
+  test("Ship Class gets hit, incrementing timesHit by 1", () => {
+    const ship = new Ship(Ship.VALID_NAMES[0]);
+    const initialTimesHit = ship.timesHit;
+    ship.hit();
+    expect(ship.timesHit).toBe(initialTimesHit + 1);
+  });
 
-test("Ship has sunk if, times hit == length", () => {
-  const ship = new Ship();
-  ship.timesHit = ship.length;
-  expect(ship.isSunk()).toBe(true);
-});
+  test("Ship Class has sunk if, times hit == length", () => {
+    const ship = new Ship(Ship.VALID_NAMES[0]);
+    for (let i = 0; i < ship.length; i++) {
+      ship.hit();
+    }
+    expect(ship.isSunk()).toBe(true);
+  });
 
-test("Ship is not sunk if, times hit < length", () => {
-  const ship = new Ship();
-  ship.timesHit = ship.length - 1;
-  expect(ship.isSunk()).toBe(false);
+  test("Ship Class is not sunk if, times hit < length", () => {
+    const ship = new Ship(Ship.VALID_NAMES[0]);
+    expect(ship.isSunk()).toBe(false);
+  });
 });
