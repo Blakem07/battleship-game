@@ -32,7 +32,7 @@ test("Ship Class intializes with valid name and lengths", () => {
 });
 
 test("Ship gets hit, incrementing timesHit by 1", () => {
-  const ship = new Ship();
+  const ship = new Ship(Ship.VALID_NAMES[0]);
   const initialTimesHit = ship.timesHit;
   ship.hit();
   expect(ship.timesHit).toBe(initialTimesHit + 1);
