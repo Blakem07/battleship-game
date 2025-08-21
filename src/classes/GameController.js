@@ -6,6 +6,8 @@ export default class GameController {
     this.gameOver = false;
   }
 
+  placeAllShips(shipPositions) {}
+
   /**
    * placePlayerShips method.
    *
