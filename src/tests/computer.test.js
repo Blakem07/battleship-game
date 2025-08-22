@@ -1,6 +1,6 @@
 import Computer from "../classes/Computer";
 
-describe.skip("Computer Class Tests", () => {
+describe("Computer Class Tests", () => {
   test("Computer is intialized with an instance of player.", () => {
     const mockPlayer = {};
     const computer = new Computer(mockPlayer);

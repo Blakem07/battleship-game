@@ -1,5 +1,6 @@
 import Player from "../classes/Player";
 import Gameboard from "../classes/Gameboard";
+import Ship from "../classes/Ship";
 
 describe("Player Class Tests", () => {
   test("Player object initializes with a reference to their gameboard.", () => {
@@ -29,13 +30,12 @@ describe("Player Class Tests", () => {
     const mockGameboard = { placeShip: jest.fn() };
     const player = new Player(mockGameboard);
 
-    player.placeShip(0, 0, 5, "carrier", "vertical");
+    player.placeShip(0, 0, Ship.VALID_NAMES[0], "vertical");
 
     expect(mockGameboard.placeShip).toBeCalledWith(
       0,
       0,
-      5,
-      "carrier",
+      Ship.VALID_NAMES[0],
       "vertical"
     );
   });
