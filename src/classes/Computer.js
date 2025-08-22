@@ -1,3 +1,5 @@
+import Ship from "./Ship";
+
 export default class Computer {
   constructor(player) {
     this.player = player;
@@ -25,23 +27,7 @@ export default class Computer {
    *
    */
   placeShipsRandomly() {
-    const shipNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
-    ];
-
-    const shipLengths = {
-      carrier: 5,
-      battleship: 4,
-      cruiser: 3,
-      submarine: 3,
-      destroyer: 2,
-    };
-
-    shipNames.forEach((shipName) => {
+    Ship.VALID_NAMES.forEach((shipName) => {
       let placed = false;
 
       while (!placed) {
@@ -53,7 +39,6 @@ export default class Computer {
           this.player.placeShip(
             rX,
             rY,
-            shipLengths[shipName],
             shipName,
             direction
           );
