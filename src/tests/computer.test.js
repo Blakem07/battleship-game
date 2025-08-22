@@ -1,7 +1,8 @@
+import Ship from "../classes/Ship";
 import Computer from "../classes/Computer";
 
 describe("Computer Class Tests", () => {
-  test("Computer is intialized with an instance of player.", () => {
+  test("Computer Class intialized with an instance of player.", () => {
     const mockPlayer = {};
     const computer = new Computer(mockPlayer);
 
@@ -10,7 +11,7 @@ describe("Computer Class Tests", () => {
 
   // Tests for attack method
 
-  test("Computer.randomAttack method calls player.attack and returns its results.", () => {
+  test("Computer.randomAttack method calls player.attack with and returns its results.", () => {
     const mockPlayer = { attack: jest.fn().mockReturnValue("attack result") };
     const computer = new Computer(mockPlayer);
     const mockOpponent = {};
@@ -30,7 +31,7 @@ describe("Computer Class Tests", () => {
 
   // Tests for placeShipsRandomly
 
-  test("Computer.placeShipsRandomly calls player.placeShip for all 5 types of ship.", () => {
+  test("Computer.placeShipsRandomly calls player.placeShip for all 5 types of ship with correct args.", () => {
     const mockPlayer = { placeShip: jest.fn() };
     const computer = new Computer(mockPlayer);
 
@@ -41,31 +42,15 @@ describe("Computer Class Tests", () => {
     expect(computer.getRandomInt).toHaveBeenCalledTimes(10);
     expect(computer.getRandomInt).toHaveBeenCalledWith(0, 10);
 
-    const shipNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
-    ];
-
-    const shipLengths = {
-      carrier: 5,
-      battleship: 4,
-      cruiser: 3,
-      submarine: 3,
-      destroyer: 2,
-    };
+    const shipNames = Ship.VALID_NAMES;
 
     expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
 
     shipNames.forEach((shipName, index) => {
       expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(
         index + 1, // call number
-
         expect.any(Number), // row
         expect.any(Number), // column
-        shipLengths[shipName], // length
         shipName, // ship name
         expect.any(String) // direction
       );
@@ -74,7 +59,7 @@ describe("Computer Class Tests", () => {
 
   test("Computer.placeShipsRandomly ensures continuation of ship placement after an invalid position is generated", () => {
     const mockPlayer = {
-      placeShip: jest.fn((row, col, length, shipName, direction) => {
+      placeShip: jest.fn((row, col, shipName, direction) => {
         if (row === 10 && col === 8) {
           throw new Error("Out of bounds");
         }
