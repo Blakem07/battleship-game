@@ -1,7 +1,7 @@
 import Gameboard from "../classes/Gameboard";
 import Ship from "../classes/Ship";
 
-describe.skip("Gameboard Class Tests", () => {
+describe("Gameboard Class Tests", () => {
   test("Gameboard initializes with correct dimensions", () => {
     const gameboard = new Gameboard(); // assumes board is created in the constructor
 
@@ -41,17 +41,17 @@ describe.skip("Gameboard Class Tests", () => {
 
   // Tests for placeShip method.
 
-  test("Gameboard places horizontal ships correctly", () => {
-    const gameboard = new Gameboard();
+  test("Gameboard.placeShip places horizontal ships correctly", () => {
+    const gameboard = new Gameboard(Ship.VALID_NAMES[0]);
 
     const row = 1;
     const column = 5;
-    const length = 5;
+    const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES[0]];
 
     // Place a ship of length 5 at row 1, column 5, horizontally
-    gameboard.placeShip(row, column, length, "carrier");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "horizontal");
 
-    let ship = new Ship(length);
+    let ship = new Ship(Ship.VALID_NAMES[0]);
 
     // Assert that the ship has been placed on the correct coordinates
     for (let i = 0; i < length; i++) {
@@ -59,7 +59,7 @@ describe.skip("Gameboard Class Tests", () => {
     }
   });
 
-  test("Gameboard throws error if the specified column and row position is invalid", () => {
+  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
     const gameboard = new Gameboard();
 
     const column = 22;
@@ -80,46 +80,14 @@ describe.skip("Gameboard Class Tests", () => {
     }).toThrow("Error an invalid direction has been passed to placeShip");
   });
 
-  test("Gameboard.placeShip throws an error when length and ship name do not match.", () => {
-    const shipNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
-    ];
-
-    const invalidLengths = {
-      carrier: 2,
-      battleship: 3,
-      cruiser: 4,
-      submarine: 4,
-      destroyer: 5,
-    };
-
-    shipNames.forEach((shipName) => {
-      const gameboard = new Gameboard();
-
-      expect(() => {
-        gameboard.placeShip(
-          0,
-          0,
-          invalidLengths[shipName],
-          shipName,
-          "horizontal"
-        );
-      }).toThrow("Error ship length does not match");
-    });
-  });
-
-  test("Ensure thes ships are placed vertically by checking each grid reference is the same.", () => {
+  test("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
     const gameboard = new Gameboard();
 
     const row = 0;
     const column = 2;
-    const length = 5;
+    const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES[0]];
 
-    gameboard.placeShip(row, column, length, "carrier", "vertical");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "vertical");
 
     const ship = gameboard.grid[row][column];
 
@@ -129,21 +97,20 @@ describe.skip("Gameboard Class Tests", () => {
     }
   });
 
-  test("Gameboard throws error if specified postion already has a ship.", () => {
+  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
     const row = 0;
-    const length = 5;
 
-    gameboard.placeShip(row, column, length, "carrier");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
     expect(() => {
-      gameboard.placeShip(row, column, length, "carrier");
+      gameboard.placeShip(row, column, length, Ship.VALID_NAMES[0]);
     }).toThrow();
   });
 
-  test("Gameboard throws error if the ship placed does not fit horizontally", () => {
+  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
     const gameboard = new Gameboard();
 
     const column = 9;
@@ -156,7 +123,7 @@ describe.skip("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test("Gameboard's placeShip rejects names not from the valid list", () => {
+  test("Gameboard.placeShip rejects names not from the valid list", () => {
     const column = 0;
     const row = 0;
 
@@ -180,59 +147,30 @@ describe.skip("Gameboard Class Tests", () => {
     });
   });
 
-  test("Gameboard's placeShip accepts names from the valid list", () => {
-    const column = 0;
-    const row = 0;
-
-    const validNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
-    ];
-
-    const shipLengths = {
-      carrier: 5,
-      battleship: 4,
-      cruiser: 3,
-      submarine: 3,
-      destroyer: 2,
-    };
-
-    validNames.forEach((validName) => {
-      let gameboard = new Gameboard();
-
-      expect(() => {
-        gameboard.placeShip(row, column, shipLengths[validName], validName);
-      }).not.toThrow();
-    });
-  });
-
-  test("Gameboard grid indexes succesfully hold references to the new ship object", () => {
+  test("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
     const row = 0;
-    const length = 5;
+    const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES];
 
-    const ship = new Ship(length);
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
-    gameboard.placeShip(row, column, length, "carrier");
+    const ship = gameboard.grid[row][column];
 
     for (let i = column; i < column + length; i++) {
       expect(gameboard.grid[row][i]).toStrictEqual(ship);
     }
   });
 
-  test("Gameboard's placeShipHorizonal adds ships to a ships dictionary after being placed.", () => {
+  test("Gameboard.placeShip adds ships to a ships dictionary", () => {
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(0, 0, 5, "carrier"); // Carrier
-    gameboard.placeShip(1, 0, 4, "battleship"); // Battleship
-    gameboard.placeShip(2, 0, 3, "cruiser"); // Cruiser
-    gameboard.placeShip(3, 0, 3, "submarine"); // Submarine
-    gameboard.placeShip(4, 0, 2, "destroyer"); // Destroyer
+    gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal"); // Carrier
+    gameboard.placeShip(1, 0, Ship.VALID_NAMES[1], "horizontal"); // Battleship
+    gameboard.placeShip(2, 0, Ship.VALID_NAMES[2], "horizontal"); // Cruiser
+    gameboard.placeShip(3, 0, Ship.VALID_NAMES[3], "horizontal"); // Submarine
+    gameboard.placeShip(4, 0, Ship.VALID_NAMES[4], "horizontal"); // Destroyer
 
     expect(gameboard.ships["carrier"].length).toBe(5);
     expect(gameboard.ships["battleship"].length).toBe(4);
@@ -243,19 +181,18 @@ describe.skip("Gameboard Class Tests", () => {
 
   // Tests for ReceiveAttackMethod.
 
-  test("Gameboard successfully determines the attack hit a ship.", () => {
+  test("Gameboard.recieveAttack successfully determines the attack hit a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
     const row = 0;
-    const length = 5;
 
-    gameboard.placeShip(column, row, length, "carrier");
+    gameboard.placeShip(column, row, Ship.VALID_NAMES[0]);
 
     expect(gameboard.receiveAttack(column, row)).toBe(true);
   });
 
-  test("Gameboard records the coordinates of a missed attack its missedAttack property", () => {
+  test("Gameboard.recieveAttack records the coordinates of a missed attack its missedAttack property", () => {
     const gameboard = new Gameboard();
 
     const row = 3;
@@ -265,14 +202,13 @@ describe.skip("Gameboard Class Tests", () => {
     expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
   });
 
-  test("Gameboard checks and prevents repeat attacks in the same cell.", () => {
+  test("Gameboard.recieveAttack checks prevents repeat attacks in same cell", () => {
     const gameboard = new Gameboard();
 
     const row = 3;
     const column = 2;
-    const length = 5;
 
-    gameboard.placeShip(row, column, length, "carrier");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
     gameboard.receiveAttack(row, column);
 
     expect(() => {
@@ -282,14 +218,14 @@ describe.skip("Gameboard Class Tests", () => {
 
   // Tests for report ship status method.
 
-  test("Gameboard's reportShipStatus method returns true when all of their ships have been sunk.", () => {
+  test("Gameboard.reportShipStatus method returns true when all of their ships have been sunk.", () => {
     const gameboard = new Gameboard();
 
     const row = 5;
     const column = 4;
-    const length = 5;
+    const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES[0]];
 
-    gameboard.placeShip(row, column, length, "carrier");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
     for (let i = 0; i <= length; i++) {
       gameboard.receiveAttack(row, column + i);
@@ -298,24 +234,23 @@ describe.skip("Gameboard Class Tests", () => {
     expect(gameboard.reportShipStatus()).toBe(true);
   });
 
-  test("Gameboard's reportShipStatus method returns false if no ships are sunk", () => {
+  test("Gameboard.reportShipStatus method returns false if no ships are sunk", () => {
     const gameboard = new Gameboard();
 
     const row = 5;
     const column = 4;
-    const length = 5;
 
-    gameboard.placeShip(row, column, length, "carrier");
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
     expect(gameboard.reportShipStatus()).toBe(false);
   });
 
-  test("Gameboard's reportShipStatus method returns false if some ships have been sunk.", () => {
+  test("Gameboard.reportShipStatus method returns false if some ships have been sunk.", () => {
     const gameboard = new Gameboard();
 
-    gameboard.placeShip(0, 0, 5, "carrier");
-    gameboard.placeShip(1, 0, 4, "battleship");
-    gameboard.placeShip(2, 0, 3, "cruiser");
+    gameboard.placeShip(0, 0, Ship.VALID_NAMES[0]);
+    gameboard.placeShip(1, 0, Ship.VALID_NAMES[1]);
+    gameboard.placeShip(2, 0, Ship.VALID_NAMES[2]);
 
     for (let i = 0; i <= 5; i++) {
       gameboard.receiveAttack(1, 0 + i);
@@ -325,7 +260,7 @@ describe.skip("Gameboard Class Tests", () => {
     expect(gameboard.reportShipStatus()).toBe(false);
   });
 
-  test("Gameboard's reportShipStatus method throws error if called without ships being placed on the board.", () => {
+  test("Gameboard.reportShipStatus method throws error if called without ships being placed on the board.", () => {
     const gameboard = new Gameboard();
 
     expect(() => {
