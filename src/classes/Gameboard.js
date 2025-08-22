@@ -55,18 +55,12 @@ export default class Gameboard {
    * @param {string} direction - Horizontal or vertical placement
    */
 
-  placeShip(row, column, length, shipName, direction = "horizontal") {
-    const validLengths = {
-      carrier: 5,
-      battleship: 4,
-      cruiser: 3,
-      submarine: 3,
-      destroyer: 2,
-    };
-    const dir = direction.toUpperCase();
+  placeShip(row, column, shipName, direction = "horizontal") {
+    const dir = direction.toLowerCase();
     const spaceLeft = Gameboard.BOARD_COLS - column;
+    const length = Ship.VALID_LENGTHS[shipName];
 
-    if (length !== validLengths[shipName]) {
+    if (length !== Ship.VALID_LENGTHS[shipName]) {
       throw new Error("Error ship length does not match");
     }
 
@@ -74,7 +68,7 @@ export default class Gameboard {
       throw new Error("The ship has been placed in an out of bounds position.");
     }
 
-    if (dir !== "HORIZONTAL" && dir !== "VERTICAL") {
+    if (dir !== "horizontal" && dir !== "vertical") {
       throw new Error(
         "Error an invalid direction has been passed to placeShip"
       );
@@ -104,7 +98,7 @@ export default class Gameboard {
       throw new Error("The ship name passed as an arugment is invalid.");
     }
 
-    let ship = new Ship(length);
+    let ship = new Ship(shipName);
 
     for (let i = 0; i < length; i++) {
       if (direction.toUpperCase() == "HORIZONTAL") {
