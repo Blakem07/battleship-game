@@ -28,12 +28,11 @@ export default class Player {
    *
    * @param {number} row - Starting row for the ship
    * @param {number} column - Starting column for the ship
-   * @param {number} length - Length of the ship
    * @param {string} shipName - Identifier for the ship type
    * @param {string} direction - 'horizontal' or 'vertical'
    * @returns {*} Result from the gameboard's placeShip method
    */
-  placeShip(row, column, length, shipName, direction) {
-    return this.gameboard.placeShip(row, column, length, shipName, direction);
+  placeShip(row, column, shipName, direction) {
+    return this.gameboard.placeShip(row, column, shipName, direction);
   }
 }

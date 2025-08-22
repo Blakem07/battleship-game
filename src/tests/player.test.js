@@ -3,7 +3,7 @@ import Gameboard from "../classes/Gameboard";
 import Ship from "../classes/Ship";
 
 describe("Player Class Tests", () => {
-  test("Player object initializes with a reference to their gameboard.", () => {
+  test("Player Class initializes with a reference to their gameboard.", () => {
     const gameboard = new Gameboard();
     const player = new Player(gameboard);
 
@@ -12,7 +12,7 @@ describe("Player Class Tests", () => {
 
   // Tests for attack method
 
-  test("Player's attack method calls the opponents gameboard.receive attack with the correct args.", () => {
+  test("Player.attack method calls the opponents gameboard.receive attack with the correct args.", () => {
     const mockGameboard = {};
     const player = new Player(mockGameboard);
 
