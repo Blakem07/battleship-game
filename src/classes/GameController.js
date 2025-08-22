@@ -17,7 +17,7 @@ export default class GameController {
    * @param {Array} - shipPositions passed from UI
    */
   placePlayerShips(shipPositions) {
-    const validKeys = ["row", "col", "length", "shipName", "direction"];
+    const validKeys = ["row", "col", "shipName", "direction"];
 
     shipPositions.forEach((shipPosition) => {
       if (
