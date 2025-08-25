@@ -175,4 +175,19 @@ export default class Gameboard {
     }
     return true;
   }
+
+  /**
+   * GetGrid method.
+   *
+   * Getter function with returns a deep clone of this.#grid
+   *
+   * @return {array<Object>} - Deep clone of grid.
+   */
+  getGrid() {
+    return this.#grid.map((row) => {
+      return row.map((col) => {
+        return structuredClone(col);
+      });
+    });
+  }
 }
