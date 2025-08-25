@@ -4,11 +4,16 @@ export default class Gameboard {
   static BOARD_ROWS = 10;
   static BOARD_COLS = 10;
 
+  #grid;
+  #missedAttacks;
+  #landedAttacks;
+  #ships;
+
   constructor() {
-    this.grid = this.initGameboard();
-    this.missedAttacks = {};
-    this.landedAttacks = {};
-    this.ships = {};
+    this.#grid = this.initGameboard();
+    this.#missedAttacks = {};
+    this.#landedAttacks = {};
+    this.#ships = {};
   }
 
   initGameboard() {
@@ -35,8 +40,8 @@ export default class Gameboard {
       typeof column === "number" &&
       row >= 0 &&
       column >= 0 &&
-      column < this.grid.length &&
-      row < this.grid[column].length
+      column < this.#grid.length &&
+      row < this.#grid[column].length
     );
   }
 
@@ -75,7 +80,7 @@ export default class Gameboard {
     }
 
     for (let i = column; i < column + length; i++) {
-      if (this.grid[row][i] !== null) {
+      if (this.#grid[row][i] !== null) {
         throw new Error(`A ship already occupies row: ${row} column: ${i}`);
       }
     }
@@ -102,13 +107,13 @@ export default class Gameboard {
 
     for (let i = 0; i < length; i++) {
       if (direction.toUpperCase() == "HORIZONTAL") {
-        this.grid[row][column + i] = ship;
+        this.#grid[row][column + i] = ship;
       } else if (direction.toUpperCase() == "VERTICAL") {
-        this.grid[row + i][column] = ship;
+        this.#grid[row + i][column] = ship;
       }
     }
 
-    this.ships[shipName] = ship;
+    this.#ships[shipName] = ship;
   }
 
   /**
