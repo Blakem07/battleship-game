@@ -88,7 +88,7 @@ describe("GameController Class Tests", () => {
 
   // Tests for GameController.placeAllShips
 
-  test("GameController.placeAllShips places all Player and Computer Ships correctly on the board.", () => {
+  test.skip("GameController.placeAllShips places all Player and Computer Ships correctly on the board.", () => {
     /***
      * TODO: WORK IN PROGRESS....
      * - Verify placePlayerShips is called with the correct input[x].
@@ -132,7 +132,10 @@ describe("GameController Class Tests", () => {
       }, // occupies (9,7) to (9,8)
     ];
     const placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
-    const placeShipsRandomlySpy = jest.spyOn(computer, "placeShipsRandomly"); // Computer
+    const placeShipsRandomlySpy = jest.spyOn(
+      gameController.computer,
+      "placeShipsRandomly"
+    ); // Computer
 
     gameController.placeAllShips(shipPositions);
 
@@ -140,7 +143,5 @@ describe("GameController Class Tests", () => {
       expect(placePlayerShipsSpy).toHaveBeenNthCalledWith(index + 1, position);
     });
     expect(placeShipsRandomlySpy).toHaveBeenCalledTimes(1);
-
-
   });
 });

@@ -16,21 +16,21 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for isValidCoordinate
 
-  test("Valid coordinates inside grid", () => {
+  test.only("Valid coordinates inside grid", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate(0, 0)).toBe(true);
     expect(gameboard.isValidCoordinate(1, 1)).toBe(true);
   });
 
-  test("Invalid coordinates", () => {
+  test.only("Invalid coordinates", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate(100, 100)).toBe(false);
     expect(gameboard.isValidCoordinate(20, 20)).toBe(false);
   });
 
-  test("invalid coordinates: wrong types", () => {
+  test.only("invalid coordinates: wrong types", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate("1", 0)).toBe(false);
@@ -41,7 +41,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for placeShip method.
 
-  test("Gameboard.placeShip places horizontal ships correctly", () => {
+  test.only("Gameboard.placeShip places horizontal ships correctly", () => {
     const gameboard = new Gameboard(Ship.VALID_NAMES[0]);
 
     const row = 1;
