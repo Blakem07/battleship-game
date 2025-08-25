@@ -41,7 +41,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for placeShip method.
 
-  test.only("Gameboard.placeShip places horizontal ships correctly", () => {
+  test("Gameboard.placeShip places horizontal ships correctly", () => {
     const gameboard = new Gameboard(Ship.VALID_NAMES[0]);
 
     const row = 1;
@@ -267,4 +267,37 @@ describe("Gameboard Class Tests", () => {
       gameboard.reportShipStatus();
     }).toThrow();
   });
+
+  // Tests for get grid
+
+  test.only("Gameboard.getGrid returns deep clone of grid which cannot mutate the original.", () => {
+    const gameboard = new Gameboard();
+
+    let initialGrid = gameboard.getGrid();
+    initialGrid[0][0] = "changed";
+
+    const updatedGrid = gameboard.getGrid();
+    expect(updatedGrid[0][0]).toBe(null);
+  });
+});
+
+test.only("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () => {
+  const gameboard = new Gameboard();
+
+  let clonedGrid = gameboard.getGrid();
+
+  for (const row of clonedGrid) {
+    expect(row.length).toBe(10);
+    for (const col of row) {
+      expect(col === null || typeof col === "object").toBe(true);
+    }
+  }
+});
+
+test.only("Gameboard.getGrid reflects the current state of the grid.", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+  const clonedGrid = gameboard.getGrid();
+
+  expect(typeof clonedGrid[0][0]).toBe("object");
 });
