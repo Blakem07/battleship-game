@@ -41,7 +41,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for placeShip method.
 
-  test("Gameboard.placeShip places horizontal ships correctly", () => {
+  test.only("Gameboard.placeShip places horizontal ships correctly", () => {
     const gameboard = new Gameboard(Ship.VALID_NAMES[0]);
 
     const row = 1;
@@ -51,15 +51,16 @@ describe("Gameboard Class Tests", () => {
     // Place a ship of length 5 at row 1, column 5, horizontally
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "horizontal");
 
-    let ship = new Ship(Ship.VALID_NAMES[0]);
+    const grid = gameboard.getGrid();
+    let ship = grid[1][5];
 
-    // Assert that the ship has been placed on the correct coordinates
+    // Traverse though the grid using the length of the ship, asserting that each ref is the same
     for (let i = 0; i < length; i++) {
-      expect(gameboard.grid[row][column + i]).toStrictEqual(ship);
+      expect(grid[row][column + i]).toStrictEqual(ship);
     }
   });
 
-  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
+  test.only("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
     const gameboard = new Gameboard();
 
     const column = 22;
@@ -72,7 +73,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
+  test.only("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
     const gameboard = new Gameboard();
 
     expect(() => {
@@ -80,7 +81,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow("Error an invalid direction has been passed to placeShip");
   });
 
-  test("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
+  test.only("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
     const gameboard = new Gameboard();
 
     const row = 0;
@@ -89,15 +90,17 @@ describe("Gameboard Class Tests", () => {
 
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "vertical");
 
-    const ship = gameboard.grid[row][column];
+    const grid = gameboard.getGrid();
+
+    const ship = grid[row][column];
 
     for (let i = 0; i < length; i++) {
-      expect(gameboard.grid[row + i][column]).not.toBe(null);
-      expect(gameboard.grid[row + i][column]).toBe(ship);
+      expect(grid[row + i][column]).not.toBe(null);
+      expect(grid[row + i][column]).toStrictEqual(ship);
     }
   });
 
-  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
+  test.only("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -110,7 +113,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
+  test.only("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
     const gameboard = new Gameboard();
 
     const column = 9;
@@ -123,7 +126,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test("Gameboard.placeShip rejects names not from the valid list", () => {
+  test.only("Gameboard.placeShip rejects names not from the valid list", () => {
     const column = 0;
     const row = 0;
 
@@ -147,7 +150,7 @@ describe("Gameboard Class Tests", () => {
     });
   });
 
-  test("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
+  test.only("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -156,14 +159,15 @@ describe("Gameboard Class Tests", () => {
 
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
-    const ship = gameboard.grid[row][column];
+    const grid = gameboard.getGrid();
+    const ship = grid[row][column];
 
     for (let i = column; i < column + length; i++) {
-      expect(gameboard.grid[row][i]).toStrictEqual(ship);
+      expect(grid[row][i]).toStrictEqual(ship);
     }
   });
 
-  test("Gameboard.placeShip adds ships to a ships dictionary", () => {
+  test.only("Gameboard.placeShip adds ships to a ships dictionary", () => {
     const gameboard = new Gameboard();
 
     gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal"); // Carrier
