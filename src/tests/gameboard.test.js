@@ -167,7 +167,7 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test.only("Gameboard.placeShip adds ships to a ships dictionary", () => {
+  test("Gameboard.placeShip adds ships to a ships dictionary", () => {
     const gameboard = new Gameboard();
 
     gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal"); // Carrier
