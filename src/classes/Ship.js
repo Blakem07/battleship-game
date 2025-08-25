@@ -55,4 +55,21 @@ export default class Ship {
       return false;
     }
   }
+
+  /**
+   * Clone method.
+   *
+   * Returns a deeply equal clone maintaining class instance.
+   *
+   * This method is called by Gameboard.getShips to return copies of ships,
+   * ensuring callers cannot mutate the original ships.
+   *
+   * @return {Ship} - A new Ship instance cloned from this one.
+   */
+  clone() {
+    const shipClone = new Ship(this.name);
+    shipClone.#timesHit = this.timesHit;
+
+    return shipClone;
+  }
 }
