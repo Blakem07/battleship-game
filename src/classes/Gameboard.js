@@ -222,4 +222,16 @@ export default class Gameboard {
   getMissedAttacks() {
     return structuredClone(this.#missedAttacks);
   }
+
+  /**
+   * GetShipAt Method.
+   *
+   * Returns a reference to the ship at a specific index
+   * within the grid.
+   *
+   * @returns {Ship} - Ship Reference
+   */
+  getShipAt(row, col) {
+    return this.#grid[row][col];
+  }
 }
