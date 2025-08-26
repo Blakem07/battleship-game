@@ -4,7 +4,7 @@ import Ship from "../classes/Ship";
 describe("Gameboard Class Tests", () => {
   test("Gameboard initializes with correct dimensions", () => {
     const gameboard = new Gameboard(); // assumes board is created in the constructor
-    const grid = gameboard.getGrid()
+    const grid = gameboard.getGrid();
 
     // Check number of rows
     expect(grid.length).toBe(Gameboard.BOARD_ROWS);
@@ -364,4 +364,30 @@ test("Gameboard.getMissed attacks return an empty dictionary when no attacks hav
   const gameboard = new Gameboard();
   const missedAttacks = gameboard.getMissedAttacks();
   expect(missedAttacks).toEqual({});
+});
+
+// Tests for GetShipAt
+
+test("Gameboard.getShipAt returns a reference to the ship object.", () => {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+
+  const ship = gameboard.getShipAt(0, 0);
+
+  // Check shape
+  expect(typeof ship).toBe("object");
+  expect(ship.name).toBe(Ship.VALID_NAMES[0]);
+
+  // Check mutation
+  expect(ship.timesHit).toBe(0);
+  ship.hit();
+  const mutatedShip = gameboard.getShipAt(0, 0);
+  expect(mutatedShip.timesHit).toBe(1);
+});
+
+test("Gameboard.getShipAt returns null when there is no ship at the index", () => {
+  const gameboard = new Gameboard();
+  const ship = gameboard.getShipAt(0, 0);
+
+  expect(ship).toEqual(null);
 });
