@@ -4,33 +4,34 @@ import Ship from "../classes/Ship";
 describe("Gameboard Class Tests", () => {
   test("Gameboard initializes with correct dimensions", () => {
     const gameboard = new Gameboard(); // assumes board is created in the constructor
+    const grid = gameboard.getGrid()
 
     // Check number of rows
-    expect(gameboard.grid.length).toBe(Gameboard.BOARD_ROWS);
+    expect(grid.length).toBe(Gameboard.BOARD_ROWS);
 
     // Check number of columns in each row
-    for (let row of gameboard.grid) {
+    for (let row of grid) {
       expect(row.length).toBe(Gameboard.BOARD_COLS);
     }
   });
 
   // Tests for isValidCoordinate
 
-  test.only("Valid coordinates inside grid", () => {
+  test("Valid coordinates inside grid", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate(0, 0)).toBe(true);
     expect(gameboard.isValidCoordinate(1, 1)).toBe(true);
   });
 
-  test.only("Invalid coordinates", () => {
+  test("Invalid coordinates", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate(100, 100)).toBe(false);
     expect(gameboard.isValidCoordinate(20, 20)).toBe(false);
   });
 
-  test.only("invalid coordinates: wrong types", () => {
+  test("invalid coordinates: wrong types", () => {
     const gameboard = new Gameboard();
 
     expect(gameboard.isValidCoordinate("1", 0)).toBe(false);
@@ -41,7 +42,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for placeShip method.
 
-  test.only("Gameboard.placeShip places horizontal ships correctly", () => {
+  test("Gameboard.placeShip places horizontal ships correctly", () => {
     const gameboard = new Gameboard(Ship.VALID_NAMES[0]);
 
     const row = 1;
@@ -60,7 +61,7 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test.only("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
+  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
     const gameboard = new Gameboard();
 
     const column = 22;
@@ -73,7 +74,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test.only("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
+  test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
     const gameboard = new Gameboard();
 
     expect(() => {
@@ -81,7 +82,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow("Error an invalid direction has been passed to placeShip");
   });
 
-  test.only("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
+  test("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
     const gameboard = new Gameboard();
 
     const row = 0;
@@ -100,7 +101,7 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test.only("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
+  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -113,7 +114,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test.only("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
+  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
     const gameboard = new Gameboard();
 
     const column = 9;
@@ -126,7 +127,7 @@ describe("Gameboard Class Tests", () => {
     }).toThrow();
   });
 
-  test.only("Gameboard.placeShip rejects names not from the valid list", () => {
+  test("Gameboard.placeShip rejects names not from the valid list", () => {
     const column = 0;
     const row = 0;
 
@@ -150,7 +151,7 @@ describe("Gameboard Class Tests", () => {
     });
   });
 
-  test.only("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
+  test("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -167,7 +168,7 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test.only("Gameboard.placeShip adds ships to a ships dictionary", () => {
+  test("Gameboard.placeShip adds ships to a ships dictionary", () => {
     const gameboard = new Gameboard();
 
     gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal"); // Carrier
@@ -187,7 +188,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for ReceiveAttackMethod.
 
-  test.only("Gameboard.recieveAttack successfully determines the attack hit a ship.", () => {
+  test("Gameboard.recieveAttack successfully determines the attack hit a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -198,14 +199,14 @@ describe("Gameboard Class Tests", () => {
     expect(gameboard.receiveAttack(column, row)).toBe(true);
   });
 
-  test.only("Gameboard.recieveAttack records the coordinates of a missed attack its missedAttack property", () => {
+  test("Gameboard.recieveAttack records the coordinates of a missed attack its missedAttack property", () => {
     const gameboard = new Gameboard();
-
     const row = 3;
     const column = 2;
-
     expect(gameboard.receiveAttack(row, column)).toBe(false);
-    expect(gameboard.missedAttacks[`${row},${column}`]).toStrictEqual(true);
+
+    const missedAttacks = gameboard.getMissedAttacks();
+    expect(missedAttacks[`${row},${column}`]).toStrictEqual(true);
   });
 
   test("Gameboard.recieveAttack checks prevents repeat attacks in same cell", () => {
@@ -276,7 +277,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for get grid
 
-  test.only("Gameboard.getGrid returns deep clone of grid which cannot mutate the original.", () => {
+  test("Gameboard.getGrid returns deep clone of grid which cannot mutate the original.", () => {
     const gameboard = new Gameboard();
 
     let initialGrid = gameboard.getGrid();
@@ -287,7 +288,7 @@ describe("Gameboard Class Tests", () => {
   });
 });
 
-test.only("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () => {
+test("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () => {
   const gameboard = new Gameboard();
 
   let clonedGrid = gameboard.getGrid();
@@ -300,7 +301,7 @@ test.only("Gameboard.getGrid returns the correct structure of the 10x10 grid.", 
   }
 });
 
-test.only("Gameboard.getGrid reflects the current state of the grid.", () => {
+test("Gameboard.getGrid reflects the current state of the grid.", () => {
   const gameboard = new Gameboard();
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
   const clonedGrid = gameboard.getGrid();
@@ -310,7 +311,7 @@ test.only("Gameboard.getGrid reflects the current state of the grid.", () => {
 
 // Tests for get ships
 
-test.only("Gameboard.getShips returns an array of cloned ships.", () => {
+test("Gameboard.getShips returns an array of cloned ships.", () => {
   const gameboard = new Gameboard();
 
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
@@ -331,7 +332,7 @@ test.only("Gameboard.getShips returns an array of cloned ships.", () => {
   expect(ships[0].timesHit).toBe(1);
 });
 
-test.only("Gameboard.getShips returns an empty array when no ships have been placed.", () => {
+test("Gameboard.getShips returns an empty array when no ships have been placed.", () => {
   const gameboard = new Gameboard();
   const ships = gameboard.getShips();
 
@@ -340,7 +341,7 @@ test.only("Gameboard.getShips returns an empty array when no ships have been pla
 
 // Tests for GetMissedAttacks
 
-test.only("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () => {
+test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () => {
   const gameboard = new Gameboard();
   gameboard.receiveAttack(1, 1);
 
@@ -359,7 +360,7 @@ test.only("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.",
   expect(mutatedMissedAttacks["1,1"]).toEqual(true);
 });
 
-test.only("Gameboard.getMissed attacks return an empty dictionary when no attacks have been missed", () => {
+test("Gameboard.getMissed attacks return an empty dictionary when no attacks have been missed", () => {
   const gameboard = new Gameboard();
   const missedAttacks = gameboard.getMissedAttacks();
   expect(missedAttacks).toEqual({});
