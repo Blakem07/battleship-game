@@ -131,25 +131,25 @@ export default class Gameboard {
    */
   receiveAttack(row, column) {
     const key = `${row},${column}`;
-
+  
     if (!this.isValidCoordinate(row, column)) {
       throw new Error(
         "This is invalid as the given position is out of bounds."
       );
     }
 
-    if (this.landedAttacks[key]) {
+    if (this.#landedAttacks[key]) {
       throw new Error(
         "Invalid attack, this position has been attacked before."
       );
     }
 
-    if (this.grid[row][column] !== null) {
-      this.grid[row][column].hit();
-      this.landedAttacks[key] = true;
+    if (this.#grid[row][column] !== null) {
+      this.#grid[row][column].hit();
+      this.#landedAttacks[key] = true;
       return true;
     } else {
-      this.missedAttacks[key] = true;
+      this.#missedAttacks[key] = true;
       return false;
     }
   }
