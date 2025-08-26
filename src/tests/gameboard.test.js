@@ -337,3 +337,30 @@ test.only("Gameboard.getShips returns an empty array when no ships have been pla
 
   expect(ships).toEqual([]);
 });
+
+// Tests for GetMissedAttacks
+
+test.only("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () => {
+  const gameboard = new Gameboard();
+  gameboard.receiveAttack(1, 1);
+
+  const missedAttacks = gameboard.getMissedAttacks();
+  expect(missedAttacks["1,1"]).toEqual(true);
+
+  // Checks Shape
+  expect(Array.isArray(missedAttacks)).toBe(false);
+  expect(typeof missedAttacks).toBe("object");
+  expect(missedAttacks).not.toBeNull();
+  expect(Object.keys(missedAttacks).length).toEqual(1);
+
+  // Checks immutability of gameboard.#missedAttacks
+  delete missedAttacks["1,1"];
+  const mutatedMissedAttacks = gameboard.getMissedAttacks();
+  expect(mutatedMissedAttacks["1,1"]).toEqual(true);
+});
+
+test.only("Gameboard.getMissed attacks return an empty dictionary when no attacks have been missed", () => {
+  const gameboard = new Gameboard();
+  const missedAttacks = gameboard.getMissedAttacks();
+  expect(missedAttacks).toEqual({});
+});
