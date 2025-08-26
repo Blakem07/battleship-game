@@ -162,14 +162,14 @@ export default class Gameboard {
    * @return {boolean} - Returns true if all ships have been sunk, false otherwise.
    */
   reportShipStatus() {
-    if (Object.keys(this.ships).length <= 0) {
+    if (Object.keys(this.#ships).length <= 0) {
       throw new Error(
         "Error, reportShipStatus has been called but no ships have been placed on the board."
       );
     }
 
-    for (let ship in this.ships) {
-      if (!this.ships[ship].isSunk()) {
+    for (let ship in this.#ships) {
+      if (!this.#ships[ship].isSunk()) {
         return false;
       }
     }
@@ -179,7 +179,7 @@ export default class Gameboard {
   /**
    * GetGrid method.
    *
-   * Getter function with returns a deep clone of this.#grid
+   * Returns a deep clone of this.#grid
    *
    * @return {array<Object>} - Deep clone of grid.
    */
