@@ -131,7 +131,7 @@ export default class Gameboard {
    */
   receiveAttack(row, column) {
     const key = `${row},${column}`;
-  
+
     if (!this.isValidCoordinate(row, column)) {
       throw new Error(
         "This is invalid as the given position is out of bounds."
@@ -210,5 +210,16 @@ export default class Gameboard {
     });
 
     return shipsArray;
+  }
+
+  /**
+   * GetMissedAttacks Method.
+   *
+   * Returns a deep clone dictionary containing the missed attacks.
+   *
+   * @returns {Dictionary} - Deep clone of missed attacks.
+   */
+  getMissedAttacks() {
+    return structuredClone(this.#missedAttacks);
   }
 }
