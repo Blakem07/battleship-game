@@ -167,7 +167,7 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test("Gameboard.placeShip adds ships to a ships dictionary", () => {
+  test.only("Gameboard.placeShip adds ships to a ships dictionary", () => {
     const gameboard = new Gameboard();
 
     gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal"); // Carrier
@@ -176,16 +176,18 @@ describe("Gameboard Class Tests", () => {
     gameboard.placeShip(3, 0, Ship.VALID_NAMES[3], "horizontal"); // Submarine
     gameboard.placeShip(4, 0, Ship.VALID_NAMES[4], "horizontal"); // Destroyer
 
-    expect(gameboard.ships["carrier"].length).toBe(5);
-    expect(gameboard.ships["battleship"].length).toBe(4);
-    expect(gameboard.ships["cruiser"].length).toBe(3);
-    expect(gameboard.ships["submarine"].length).toBe(3);
-    expect(gameboard.ships["destroyer"].length).toBe(2);
+    const ships = gameboard.getShips();
+
+    expect(ships[0].length).toBe(5);
+    expect(ships[1].length).toBe(4);
+    expect(ships[2].length).toBe(3);
+    expect(ships[3].length).toBe(3);
+    expect(ships[4].length).toBe(2);
   });
 
   // Tests for ReceiveAttackMethod.
 
-  test("Gameboard.recieveAttack successfully determines the attack hit a ship.", () => {
+  test.only("Gameboard.recieveAttack successfully determines the attack hit a ship.", () => {
     const gameboard = new Gameboard();
 
     const column = 0;
@@ -196,7 +198,7 @@ describe("Gameboard Class Tests", () => {
     expect(gameboard.receiveAttack(column, row)).toBe(true);
   });
 
-  test("Gameboard.recieveAttack records the coordinates of a missed attack its missedAttack property", () => {
+  test.only("Gameboard.recieveAttack records the coordinates of a missed attack its missedAttack property", () => {
     const gameboard = new Gameboard();
 
     const row = 3;
