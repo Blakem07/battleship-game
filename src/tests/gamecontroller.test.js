@@ -153,12 +153,10 @@ describe("GameController Class Tests", () => {
       // Check if ships are placed on board
       const row = position.row;
       const col = position.col;
+      const ship = gameController.player.gameboard.getShipAt(row, col);
       const shipName = position.shipName;
 
-      expect(playerGrid[row][col].name).toEqual(shipName);
-
-      // TODO: Make a method called gameboard.getShipNameAt which returns ship name prop.
-      // because getGrid returns a structuredClone meaning I cant access private variables
+      expect(ship.name).toEqual(shipName);
     });
   });
 });
