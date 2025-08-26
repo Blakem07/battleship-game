@@ -99,64 +99,74 @@ describe("GameController Class Tests", () => {
    * - Check all positions are within bounds.
    * - Ensure no overlap
    */
-  test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
-    const playerGameboard = new Gameboard();
-    const computerGameboard = new Gameboard();
-    const player = new Player(playerGameboard);
-    const computer = new Computer(computerGameboard);
-    const gameController = new GameController(player, computer);
+  describe("GameController.placeAllShips Tests", () => {
+    let playerGameboard;
+    let computerGameboard;
+    let player;
+    let computer;
+    let gameController;
+    let shipPositions;
 
-    const shipPositions = [
-      {
-        col: 0,
-        row: 0,
-        shipName: Ship.VALID_NAMES[0],
-        direction: "horizontal",
-      }, // occupies (0,0) to (0,4)
-      {
-        row: 2,
-        col: 0,
-        shipName: Ship.VALID_NAMES[1],
-        direction: "vertical",
-      }, // occupies (2,0) to (5,0)
-      {
-        row: 5,
-        col: 2,
-        shipName: Ship.VALID_NAMES[2],
-        direction: "horizontal",
-      }, // occupies (5,2) to (5,4)
-      {
-        row: 7,
-        col: 5,
-        shipName: Ship.VALID_NAMES[3],
-        direction: "vertical",
-      }, // occupies (7,5) to (9,5)
-      {
-        row: 9,
-        col: 7,
-        shipName: Ship.VALID_NAMES[4],
-        direction: "horizontal",
-      }, // occupies (9,7) to (9,8)
-    ];
+    beforeEach(() => {
+      playerGameboard = new Gameboard();
+      computerGameboard = new Gameboard();
+      player = new Player(playerGameboard);
+      computer = new Computer(computerGameboard);
+      gameController = new GameController(player, computer);
 
-    const placeShipSpy = jest.spyOn(player, "placeShip");
-    gameController.placeAllShips(shipPositions);
-    const playerGrid = gameController.player.gameboard.getGrid();
+      shipPositions = [
+        {
+          row: 0,
+          col: 0,
+          shipName: Ship.VALID_NAMES[0],
+          direction: "horizontal",
+        },
+        {
+          row: 2,
+          col: 0,
+          shipName: Ship.VALID_NAMES[1],
+          direction: "vertical",
+        },
+        {
+          row: 5,
+          col: 2,
+          shipName: Ship.VALID_NAMES[2],
+          direction: "horizontal",
+        },
+        {
+          row: 7,
+          col: 5,
+          shipName: Ship.VALID_NAMES[3],
+          direction: "vertical",
+        },
+        {
+          row: 9,
+          col: 7,
+          shipName: Ship.VALID_NAMES[4],
+          direction: "horizontal",
+        },
+      ];
+    });
 
-    shipPositions.forEach((position, index) => {
-      // Check if placeShip is called with proper args
-      expect(placeShipSpy).toHaveBeenNthCalledWith(
-        index + 1,
-        ...Object.values(position)
-      );
+    test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
+      const placeShipSpy = jest.spyOn(player, "placeShip");
+      gameController.placeAllShips(shipPositions);
 
-      // Check if ships are placed on board
-      const row = position.row;
-      const col = position.col;
-      const ship = gameController.player.gameboard.getShipAt(row, col);
-      const shipName = position.shipName;
+      shipPositions.forEach((position, index) => {
+        // Check if placeShip is called with proper args
+        expect(placeShipSpy).toHaveBeenNthCalledWith(
+          index + 1,
+          ...Object.values(position)
+        );
 
-      expect(ship.name).toEqual(shipName);
+        // Check if ships are placed on board
+        const row = position.row;
+        const col = position.col;
+        const ship = gameController.player.gameboard.getShipAt(row, col);
+        const shipName = position.shipName;
+
+        expect(ship.name).toEqual(shipName);
+      });
     });
   });
 });
