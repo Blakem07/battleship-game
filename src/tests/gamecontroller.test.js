@@ -1,4 +1,7 @@
 import Ship from "../classes/Ship";
+import Gameboard from "../classes/Gameboard";
+import Player from "../classes/Player";
+import Computer from "../classes/Computer";
 import GameController from "../classes/GameController";
 
 describe("GameController Class Tests", () => {
@@ -87,61 +90,75 @@ describe("GameController Class Tests", () => {
   });
 
   // Tests for GameController.placeAllShips
+  /***
+   * TODO: WORK IN PROGRESS....
+   * - Verify placePlayerShips is called with the correct input[x].
+   * - Verify placeComputerShips is called with the correct input[]
+   * - Write a method in gameboard to return all placed ships.
+   *        a. So that we can check that the number of ships place is correct.
+   * - Check all positions are within bounds.
+   * - Ensure no overlap
+   */
+  test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
+    const playerGameboard = new Gameboard();
+    const computerGameboard = new Gameboard();
+    const player = new Player(playerGameboard);
+    const computer = new Computer(computerGameboard);
+    const gameController = new GameController(player, computer);
 
-  test("GameController.placeAllShips places all Player and Computer Ships correctly on the board.", () => {
-    /***
-     * TODO: WORK IN PROGRESS....
-     * - Verify placePlayerShips is called with the correct input[x].
-     * - Verify placeComputerShips is called with the correct input[x]
-     * - Write a method in gameboard to return all placed ships.
-     *        a. So that we can check that the number of ships place is correct.
-     * - Check all positions are within bounds.
-     * - Ensure no overlap
-     */
-    const gameController = new GameController();
     const shipPositions = [
       {
-        row: 0,
         col: 0,
-        shipName: "carrier",
+        row: 0,
+        shipName: Ship.VALID_NAMES[0],
         direction: "horizontal",
       }, // occupies (0,0) to (0,4)
       {
         row: 2,
         col: 0,
-        shipName: "battleship",
+        shipName: Ship.VALID_NAMES[1],
         direction: "vertical",
       }, // occupies (2,0) to (5,0)
       {
         row: 5,
         col: 2,
-        shipName: "destroyer",
+        shipName: Ship.VALID_NAMES[2],
         direction: "horizontal",
       }, // occupies (5,2) to (5,4)
       {
         row: 7,
         col: 5,
-        shipName: "submarine",
+        shipName: Ship.VALID_NAMES[3],
         direction: "vertical",
       }, // occupies (7,5) to (9,5)
       {
         row: 9,
         col: 7,
-        shipName: "patrol",
+        shipName: Ship.VALID_NAMES[4],
         direction: "horizontal",
       }, // occupies (9,7) to (9,8)
     ];
-    const placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
-    const placeShipsRandomlySpy = jest.spyOn(
-      gameController.computer,
-      "placeShipsRandomly"
-    ); // Computer
 
+    const placeShipSpy = jest.spyOn(player, "placeShip");
     gameController.placeAllShips(shipPositions);
+    const playerGrid = gameController.player.gameboard.getGrid();
 
     shipPositions.forEach((position, index) => {
-      expect(placePlayerShipsSpy).toHaveBeenNthCalledWith(index + 1, position);
+      // Check if placeShip is called with proper args
+      expect(placeShipSpy).toHaveBeenNthCalledWith(
+        index + 1,
+        ...Object.values(position)
+      );
+
+      // Check if ships are placed on board
+      const row = position.row;
+      const col = position.col;
+      const shipName = position.shipName;
+
+      expect(playerGrid[row][col].name).toEqual(shipName);
+
+      // TODO: Make a method called gameboard.getShipNameAt which returns ship name prop.
+      // because getGrid returns a structuredClone meaning I cant access private variables
     });
-    expect(placeShipsRandomlySpy).toHaveBeenCalledTimes(1);
   });
 });
