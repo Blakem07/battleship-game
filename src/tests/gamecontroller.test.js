@@ -88,7 +88,7 @@ describe("GameController Class Tests", () => {
 
   // Tests for GameController.placeAllShips
 
-  test.skip("GameController.placeAllShips places all Player and Computer Ships correctly on the board.", () => {
+  test("GameController.placeAllShips places all Player and Computer Ships correctly on the board.", () => {
     /***
      * TODO: WORK IN PROGRESS....
      * - Verify placePlayerShips is called with the correct input[x].

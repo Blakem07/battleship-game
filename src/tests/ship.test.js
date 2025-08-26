@@ -1,6 +1,6 @@
 import Ship from "../classes/Ship";
 
-describe.only("Ship Class Tests", () => {
+describe("Ship Class Tests", () => {
   test("Ship Class initialization fails with invalid length", () => {
     const invalidLengths = [1, 0, 6, 10, -3];
     invalidLengths.forEach((length) => {
@@ -54,21 +54,21 @@ describe.only("Ship Class Tests", () => {
 
   // Tests for ship.clone
 
-  test.only("Ship.clone returns an object deep equal to the original.", () => {
+  test("Ship.clone returns an object deep equal to the original.", () => {
     const ship = new Ship(Ship.VALID_NAMES[0]);
     const clone = ship.clone();
 
     expect(clone).toEqual(ship);
   });
 
-  test.only("Ship.clone returns a ship of a different instance, so mutating does not affect origial.", () => {
+  test("Ship.clone returns a ship of a different instance, so mutating does not affect origial.", () => {
     const ship = new Ship(Ship.VALID_NAMES[0]);
     const clone = ship.clone();
 
     expect(clone).not.toBe(ship);
   });
 
-  test.only("Ship.clone mutating the clone does not affect the original.", () => {
+  test("Ship.clone mutating the clone does not affect the original.", () => {
     const ship = new Ship(Ship.VALID_NAMES[0]);
     const clone = ship.clone();
 
