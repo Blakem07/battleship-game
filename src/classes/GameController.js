@@ -5,8 +5,25 @@ export default class GameController {
     this.currentTurn = "player";
     this.gameOver = false;
   }
+  /**
+   * PlaceAllShips Method.
+   *
+   * Places all of the players and computers ships on the board.
+   *
+   * @param {Array<object>} - shipPositons (Beloning to the player).
+   * @return {bool} - Returns true on success.
+   */
+  placeAllShips(shipPositions) {
+    // Handles player ship placement
+    shipPositions.forEach((position) => {
+      const row = position["row"];
+      const col = position["col"];
+      const shipName = position["shipName"];
+      const direction = position["direction"];
 
-  placeAllShips(shipPositions) {}
+      this.player.placeShip(row, col, shipName, direction);
+    });
+  }
 
   /**
    * placePlayerShips method.
