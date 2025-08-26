@@ -305,3 +305,33 @@ test.only("Gameboard.getGrid reflects the current state of the grid.", () => {
 
   expect(typeof clonedGrid[0][0]).toBe("object");
 });
+
+// Tests for get ships
+
+test.only("Gameboard.getShips returns an array of cloned ships.", () => {
+  const gameboard = new Gameboard();
+
+  gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+  gameboard.placeShip(1, 0, Ship.VALID_NAMES[1], "horizontal");
+  gameboard.placeShip(2, 0, Ship.VALID_NAMES[2], "horizontal");
+  gameboard.placeShip(3, 0, Ship.VALID_NAMES[3], "horizontal");
+  gameboard.placeShip(4, 0, Ship.VALID_NAMES[4], "horizontal");
+
+  const ships = gameboard.getShips();
+
+  // Check array shape
+  expect(Array.isArray(ships)).toBe(true);
+  expect(ships.length).toBe(5);
+
+  // Test public interface
+  expect(ships[0].timesHit).toBe(0);
+  ships[0].hit();
+  expect(ships[0].timesHit).toBe(1);
+});
+
+test.only("Gameboard.getShips returns an empty array when no ships have been placed.", () => {
+  const gameboard = new Gameboard();
+  const ships = gameboard.getShips();
+
+  expect(ships).toEqual([]);
+});
