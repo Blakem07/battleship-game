@@ -190,4 +190,25 @@ export default class Gameboard {
       });
     });
   }
+
+  /**
+   * GetShips Method.
+   *
+   * Returns an array of deeply cloned ship objects.
+   *
+   * @return {Array<objects>} - Array of cloned ships.
+   */
+  getShips() {
+    const shipsArray = [];
+
+    if (!this.#ships) {
+      return []; // return empty array if ships storage is undefined
+    }
+
+    Object.values(this.#ships).map((ship) => {
+      shipsArray.push(ship.clone());
+    });
+
+    return shipsArray;
+  }
 }
