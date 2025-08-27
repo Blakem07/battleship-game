@@ -103,6 +103,7 @@ describe("GameController Class Tests", () => {
     let playerGameboard;
     let computerGameboard;
     let player;
+    let computerPlayer;
     let computer;
     let gameController;
     let shipPositions;
@@ -111,6 +112,7 @@ describe("GameController Class Tests", () => {
       playerGameboard = new Gameboard();
       computerGameboard = new Gameboard();
       player = new Player(playerGameboard);
+      computerPlayer = new Player(computerGameboard);
       computer = new Computer(computerGameboard);
       gameController = new GameController(player, computer);
 
