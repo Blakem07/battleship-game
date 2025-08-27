@@ -29,23 +29,26 @@ export default class Computer {
   placeShipsRandomly() {
     Ship.VALID_NAMES.forEach((shipName) => {
       let placed = false;
+      let attempts = 0;
+      const MAXIMUM_ATTEMPTS = 100;
 
-      while (!placed) {
+      while (!placed && attempts < MAXIMUM_ATTEMPTS) {
         let rX = this.getRandomInt(0, 10);
         let rY = this.getRandomInt(0, 10);
         let direction = rX % 2 === 0 ? "horizontal" : "vertical";
 
         try {
-          this.player.placeShip(
-            rX,
-            rY,
-            shipName,
-            direction
-          );
+          this.player.placeShip(rX, rY, shipName, direction);
           placed = true; // success — exit loop
         } catch (error) {
-          // Invalid placement; retry with new random coordinates
+          attempts++;
         }
+      }
+
+      if (!placed) {
+        throw new Error(
+          `Failed to place ship: ${shipName} after ${MAXIMUM_ATTEMPTS} attempts.`
+        );
       }
     });
   }
