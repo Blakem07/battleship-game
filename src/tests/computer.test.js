@@ -96,6 +96,20 @@ describe("Computer Class Tests", () => {
     expect(mockPlayer.placeShip.mock.calls.length).toBeGreaterThan(5);
   });
 
+  test("Computer.placeShipsRandomly throws an error after failing to place a ship after exceeding maximum retries.", () => {
+    const mockPlayer = {
+      placeShip: jest.fn((row, col, shipName, direction) => {
+        throw new Error("Out of bounds");
+      }),
+    };
+
+    const computer = new Computer(mockPlayer);
+
+    expect(() => computer.placeShipsRandomly()).toThrow(
+      "Failed to place ship:"
+    );
+  });
+
   // Tests for getRandomInt
 
   test("Computer.getRandomInt returns a number between two constraints.", () => {
