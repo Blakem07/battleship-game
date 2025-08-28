@@ -98,7 +98,7 @@ describe("Computer Class Tests", () => {
 
   test("Computer.placeShipsRandomly throws an error after failing to place a ship after exceeding maximum retries.", () => {
     const mockPlayer = {
-      placeShip: jest.fn((row, col, shipName, direction) => {
+      placeShip: jest.fn(() => {
         throw new Error("Out of bounds");
       }),
     };
@@ -107,6 +107,10 @@ describe("Computer Class Tests", () => {
 
     expect(() => computer.placeShipsRandomly()).toThrow(
       "Failed to place ship:"
+    );
+
+    expect(mockPlayer.placeShip).toHaveBeenCalledTimes(
+      Computer.MAX_SHIP_PLACEMENT_ATTEMPTS
     );
   });
 
