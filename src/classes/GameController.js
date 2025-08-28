@@ -58,7 +58,12 @@ export default class GameController {
    */
   placeComputerShips(methodName) {
     methodName = `placeShips${this.capitalize(methodName)}`;
-    return this.computer[methodName]();
+
+    if (typeof this.computer[methodName] === "function") {
+      return this.computer[methodName]();
+    } else {
+      throw new Error(`Invalid method: ${methodName}`);
+    }
   }
 
   capitalize(methodName) {
