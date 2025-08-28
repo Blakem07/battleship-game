@@ -5,6 +5,18 @@ import Computer from "../classes/Computer";
 import GameController from "../classes/GameController";
 
 describe("GameController Class Tests", () => {
+  let player;
+  let computerPlayer;
+  let computer;
+  let gameController;
+
+  beforeEach(() => {
+    player = new Player(new Gameboard());
+    computerPlayer = new Player(new Gameboard());
+    computer = new Computer(computerPlayer);
+    gameController = new GameController(player, computer);
+  });
+
   test("GameController is initialized with references to Player and Computer.", () => {
     const mockPlayer = {};
     const mockComputer = {};
@@ -89,6 +101,22 @@ describe("GameController Class Tests", () => {
     }).toThrow("Error, one of the ship positions has invalid keys");
   });
 
+  // Tests for placeComputerShips
+
+  test("GameController.placeComputerShips calls the correct placement method.", () => {
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      const methodName = `placeShips${gameController.capitalize(method)}`;
+      jest.spyOn(computer, methodName).mockImplementation(() => {});
+    });
+
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      const methodName = `placeShips${gameController.capitalize(method)}`;
+      gameController.placeComputerShips(method);
+
+      expect(computer[methodName]).toHaveBeenCalledTimes(1);
+    });
+  });
+
   // Tests for GameController.placeAllShips
   /***
    * TODO: WORK IN PROGRESS....
@@ -100,22 +128,9 @@ describe("GameController Class Tests", () => {
    * - Ensure no overlap
    */
   describe("GameController.placeAllShips Tests", () => {
-    let playerGameboard;
-    let computerGameboard;
-    let player;
-    let computerPlayer;
-    let computer;
-    let gameController;
     let shipPositions;
 
     beforeEach(() => {
-      playerGameboard = new Gameboard();
-      computerGameboard = new Gameboard();
-      player = new Player(playerGameboard);
-      computerPlayer = new Player(computerGameboard);
-      computer = new Computer(computerGameboard);
-      gameController = new GameController(player, computer);
-
       shipPositions = [
         {
           row: 0,
