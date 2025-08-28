@@ -1,6 +1,8 @@
 import Ship from "./Ship";
 
 export default class Computer {
+  static MAX_SHIP_PLACEMENT_ATTEMPTS = 100;
+
   constructor(player) {
     this.player = player;
   }
@@ -30,9 +32,8 @@ export default class Computer {
     Ship.VALID_NAMES.forEach((shipName) => {
       let placed = false;
       let attempts = 0;
-      const MAXIMUM_ATTEMPTS = 100;
 
-      while (!placed && attempts < MAXIMUM_ATTEMPTS) {
+      while (!placed && attempts < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS) {
         let rX = this.getRandomInt(0, 10);
         let rY = this.getRandomInt(0, 10);
         let direction = rX % 2 === 0 ? "horizontal" : "vertical";
@@ -47,7 +48,7 @@ export default class Computer {
 
       if (!placed) {
         throw new Error(
-          `Failed to place ship: ${shipName} after ${MAXIMUM_ATTEMPTS} attempts.`
+          `Failed to place ship: ${shipName} after ${Computer.MAX_SHIP_PLACEMENT_ATTEMPTS} attempts.`
         );
       }
     });
