@@ -117,6 +117,12 @@ describe("GameController Class Tests", () => {
     });
   });
 
+  test("GameController.placeComputerShips throws an error when Computer is called with an invalid function.", () => {
+    expect(() =>
+      gameController.placeComputerShips("notAPlacementMethod")
+    ).toThrow(/Invalid method:/);
+  });
+
   // Tests for GameController.placeAllShips
   /***
    * TODO: WORK IN PROGRESS....
