@@ -48,4 +48,20 @@ export default class GameController {
       this.player.placeShip(shipPosition);
     });
   }
+  /**
+   * PlaceComputerShips Method.
+   *
+   * Calls a method in Computer handling all ship placement.
+   *
+   * @param {string} - Method name
+   * @return {*} - Calls Computer. placement method*
+   */
+  placeComputerShips(methodName) {
+    methodName = `placeShips${this.capitalize(methodName)}`;
+    return this.computer[methodName]();
+  }
+
+  capitalize(methodName) {
+    return methodName.charAt(0).toUpperCase() + methodName.slice(1);
+  }
 }
