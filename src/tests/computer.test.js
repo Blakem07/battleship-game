@@ -116,12 +116,25 @@ describe("Computer Class Tests", () => {
 
   test("Computer.placeShipsRandomly retries and resets grid after reach maximum ship placement attempts.", () => {
     const mockGameboard = { initGrid: jest.fn() };
-    const mockPlayer = { placeShip: jest.fn() };
+    const mockPlayer = { gameboard: mockGameboard, placeShip: jest.fn() };
     const computer = new Computer(mockPlayer);
 
-    for (let i; i < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS; i++) {
-      mockPlayer.placeShip.mockReturnValueOnce(() => {});
+    for (let i = 0; i < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS; i++) {
+      mockPlayer.placeShip.mockImplementationOnce(() => {
+        throw new Error();
+      });
     }
+
+    for (let i = 0; i < 5; i++) {
+      mockPlayer.placeShip.mockImplementationOnce(() => true);
+    }
+
+    computer.placeShipsRandomly();
+
+    expect(mockGameboard.initGrid).toHaveBeenCalledTimes(1);
+    expect(mockPlayer.placeShip).toHaveBeenCalledTimes(
+      Computer.MAX_SHIP_PLACEMENT_ATTEMPTS + 5
+    );
   });
 
   // Tests for getRandomInt
