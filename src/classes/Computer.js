@@ -26,33 +26,41 @@ export default class Computer {
   /**
    * placeShipsRandomly method.
    *
-   * Handles the ship placement of the entire fleet using randomly generated numbers.
-   *
+   * Handles the ship placement of the entire fleet by calling try placeShip.
    */
   placeShipsRandomly() {
     Ship.VALID_NAMES.forEach((shipName) => {
-      let placed = false;
-      let attempts = 0;
-
-      while (!placed && attempts < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS) {
-        let rX = this.getRandomInt(0, 10);
-        let rY = this.getRandomInt(0, 10);
-        let direction = rX % 2 === 0 ? "horizontal" : "vertical";
-
-        try {
-          this.player.placeShip(rX, rY, shipName, direction);
-          placed = true; // success — exit loop
-        } catch (error) {
-          attempts++;
-        }
-      }
-
-      if (!placed) {
-        throw new Error(
-          `Failed to place ship: ${shipName} after ${Computer.MAX_SHIP_PLACEMENT_ATTEMPTS} attempts.`
-        );
-      }
+      this.tryPlaceShip(shipName);
     });
+  }
+
+  /**
+   * tryPlaceShip method.
+   *
+   * Called during placeShipsRandommly for ship placement.
+   */
+  tryPlaceShip(shipName) {
+    let placed = false;
+    let attempts = 0;
+
+    while (!placed && attempts < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS) {
+      let rX = this.getRandomInt(0, 10);
+      let rY = this.getRandomInt(0, 10);
+      let direction = Math.random() < 0.5 ? "horizontal" : "vertical";
+
+      try {
+        this.player.placeShip(rX, rY, shipName, direction);
+        placed = true; // success — exit loop
+      } catch (error) {
+        attempts++;
+      }
+    }
+
+    if (!placed) {
+      throw new Error(
+        `Failed to place ship: ${shipName} after ${Computer.MAX_SHIP_PLACEMENT_ATTEMPTS} attempts.`
+      );
+    }
   }
 
   /**
