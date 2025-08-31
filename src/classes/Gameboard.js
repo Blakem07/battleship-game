@@ -61,9 +61,40 @@ export default class Gameboard {
    */
 
   placeShip(row, column, shipName, direction = "horizontal") {
+    const length = Ship.VALID_LENGTHS[shipName];
+
+    this.verifyShipPlacement(row, column, shipName, direction, length);
+
+    let ship = new Ship(shipName);
+
+    for (let i = 0; i < length; i++) {
+      if (direction.toUpperCase() == "HORIZONTAL") {
+        this.#grid[row][column + i] = ship;
+      } else if (direction.toUpperCase() == "VERTICAL") {
+        this.#grid[row + i][column] = ship;
+      }
+    }
+
+    this.#ships[shipName] = ship;
+
+    return true;
+  }
+
+  /**
+   * VerifyShipPlacement Helper Method.
+   *
+   * Verifies a ship can be placed on the gameboard correctly.
+   * 
+   * @param {number} row - Starting row (y-coordinate)
+   * @param {number} column - Starting column (x-coordinate)
+   * @param {number} length - Length of the ship
+   * @param {string} shipName - Name of the ship
+   * @param {string} direction - Horizontal or vertical placement
+   * @param {string} length - Length of ship
+   */
+  verifyShipPlacement(row, column, shipName, direction, length) {
     const dir = direction.toLowerCase();
     const spaceLeft = Gameboard.BOARD_COLS - column;
-    const length = Ship.VALID_LENGTHS[shipName];
 
     if (length !== Ship.VALID_LENGTHS[shipName]) {
       throw new Error("Error ship length does not match");
@@ -102,20 +133,6 @@ export default class Gameboard {
     if (!validNames.includes(shipName)) {
       throw new Error("The ship name passed as an arugment is invalid.");
     }
-
-    let ship = new Ship(shipName);
-
-    for (let i = 0; i < length; i++) {
-      if (direction.toUpperCase() == "HORIZONTAL") {
-        this.#grid[row][column + i] = ship;
-      } else if (direction.toUpperCase() == "VERTICAL") {
-        this.#grid[row + i][column] = ship;
-      }
-    }
-
-    this.#ships[shipName] = ship;
-
-    return true;
   }
 
   /**
