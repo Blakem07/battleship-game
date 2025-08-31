@@ -15,6 +15,29 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
+  // Tests for ResetBoard
+
+  test("Gameboard.resetBoard resets the gameboards properties to their default values.", () => {
+    const gameboard = new Gameboard();
+    const gridBeforeMutation = gameboard.getGrid();
+
+    gameboard.placeShip(0, 0, Ship.VALID_NAMES[0]); // Placed Ship
+    gameboard.receiveAttack(0, 0); // Landed attack
+    gameboard.receiveAttack(9, 9); // Missed attack
+
+    expect(gameboard.getGrid()).not.toEqual(gridBeforeMutation);
+    expect(gameboard.getMissedAttacks()).not.toEqual({});
+    expect(gameboard.getLandedAttacks()).not.toEqual({});
+    expect(gameboard.getShips()).not.toEqual({});
+
+    gameboard.resetBoard();
+
+    expect(gameboard.getGrid()).toEqual(gridBeforeMutation);
+    expect(gameboard.getMissedAttacks()).toEqual({});
+    expect(gameboard.getLandedAttacks()).toEqual({});
+    expect(gameboard.getShips()).toEqual({});
+  });
+
   // Tests for isValidCoordinate
 
   test("Valid coordinates inside grid", () => {
