@@ -114,6 +114,16 @@ describe("Computer Class Tests", () => {
     );
   });
 
+  test("Computer.placeShipsRandomly retries and resets grid after reach maximum ship placement attempts.", () => {
+    const mockGameboard = { initGrid: jest.fn() };
+    const mockPlayer = { placeShip: jest.fn() };
+    const computer = new Computer(mockPlayer);
+
+    for (let i; i < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS; i++) {
+      mockPlayer.placeShip.mockReturnValueOnce(() => {});
+    }
+  });
+
   // Tests for getRandomInt
 
   test("Computer.getRandomInt returns a number between two constraints.", () => {

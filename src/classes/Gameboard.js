@@ -114,6 +114,8 @@ export default class Gameboard {
     }
 
     this.#ships[shipName] = ship;
+
+    return true;
   }
 
   /**

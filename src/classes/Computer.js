@@ -36,9 +36,9 @@ export default class Computer {
 
   /**
    * tryPlaceShip method.
-   *
+   * 
    * Called during placeShipsRandommly for ship placement.
-   */
+  */
   tryPlaceShip(shipName) {
     let placed = false;
     let attempts = 0;
