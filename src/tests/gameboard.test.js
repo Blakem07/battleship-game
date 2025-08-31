@@ -389,6 +389,29 @@ test("Gameboard.getMissed attacks return an empty dictionary when no attacks hav
   expect(missedAttacks).toEqual({});
 });
 
+// Tests for GetLandedAttacks
+
+test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", () => {
+  const gameboard = new Gameboard();
+
+  gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+  gameboard.receiveAttack(0, 0);
+
+  const landedAttacks = gameboard.getLandedAttacks();
+  expect(landedAttacks["0,0"]).toEqual(true);
+
+  // Checks Shape
+  expect(Array.isArray(landedAttacks)).toBe(false);
+  expect(typeof landedAttacks).toBe("object");
+  expect(landedAttacks).not.toBeNull();
+  expect(Object.keys(landedAttacks).length).toEqual(1);
+
+  // Checks immutability of gameboard.#missedAttacks
+  delete landedAttacks["0,0"];
+  const mutatedLandedAttacks = gameboard.getLandedAttacks();
+  expect(mutatedLandedAttacks["0,0"]).toEqual(true);
+});
+
 // Tests for GetShipAt
 
 test("Gameboard.getShipAt returns a reference to the ship object.", () => {
