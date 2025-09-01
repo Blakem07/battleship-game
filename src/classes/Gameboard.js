@@ -238,7 +238,7 @@ export default class Gameboard {
    *
    * @returns {Dictionary} - Deep clone of missed attacks.
    */
-  getMissedAttacks() {
+  get missedAttacks() {
     return structuredClone(this.#missedAttacks);
   }
 
