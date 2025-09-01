@@ -36,9 +36,12 @@ export default class Computer {
 
   /**
    * tryPlaceShip method.
-   * 
+   *
    * Called during placeShipsRandommly for ship placement.
-  */
+   *
+   * @param {string} shipName
+   * @return {bool} True on success, else false.
+   */
   tryPlaceShip(shipName) {
     let placed = false;
     let attempts = 0;
@@ -48,19 +51,16 @@ export default class Computer {
       let rY = this.getRandomInt(0, 10);
       let direction = Math.random() < 0.5 ? "horizontal" : "vertical";
 
-      try {
-        this.player.placeShip(rX, rY, shipName, direction);
-        placed = true; // success — exit loop
-      } catch (error) {
+      const isSuccessful = this.player.placeShip(rX, rY, shipName, direction);
+
+      if (isSuccessful) {
+        placed = true;
+      } else {
         attempts++;
       }
     }
 
-    if (!placed) {
-      throw new Error(
-        `Failed to place ship: ${shipName} after ${Computer.MAX_SHIP_PLACEMENT_ATTEMPTS} attempts.`
-      );
-    }
+    return placed;
   }
 
   /**
