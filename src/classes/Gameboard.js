@@ -30,6 +30,18 @@ export default class Gameboard {
   }
 
   /**
+   * ResetBoard Method.
+   *
+   * Resets all gameboard properties to default values.
+   */
+  resetBoard() {
+    this.#grid = this.initGameboard();
+    this.#missedAttacks = {};
+    this.#landedAttacks = {};
+    this.#ships = {};
+  }
+
+  /**
    * IsValidCoordinate method.
    *
    * Checks whether a coordinate exists within the grid.
