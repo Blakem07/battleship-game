@@ -300,7 +300,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for get grid
 
-  test("Gameboard.getGrid returns deep clone of grid which cannot mutate the original.", () => {
+  test("Gameboard.grid returns deep clone of grid which cannot mutate the original.", () => {
     const gameboard = new Gameboard();
 
     let initialGrid = gameboard.grid;
@@ -311,7 +311,7 @@ describe("Gameboard Class Tests", () => {
   });
 });
 
-test("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () => {
+test("Gameboard.grid returns the correct structure of the 10x10 grid.", () => {
   const gameboard = new Gameboard();
 
   let clonedGrid = gameboard.grid;
@@ -324,7 +324,7 @@ test("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () =>
   }
 });
 
-test("Gameboard.getGrid reflects the current state of the grid.", () => {
+test("Gameboard.grid reflects the current state of the grid.", () => {
   const gameboard = new Gameboard();
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
   const clonedGrid = gameboard.grid;
@@ -334,7 +334,7 @@ test("Gameboard.getGrid reflects the current state of the grid.", () => {
 
 // Tests for get ships
 
-test("Gameboard.getShips returns an array of cloned ships.", () => {
+test("Gameboard.ships returns an array of cloned ships.", () => {
   const gameboard = new Gameboard();
 
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
@@ -364,7 +364,7 @@ test("Gameboard.getShips returns an empty array when no ships have been placed."
 
 // Tests for get missedAttacks
 
-test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () => {
+test("Gameboard.missedAttack attacks returns a deep clone of #missedAttacks.", () => {
   const gameboard = new Gameboard();
   gameboard.receiveAttack(1, 1);
 
@@ -383,7 +383,7 @@ test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () =
   expect(mutatedMissedAttacks["1,1"]).toEqual(true);
 });
 
-test("Gameboard.getMissed attacks return an empty dictionary when no attacks have been missed", () => {
+test("Gameboard.missedAttack attacks return an empty dictionary when no attacks have been missed", () => {
   const gameboard = new Gameboard();
   const missedAttacks = gameboard.missedAttacks;
   expect(missedAttacks).toEqual({});
@@ -391,7 +391,7 @@ test("Gameboard.getMissed attacks return an empty dictionary when no attacks hav
 
 // Tests for get landedAttacks
 
-test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", () => {
+test("Gameboard.landedAttacks returns an immutable copy of #landedAttacks", () => {
   const gameboard = new Gameboard();
 
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
@@ -410,6 +410,11 @@ test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", (
   delete landedAttacks["0,0"];
   const mutatedLandedAttacks = gameboard.landedAttacks;
   expect(mutatedLandedAttacks["0,0"]).toEqual(true);
+});
+
+test("Gameboard.landedAttacks returns an empty dictionary when no attacks have landed.", () => {
+  const gameboard = new Gameboard();
+  expect(gameboard.landedAttacks).toEqual({});
 });
 
 // Tests for GetShipAt
