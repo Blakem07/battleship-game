@@ -70,11 +70,11 @@ describe("Computer Class Tests", () => {
 
   // Tests for placeShipsRandomly
 
-  test.skip("Computer.placeShipsRandomly ensures continuation of ship placement after an invalid position is generated", () => {
+  test("Computer.placeShipsRandomly ensures continuation of ship placement after an invalid position is generated", () => {
     const mockPlayer = {
       placeShip: jest.fn((row, col, shipName, direction) => {
         if (row === 10 && col === 8) {
-          throw new Error("Out of bounds");
+          return false;
         }
       }),
     };
