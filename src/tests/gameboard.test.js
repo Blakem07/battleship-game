@@ -138,6 +138,17 @@ describe("Gameboard Class Tests", () => {
     expect(ships[4].length).toBe(2);
   });
 
+  test("Gameboard.placeShip stops and returns false is placement is not valid.", () => {
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+
+    expect(gameboard.getShipAt(0, 0)).not.toBeNull();
+    expect(
+      gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal")
+    ).toEqual(false);
+  });
+
   // Tests for verifyShipPlacement
 
   test("Gameboard.verifyShipPlacement throws error if the specified column and row position is invalid", () => {
