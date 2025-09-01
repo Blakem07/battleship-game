@@ -26,14 +26,14 @@ describe("Gameboard Class Tests", () => {
     gameboard.receiveAttack(9, 9); // Missed attack
 
     expect(gameboard.getGrid()).not.toEqual(gridBeforeMutation);
-    expect(gameboard.getMissedAttacks()).not.toEqual({});
+    expect(gameboard.missedAttacks).not.toEqual({});
     expect(gameboard.getLandedAttacks()).not.toEqual({});
     expect(gameboard.getShips()).not.toEqual({});
 
     gameboard.resetBoard();
 
     expect(gameboard.getGrid()).toEqual(gridBeforeMutation);
-    expect(gameboard.getMissedAttacks()).toEqual({});
+    expect(gameboard.missedAttacks).toEqual({});
     expect(gameboard.getLandedAttacks()).toEqual({});
     expect(gameboard.getShips()).toEqual({});
   });
@@ -228,7 +228,7 @@ describe("Gameboard Class Tests", () => {
     const column = 2;
     expect(gameboard.receiveAttack(row, column)).toBe(false);
 
-    const missedAttacks = gameboard.getMissedAttacks();
+    const missedAttacks = gameboard.missedAttacks;
     expect(missedAttacks[`${row},${column}`]).toStrictEqual(true);
   });
 
@@ -368,7 +368,7 @@ test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () =
   const gameboard = new Gameboard();
   gameboard.receiveAttack(1, 1);
 
-  const missedAttacks = gameboard.getMissedAttacks();
+  const missedAttacks = gameboard.missedAttacks;
   expect(missedAttacks["1,1"]).toEqual(true);
 
   // Checks Shape
@@ -379,13 +379,13 @@ test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () =
 
   // Checks immutability of gameboard.#missedAttacks
   delete missedAttacks["1,1"];
-  const mutatedMissedAttacks = gameboard.getMissedAttacks();
+  const mutatedMissedAttacks = gameboard.missedAttacks;
   expect(mutatedMissedAttacks["1,1"]).toEqual(true);
 });
 
 test("Gameboard.getMissed attacks return an empty dictionary when no attacks have been missed", () => {
   const gameboard = new Gameboard();
-  const missedAttacks = gameboard.getMissedAttacks();
+  const missedAttacks = gameboard.missedAttacks;
   expect(missedAttacks).toEqual({});
 });
 
