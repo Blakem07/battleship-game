@@ -84,27 +84,6 @@ describe("Gameboard Class Tests", () => {
     }
   });
 
-  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
-    const gameboard = new Gameboard();
-
-    const column = 22;
-    const row = 45;
-    const length = 5;
-
-    // Expect an error when an invalid position is passed to the method
-    expect(() => {
-      gameboard.placeShip(row, column, length, "carrier");
-    }).toThrow();
-  });
-
-  test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
-    const gameboard = new Gameboard();
-
-    expect(() => {
-      gameboard.placeShip(0, 0, 5, "carrier", "Sideways");
-    }).toThrow("Error an invalid direction has been passed to placeShip");
-  });
-
   test("Ensure the ships are placed vertically by checking each grid reference is the same.", () => {
     const gameboard = new Gameboard();
 
@@ -122,56 +101,6 @@ describe("Gameboard Class Tests", () => {
       expect(grid[row + i][column]).not.toBe(null);
       expect(grid[row + i][column]).toStrictEqual(ship);
     }
-  });
-
-  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
-    const gameboard = new Gameboard();
-
-    const column = 0;
-    const row = 0;
-
-    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
-
-    expect(() => {
-      gameboard.placeShip(row, column, length, Ship.VALID_NAMES[0]);
-    }).toThrow();
-  });
-
-  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
-    const gameboard = new Gameboard();
-
-    const column = 9;
-    const row = 0;
-    const length = 5;
-
-    // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
-    expect(() => {
-      gameboard.placeShip(row, column, length, "carrier");
-    }).toThrow();
-  });
-
-  test("Gameboard.placeShip rejects names not from the valid list", () => {
-    const column = 0;
-    const row = 0;
-
-    const invalidNames = [
-      "", // empty string
-      "carrier ", // trailing space
-      "battleship1", // typo
-      "sub-marine", // invalid format
-      null,
-      undefined,
-      123,
-      {},
-    ];
-
-    invalidNames.forEach((invalidName) => {
-      let gameboard = new Gameboard();
-
-      expect(() => {
-        gameboard.placeShip(row, column, 5, invalidName);
-      }).toThrow();
-    });
   });
 
   test("Gameboard.placeShip ensures grid indexes hold references to new ship object", () => {
@@ -207,6 +136,79 @@ describe("Gameboard Class Tests", () => {
     expect(ships[2].length).toBe(3);
     expect(ships[3].length).toBe(3);
     expect(ships[4].length).toBe(2);
+  });
+
+  // Tests for verifyShipPlacement
+
+  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
+    const gameboard = new Gameboard();
+
+    const column = 22;
+    const row = 45;
+    const length = 5;
+
+    // Expect an error when an invalid position is passed to the method
+    expect(() => {
+      gameboard.placeShip(row, column, length, "carrier");
+    }).toThrow();
+  });
+
+  test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
+    const gameboard = new Gameboard();
+
+    expect(() => {
+      gameboard.placeShip(0, 0, 5, "carrier", "Sideways");
+    }).toThrow("Error an invalid direction has been passed to placeShip");
+  });
+
+  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
+    const gameboard = new Gameboard();
+
+    const column = 0;
+    const row = 0;
+
+    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
+
+    expect(() => {
+      gameboard.placeShip(row, column, length, Ship.VALID_NAMES[0]);
+    }).toThrow();
+  });
+
+  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
+    const gameboard = new Gameboard();
+
+    const column = 9;
+    const row = 0;
+    const length = 5;
+
+    // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
+    expect(() => {
+      gameboard.placeShip(row, column, length, "carrier");
+    }).toThrow();
+  });
+
+  test("Gameboard.placeShip throws error for names not from the valid list", () => {
+    const column = 0;
+    const row = 0;
+
+    const invalidNames = [
+      "", // empty string
+      "carrier ", // trailing space
+      "battleship1", // typo
+      "sub-marine", // invalid format
+      null,
+      undefined,
+      123,
+      {},
+    ];
+
+    invalidNames.forEach((invalidName) => {
+      let gameboard = new Gameboard();
+
+      expect(() => {
+        gameboard.placeShip(row, column, 5, invalidName);
+      }).toThrow();
+    });
   });
 
   // Tests for ReceiveAttackMethod.
