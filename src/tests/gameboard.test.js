@@ -140,54 +140,40 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for verifyShipPlacement
 
-  test("Gameboard.placeShip throws error if the specified column and row position is invalid", () => {
+  test("Gameboard.verifyShipPlacement throws error if the specified column and row position is invalid", () => {
     const gameboard = new Gameboard();
 
-    const column = 22;
-    const row = 45;
-    const length = 5;
+    const invalidRow = 25;
+    const invalidCol = 150;
 
     // Expect an error when an invalid position is passed to the method
     expect(() => {
-      gameboard.placeShip(row, column, length, "carrier");
+      gameboard.verifyShipPlacement(
+        invalidRow,
+        invalidCol,
+        Ship.VALID_NAMES[0],
+        "horizontal",
+        Ship.VALID_LENGTHS["carrier"]
+      );
     }).toThrow();
   });
 
-  test("Gameboard.placeShip throws an error when passed an invalid direction.", () => {
+  test("Gameboard.verifyShipPlacement throws an error when passed an invalid direction.", () => {
     const gameboard = new Gameboard();
+    const invalidDirection = "diagonal";
 
     expect(() => {
-      gameboard.placeShip(0, 0, 5, "carrier", "Sideways");
+      gameboard.verifyShipPlacement(
+        0,
+        0,
+        Ship.VALID_NAMES[0],
+        invalidDirection,
+        Ship.VALID_LENGTHS["carrier"]
+      );
     }).toThrow("Error an invalid direction has been passed to placeShip");
   });
 
-  test("Gameboard.placeShip throws error if specified postion already has a ship.", () => {
-    const gameboard = new Gameboard();
-
-    const column = 0;
-    const row = 0;
-
-    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
-
-    expect(() => {
-      gameboard.placeShip(row, column, length, Ship.VALID_NAMES[0]);
-    }).toThrow();
-  });
-
-  test("Gameboard.placeShip throws error if the ship placed does not fit horizontally", () => {
-    const gameboard = new Gameboard();
-
-    const column = 9;
-    const row = 0;
-    const length = 5;
-
-    // Expect an error when placing a ship starting at column 9 on a 10x10 board, as it would go out of bounds
-    expect(() => {
-      gameboard.placeShip(row, column, length, "carrier");
-    }).toThrow();
-  });
-
-  test("Gameboard.placeShip throws error for names not from the valid list", () => {
+  test("Gameboard.verifyShipPlacement throws error for names not from the valid list", () => {
     const column = 0;
     const row = 0;
 
@@ -209,6 +195,42 @@ describe("Gameboard Class Tests", () => {
         gameboard.placeShip(row, column, 5, invalidName);
       }).toThrow();
     });
+  });
+
+  test("Gameboard.verifyShipPlacement returns false if position already occupied", () => {
+    const gameboard = new Gameboard();
+
+    const occupiedRow = 0;
+    const occupiedCol = 0;
+
+    expect(
+      gameboard.placeShip(occupiedRow, occupiedCol, Ship.VALID_NAMES[0])
+    ).toBe(true);
+
+    expect(
+      gameboard.verifyShipPlacement(
+        occupiedRow,
+        occupiedCol,
+        Ship.VALID_NAMES[0],
+        "horizontal",
+        Ship.VALID_LENGTHS["carrier"]
+      )
+    ).toBe(false);
+  });
+
+  test("Gameboard.verifyShipPlacment returns false if the ship placed does not fit horizontally", () => {
+    const gameboard = new Gameboard();
+    const lastCol = 9;
+
+    expect(
+      gameboard.verifyShipPlacement(
+        0,
+        lastCol,
+        Ship.VALID_NAMES[0],
+        "horizontal",
+        Ship.VALID_LENGTHS["carrier"]
+      )
+    ).toBe(false);
   });
 
   // Tests for ReceiveAttackMethod.
