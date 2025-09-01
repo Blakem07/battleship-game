@@ -4,7 +4,7 @@ import Ship from "../classes/Ship";
 describe("Gameboard Class Tests", () => {
   test("Gameboard initializes with correct dimensions", () => {
     const gameboard = new Gameboard(); // assumes board is created in the constructor
-    const grid = gameboard.getGrid();
+    const grid = gameboard.grid;
 
     // Check number of rows
     expect(grid.length).toBe(Gameboard.BOARD_ROWS);
@@ -19,23 +19,23 @@ describe("Gameboard Class Tests", () => {
 
   test("Gameboard.resetBoard resets the gameboards properties to their default values.", () => {
     const gameboard = new Gameboard();
-    const gridBeforeMutation = gameboard.getGrid();
+    const gridBeforeMutation = gameboard.grid;
 
     gameboard.placeShip(0, 0, Ship.VALID_NAMES[0]); // Placed Ship
     gameboard.receiveAttack(0, 0); // Landed attack
     gameboard.receiveAttack(9, 9); // Missed attack
 
-    expect(gameboard.getGrid()).not.toEqual(gridBeforeMutation);
+    expect(gameboard.grid).not.toEqual(gridBeforeMutation);
     expect(gameboard.missedAttacks).not.toEqual({});
-    expect(gameboard.getLandedAttacks()).not.toEqual({});
-    expect(gameboard.getShips()).not.toEqual({});
+    expect(gameboard.landedAttacks).not.toEqual({});
+    expect(gameboard.ships).not.toEqual({});
 
     gameboard.resetBoard();
 
-    expect(gameboard.getGrid()).toEqual(gridBeforeMutation);
+    expect(gameboard.grid).toEqual(gridBeforeMutation);
     expect(gameboard.missedAttacks).toEqual({});
-    expect(gameboard.getLandedAttacks()).toEqual({});
-    expect(gameboard.getShips()).toEqual({});
+    expect(gameboard.landedAttacks).toEqual({});
+    expect(gameboard.ships).toEqual({});
   });
 
   // Tests for isValidCoordinate
@@ -75,7 +75,7 @@ describe("Gameboard Class Tests", () => {
     // Place a ship of length 5 at row 1, column 5, horizontally
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "horizontal");
 
-    const grid = gameboard.getGrid();
+    const grid = gameboard.grid;
     let ship = grid[1][5];
 
     // Traverse though the grid using the length of the ship, asserting that each ref is the same
@@ -114,7 +114,7 @@ describe("Gameboard Class Tests", () => {
 
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "vertical");
 
-    const grid = gameboard.getGrid();
+    const grid = gameboard.grid;
 
     const ship = grid[row][column];
 
@@ -183,7 +183,7 @@ describe("Gameboard Class Tests", () => {
 
     gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
 
-    const grid = gameboard.getGrid();
+    const grid = gameboard.grid;
     const ship = grid[row][column];
 
     for (let i = column; i < column + length; i++) {
@@ -200,7 +200,7 @@ describe("Gameboard Class Tests", () => {
     gameboard.placeShip(3, 0, Ship.VALID_NAMES[3], "horizontal"); // Submarine
     gameboard.placeShip(4, 0, Ship.VALID_NAMES[4], "horizontal"); // Destroyer
 
-    const ships = gameboard.getShips();
+    const ships = gameboard.ships;
 
     expect(ships[0].length).toBe(5);
     expect(ships[1].length).toBe(4);
@@ -303,10 +303,10 @@ describe("Gameboard Class Tests", () => {
   test("Gameboard.getGrid returns deep clone of grid which cannot mutate the original.", () => {
     const gameboard = new Gameboard();
 
-    let initialGrid = gameboard.getGrid();
+    let initialGrid = gameboard.grid;
     initialGrid[0][0] = "changed";
 
-    const updatedGrid = gameboard.getGrid();
+    const updatedGrid = gameboard.grid;
     expect(updatedGrid[0][0]).toBe(null);
   });
 });
@@ -314,7 +314,7 @@ describe("Gameboard Class Tests", () => {
 test("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () => {
   const gameboard = new Gameboard();
 
-  let clonedGrid = gameboard.getGrid();
+  let clonedGrid = gameboard.grid;
 
   for (const row of clonedGrid) {
     expect(row.length).toBe(10);
@@ -327,7 +327,7 @@ test("Gameboard.getGrid returns the correct structure of the 10x10 grid.", () =>
 test("Gameboard.getGrid reflects the current state of the grid.", () => {
   const gameboard = new Gameboard();
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
-  const clonedGrid = gameboard.getGrid();
+  const clonedGrid = gameboard.grid;
 
   expect(typeof clonedGrid[0][0]).toBe("object");
 });
@@ -343,7 +343,7 @@ test("Gameboard.getShips returns an array of cloned ships.", () => {
   gameboard.placeShip(3, 0, Ship.VALID_NAMES[3], "horizontal");
   gameboard.placeShip(4, 0, Ship.VALID_NAMES[4], "horizontal");
 
-  const ships = gameboard.getShips();
+  const ships = gameboard.ships;
 
   // Check array shape
   expect(Array.isArray(ships)).toBe(true);
@@ -357,12 +357,12 @@ test("Gameboard.getShips returns an array of cloned ships.", () => {
 
 test("Gameboard.getShips returns an empty array when no ships have been placed.", () => {
   const gameboard = new Gameboard();
-  const ships = gameboard.getShips();
+  const ships = gameboard.ships;
 
   expect(ships).toEqual([]);
 });
 
-// Tests for GetMissedAttacks
+// Tests for get missedAttacks
 
 test("Gameboard.getMissed attacks returns a deep clone of #missedAttacks.", () => {
   const gameboard = new Gameboard();
@@ -389,7 +389,7 @@ test("Gameboard.getMissed attacks return an empty dictionary when no attacks hav
   expect(missedAttacks).toEqual({});
 });
 
-// Tests for GetLandedAttacks
+// Tests for get landedAttacks
 
 test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", () => {
   const gameboard = new Gameboard();
@@ -397,7 +397,7 @@ test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", (
   gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
   gameboard.receiveAttack(0, 0);
 
-  const landedAttacks = gameboard.getLandedAttacks();
+  const landedAttacks = gameboard.landedAttacks;
   expect(landedAttacks["0,0"]).toEqual(true);
 
   // Checks Shape
@@ -408,7 +408,7 @@ test("Gameboard.getLandedAttacks returns an immutable copy of #landedAttacks", (
 
   // Checks immutability of gameboard.#missedAttacks
   delete landedAttacks["0,0"];
-  const mutatedLandedAttacks = gameboard.getLandedAttacks();
+  const mutatedLandedAttacks = gameboard.landedAttacks;
   expect(mutatedLandedAttacks["0,0"]).toEqual(true);
 });
 
