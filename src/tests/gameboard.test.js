@@ -28,14 +28,14 @@ describe("Gameboard Class Tests", () => {
     expect(gameboard.grid).not.toEqual(gridBeforeMutation);
     expect(gameboard.missedAttacks).not.toEqual({});
     expect(gameboard.landedAttacks).not.toEqual({});
-    expect(gameboard.ships).not.toEqual({});
+    expect(gameboard.ships).not.toEqual([]); // get ships returns an array.
 
     gameboard.resetBoard();
 
     expect(gameboard.grid).toEqual(gridBeforeMutation);
     expect(gameboard.missedAttacks).toEqual({});
     expect(gameboard.landedAttacks).toEqual({});
-    expect(gameboard.ships).toEqual({});
+    expect(gameboard.ships).toEqual([]);
   });
 
   // Tests for isValidCoordinate
