@@ -84,7 +84,7 @@ export default class Gameboard {
    * VerifyShipPlacement Helper Method.
    *
    * Verifies a ship can be placed on the gameboard correctly.
-   * 
+   *
    * @param {number} row - Starting row (y-coordinate)
    * @param {number} column - Starting column (x-coordinate)
    * @param {number} length - Length of the ship
@@ -240,6 +240,17 @@ export default class Gameboard {
    */
   getMissedAttacks() {
     return structuredClone(this.#missedAttacks);
+  }
+
+  /**
+   * GetLandedAttacks Method.
+   *
+   * Returns a deep immutable clone of the #landedAttacks dictionary.
+   *
+   * @returns {Dictionary} - Deep clone of landed attacks.
+   */
+  getLandedAttacks() {
+    return structuredClone(this.#landedAttacks);
   }
 
   /**
