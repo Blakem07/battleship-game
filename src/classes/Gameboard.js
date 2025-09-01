@@ -103,6 +103,7 @@ export default class Gameboard {
    * @param {string} shipName - Name of the ship
    * @param {string} direction - Horizontal or vertical placement
    * @param {string} length - Length of ship
+   * @return {bool} - True on success, else false
    */
   verifyShipPlacement(row, column, shipName, direction, length) {
     const dir = direction.toLowerCase();
@@ -122,29 +123,23 @@ export default class Gameboard {
       );
     }
 
+    if (!Ship.VALID_NAMES.includes(shipName)) {
+      throw new Error("The ship name passed as an arugment is invalid.");
+    }
+
+    // Expected Failures
+
+    if (length > spaceLeft) {
+      return false;
+    }
+
     for (let i = column; i < column + length; i++) {
       if (this.#grid[row][i] !== null) {
-        throw new Error(`A ship already occupies row: ${row} column: ${i}`);
+        return false; // Positon already occupied
       }
     }
 
-    if (length > spaceLeft) {
-      throw new Error(
-        "Not enough horizontal space left for the ship to be placed."
-      );
-    }
-
-    const validNames = [
-      "carrier",
-      "battleship",
-      "cruiser",
-      "submarine",
-      "destroyer",
-    ];
-
-    if (!validNames.includes(shipName)) {
-      throw new Error("The ship name passed as an arugment is invalid.");
-    }
+    return true;
   }
 
   /**
