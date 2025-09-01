@@ -73,7 +73,14 @@ describe("Gameboard Class Tests", () => {
     const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES[0]];
 
     // Place a ship of length 5 at row 1, column 5, horizontally
-    gameboard.placeShip(row, column, Ship.VALID_NAMES[0], "horizontal");
+    const validPlacement = gameboard.placeShip(
+      row,
+      column,
+      Ship.VALID_NAMES[0],
+      "horizontal"
+    );
+
+    expect(validPlacement).toBe(true);
 
     const grid = gameboard.grid;
     let ship = grid[1][5];

@@ -70,19 +70,30 @@ export default class Gameboard {
    * @param {number} length - Length of the ship
    * @param {string} shipName - Name of the ship
    * @param {string} direction - Horizontal or vertical placement
+   * @return {bool} - True on success, else false.
    */
 
   placeShip(row, column, shipName, direction = "horizontal") {
     const length = Ship.VALID_LENGTHS[shipName];
 
-    this.verifyShipPlacement(row, column, shipName, direction, length);
+    const isValid = this.verifyShipPlacement(
+      row,
+      column,
+      shipName,
+      direction,
+      length
+    );
+
+    if (!isValid) {
+      return false;
+    }
 
     let ship = new Ship(shipName);
 
     for (let i = 0; i < length; i++) {
-      if (direction.toUpperCase() == "HORIZONTAL") {
+      if (direction.toLowerCase() == "horizontal") {
         this.#grid[row][column + i] = ship;
-      } else if (direction.toUpperCase() == "VERTICAL") {
+      } else if (direction.toLowerCase() == "vertical") {
         this.#grid[row + i][column] = ship;
       }
     }
