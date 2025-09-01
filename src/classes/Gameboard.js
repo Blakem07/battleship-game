@@ -196,13 +196,13 @@ export default class Gameboard {
   }
 
   /**
-   * GetGrid method.
+   * get grid Getter.
    *
    * Returns a deep clone of this.#grid
    *
    * @return {array<Object>} - Deep clone of grid.
    */
-  getGrid() {
+  get grid() {
     return this.#grid.map((row) => {
       return row.map((col) => {
         return structuredClone(col);
@@ -211,13 +211,13 @@ export default class Gameboard {
   }
 
   /**
-   * GetShips Method.
+   * get ships Getter.
    *
    * Returns an array of deeply cloned ship objects.
    *
    * @return {Array<objects>} - Array of cloned ships.
    */
-  getShips() {
+  get ships() {
     const shipsArray = [];
 
     if (!this.#ships) {
@@ -232,7 +232,7 @@ export default class Gameboard {
   }
 
   /**
-   * GetMissedAttacks Method.
+   * get missedAttacks Getter.
    *
    * Returns a deep clone dictionary containing the missed attacks.
    *
@@ -243,13 +243,13 @@ export default class Gameboard {
   }
 
   /**
-   * GetLandedAttacks Method.
+   * get landedAttacks Getter.
    *
    * Returns a deep immutable clone of the #landedAttacks dictionary.
    *
    * @returns {Dictionary} - Deep clone of landed attacks.
    */
-  getLandedAttacks() {
+  get landedAttacks() {
     return structuredClone(this.#landedAttacks);
   }
 
