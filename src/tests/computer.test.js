@@ -71,7 +71,10 @@ describe("Computer Class Tests", () => {
   // Tests for placeShipsRandomly
 
   test("Computer.placeShipsRandomly ensures continuation of ship placement after an invalid position is generated", () => {
+    const mockGameboard = { resetBoard: jest.fn() };
+
     const mockPlayer = {
+      gameboard: mockGameboard,
       placeShip: jest.fn((row, col, shipName, direction) => {
         if (row === 10 && col === 8) {
           return false;
@@ -109,7 +112,7 @@ describe("Computer Class Tests", () => {
     expect(mockPlayer.placeShip.mock.calls.length).toBeGreaterThan(5);
   });
 
-  test.only("Computer.placeShipsRandomly retries and resets grid after failing one fleet placement", () => {
+  test("Computer.placeShipsRandomly retries and resets grid after failing one fleet placement", () => {
     const mockGameboard = { resetBoard: jest.fn() };
     const mockPlayer = { gameboard: mockGameboard, placeShip: jest.fn() };
     const computer = new Computer(mockPlayer);

@@ -125,7 +125,9 @@ export default class Gameboard {
     }
 
     if (!this.isValidCoordinate(row, column)) {
-      throw new Error("The ship has been placed in an out of bounds position.");
+      throw new Error(
+        `The ship has been placed in an out of bounds position: Row:${row} Col:${column}`
+      );
     }
 
     if (dir !== "horizontal" && dir !== "vertical") {

@@ -1,6 +1,7 @@
 import Ship from "./Ship";
 
 export default class Computer {
+  static MAX_FLEET_PLACEMENT_ATTEMPTS = 5;
   static MAX_SHIP_PLACEMENT_ATTEMPTS = 100;
   static PLACEMENT_METHODS = ["randomly"];
 
@@ -26,12 +27,36 @@ export default class Computer {
   /**
    * placeShipsRandomly method.
    *
-   * Handles the ship placement of the entire fleet by calling try placeShip.
+   * Handles the ship placement of the entire fleet by calling tryPlaceShip
+   * with random arguments.
+   *
+   * @return {bool} - True on success, else false.
    */
   placeShipsRandomly() {
-    Ship.VALID_NAMES.forEach((shipName) => {
-      this.tryPlaceShip(shipName);
-    });
+    const gameboard = this.player.gameboard;
+    let fleetPlaced = false;
+    let attempts = 0;
+
+    while (!fleetPlaced && attempts < Computer.MAX_FLEET_PLACEMENT_ATTEMPTS) {
+      gameboard.resetBoard();
+      let shipsPlaced = 0;
+
+      Ship.VALID_NAMES.forEach((shipName) => {
+        const isSuccessful = this.tryPlaceShip(shipName);
+
+        if (isSuccessful) {
+          shipsPlaced++;
+        }
+      });
+
+      if (shipsPlaced == Ship.VALID_NAMES.length) {
+        fleetPlaced = true;
+      } else {
+        attempts++; // Increment per failed fleet placement
+      }
+    }
+
+    return fleetPlaced;
   }
 
   /**
