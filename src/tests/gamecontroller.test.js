@@ -73,7 +73,13 @@ describe("GameController Class Tests", () => {
     expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
 
     shipPositions.forEach((ship, index) => {
-      expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(index + 1, ship);
+      expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(
+        index + 1,
+        ship["row"],
+        ship["col"],
+        ship["shipName"],
+        ship["direction"]
+      );
     });
   });
 

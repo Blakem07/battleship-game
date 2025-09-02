@@ -45,7 +45,12 @@ export default class GameController {
         throw new Error("Error, one of the ship positions has invalid keys");
       }
 
-      this.player.placeShip(shipPosition);
+      this.player.placeShip(
+        shipPosition["row"],
+        shipPosition["col"],
+        shipPosition["shipName"],
+        shipPosition["direction"]
+      );
     });
   }
   /**
