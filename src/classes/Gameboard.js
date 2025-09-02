@@ -17,14 +17,11 @@ export default class Gameboard {
   }
 
   initGameboard() {
-    const grid = Array(Gameboard.BOARD_ROWS);
-
-    for (let i = 0; i < Gameboard.BOARD_ROWS; i++) {
-      grid[i] = Array(Gameboard.BOARD_COLS);
-      for (let j = 0; j < Gameboard.BOARD_COLS; j++) {
-        grid[i][j] = null;
-      }
-    }
+    const grid = Array(Gameboard.BOARD_ROWS)
+      .fill(null)
+      .map(() => {
+        return Array(Gameboard.BOARD_COLS).fill(null);
+      });
 
     return grid;
   }
