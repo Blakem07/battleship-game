@@ -9,12 +9,46 @@ describe("GameController Class Tests", () => {
   let computerPlayer;
   let computer;
   let gameController;
+  let validShipPositions;
 
   beforeEach(() => {
     player = new Player(new Gameboard());
     computerPlayer = new Player(new Gameboard());
     computer = new Computer(computerPlayer);
     gameController = new GameController(player, computer);
+
+    validShipPositions = [
+      {
+        row: 0,
+        col: 0,
+        shipName: Ship.VALID_NAMES[0],
+        direction: "horizontal",
+      },
+      {
+        row: 2,
+        col: 0,
+        shipName: Ship.VALID_NAMES[1],
+        direction: "vertical",
+      },
+      {
+        row: 5,
+        col: 2,
+        shipName: Ship.VALID_NAMES[2],
+        direction: "horizontal",
+      },
+      {
+        row: 7,
+        col: 5,
+        shipName: Ship.VALID_NAMES[3],
+        direction: "vertical",
+      },
+      {
+        row: 9,
+        col: 7,
+        shipName: Ship.VALID_NAMES[4],
+        direction: "horizontal",
+      },
+    ];
   });
 
   test("GameController is initialized with references to Player and Computer.", () => {
@@ -35,45 +69,12 @@ describe("GameController Class Tests", () => {
 
     const gameController = new GameController(mockPlayer, mockComputer);
 
-    const shipPositions = [
-      {
-        row: 0,
-        col: 0,
-        shipName: Ship.VALID_NAMES[0],
-        direction: "horizontal",
-      }, // occupies (0,0) to (0,4)
-      {
-        row: 2,
-        col: 0,
-        shipName: Ship.VALID_NAMES[1],
-        direction: "vertical",
-      }, // occupies (2,0) to (5,0)
-      {
-        row: 5,
-        col: 2,
-        shipName: Ship.VALID_NAMES[2],
-        direction: "horizontal",
-      }, // occupies (5,2) to (5,4)
-      {
-        row: 7,
-        col: 5,
-        shipName: Ship.VALID_NAMES[3],
-        direction: "vertical",
-      }, // occupies (7,5) to (9,5)
-      {
-        row: 9,
-        col: 7,
-        shipName: Ship.VALID_NAMES[4],
-        direction: "horizontal",
-      }, // occupies (9,7) to (9,8)
-    ];
-
-    const result = gameController.placePlayerShips(shipPositions);
+    const result = gameController.placePlayerShips(validShipPositions);
 
     expect(result).toEqual(true);
     expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
 
-    shipPositions.forEach((ship, index) => {
+    validShipPositions.forEach((ship, index) => {
       expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(
         index + 1,
         ship["row"],
@@ -84,13 +85,13 @@ describe("GameController Class Tests", () => {
     });
   });
 
-  test("GameController.placePlayerShips throws error when shipPositions is invalid or malformed", () => {
+  test("GameController.placePlayerShips throws error when validShipPositions is invalid or malformed", () => {
     const mockPlayer = { placeShip: jest.fn() };
     const mockComputer = {};
 
     const gameController = new GameController(mockPlayer, mockComputer);
 
-    const invalidShipPositions = [
+    const invalidvalidShipPositions = [
       {
         row: 0,
         col: 0,
@@ -104,7 +105,7 @@ describe("GameController Class Tests", () => {
     ];
 
     expect(() => {
-      gameController.placePlayerShips(invalidShipPositions);
+      gameController.placePlayerShips(invalidvalidShipPositions);
     }).toThrow("Error, one of the ship positions has invalid keys");
   });
 
@@ -140,85 +141,47 @@ describe("GameController Class Tests", () => {
    * - Check all positions are within bounds.
    * - Ensure no overlap
    */
-  describe("GameController.placeAllShips Tests", () => {
-    let shipPositions;
 
-    beforeEach(() => {
-      shipPositions = [
-        {
-          row: 0,
-          col: 0,
-          shipName: Ship.VALID_NAMES[0],
-          direction: "horizontal",
-        },
-        {
-          row: 2,
-          col: 0,
-          shipName: Ship.VALID_NAMES[1],
-          direction: "vertical",
-        },
-        {
-          row: 5,
-          col: 2,
-          shipName: Ship.VALID_NAMES[2],
-          direction: "horizontal",
-        },
-        {
-          row: 7,
-          col: 5,
-          shipName: Ship.VALID_NAMES[3],
-          direction: "vertical",
-        },
-        {
-          row: 9,
-          col: 7,
-          shipName: Ship.VALID_NAMES[4],
-          direction: "horizontal",
-        },
-      ];
+  test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
+    const placeShipSpy = jest.spyOn(player, "placeShip");
+
+    gameController.placeAllShips(validShipPositions);
+
+    validShipPositions.forEach((position, index) => {
+      // Check if placeShip is called with proper args
+      expect(placeShipSpy).toHaveBeenNthCalledWith(
+        index + 1,
+        ...Object.values(position)
+      );
+
+      // Check if ships are placed on board
+      const row = position.row;
+      const col = position.col;
+      const ship = gameController.player.gameboard.getShipAt(row, col);
+      const shipName = position.shipName;
+
+      expect(ship.name).toEqual(shipName);
     });
 
-    test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
-      const placeShipSpy = jest.spyOn(player, "placeShip");
+    expect(placeShipSpy).toHaveBeenCalledTimes(validShipPositions.length);
 
-      gameController.placeAllShips(shipPositions);
+    placeShipSpy.mockRestore();
+  });
 
-      shipPositions.forEach((position, index) => {
-        // Check if placeShip is called with proper args
-        expect(placeShipSpy).toHaveBeenNthCalledWith(
-          index + 1,
-          ...Object.values(position)
-        );
+  test("GameController.placeAllShips places all Computer Ships correctly on the board.", () => {
+    const gameboard = computerPlayer.gameboard;
+    const placeShipSpy = jest.spyOn(computerPlayer, "placeShip");
+    const tryPlaceShipSpy = jest.spyOn(computer, "tryPlaceShip");
 
-        // Check if ships are placed on board
-        const row = position.row;
-        const col = position.col;
-        const ship = gameController.player.gameboard.getShipAt(row, col);
-        const shipName = position.shipName;
+    gameController.placeAllShips(validShipPositions);
 
-        expect(ship.name).toEqual(shipName);
-      });
+    // Not fixed due to random placement retry loop
+    expect(placeShipSpy.mock.calls.length).toBeGreaterThanOrEqual(5);
+    // Fixed as retry loop occurs within here
+    expect(tryPlaceShipSpy).toHaveBeenCalledTimes(Ship.VALID_NAMES.length);
+    expect(gameboard.ships.length).toBe(Ship.VALID_NAMES.length);
 
-      expect(placeShipSpy).toHaveBeenCalledTimes(shipPositions.length);
-
-      placeShipSpy.mockRestore();
-    });
-
-    test("GameController.placeAllShips places all Computer Ships correctly on the board.", () => {
-      const gameboard = computerPlayer.gameboard;
-      const placeShipSpy = jest.spyOn(computerPlayer, "placeShip");
-      const tryPlaceShipSpy = jest.spyOn(computer, "tryPlaceShip");
-
-      gameController.placeAllShips(shipPositions);
-
-      // Not fixed due to random placement retry loop
-      expect(placeShipSpy.mock.calls.length).toBeGreaterThanOrEqual(5);
-      // Fixed as retry loop occurs within here
-      expect(tryPlaceShipSpy).toHaveBeenCalledTimes(Ship.VALID_NAMES.length);
-      expect(gameboard.ships.length).toBe(Ship.VALID_NAMES.length);
-
-      placeShipSpy.mockRestore();
-      tryPlaceShipSpy.mockRestore();
-    });
+    placeShipSpy.mockRestore();
+    tryPlaceShipSpy.mockRestore();
   });
 });
