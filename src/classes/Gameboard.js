@@ -52,11 +52,10 @@ export default class Gameboard {
       typeof column === "number" &&
       row >= 0 &&
       column >= 0 &&
-      column < this.#grid.length &&
-      row < this.#grid[column].length
+      column < Gameboard.BOARD_COLS &&
+      row < Gameboard.BOARD_ROWS
     );
   }
-
   //
 
   /**

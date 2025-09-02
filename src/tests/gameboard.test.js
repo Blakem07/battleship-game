@@ -40,11 +40,14 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for isValidCoordinate
 
-  test("Valid coordinates inside grid", () => {
+  test.only("Gameboard.isValidCoordinate returns true for all cells in a 10x10 grid.", () => {
     const gameboard = new Gameboard();
 
-    expect(gameboard.isValidCoordinate(0, 0)).toBe(true);
-    expect(gameboard.isValidCoordinate(1, 1)).toBe(true);
+    for (let row = 0; row < 10; row++) {
+      for (let col = 0; col < 10; col++) {
+        expect(gameboard.isValidCoordinate(row, col)).toEqual(true);
+      }
+    }
   });
 
   test("Invalid coordinates", () => {
