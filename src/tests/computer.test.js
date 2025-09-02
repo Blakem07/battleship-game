@@ -109,28 +109,31 @@ describe("Computer Class Tests", () => {
     expect(mockPlayer.placeShip.mock.calls.length).toBeGreaterThan(5);
   });
 
-  test.skip("Computer.placeShipsRandomly retries and resets grid after reach maximum ship placement attempts.", () => {
-    const mockGameboard = { resetGrid: jest.fn() };
+  test.only("Computer.placeShipsRandomly retries and resets grid after failing one fleet placement", () => {
+    const mockGameboard = { resetBoard: jest.fn() };
     const mockPlayer = { gameboard: mockGameboard, placeShip: jest.fn() };
     const computer = new Computer(mockPlayer);
 
-    // Fails one fleet placement
-    for (let i = 0; i < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS; i++) {
-      mockPlayer.placeShip.mockImplementationOnce(() => {
-        return false;
-      });
+    const spy = jest.spyOn(computer, "tryPlaceShip");
+
+    for (let i = 0; i < Ship.VALID_NAMES.length; i++) {
+      spy.mockReturnValueOnce(false); // Force failure for 5 ships (1 fleets)
     }
 
-    // Successful fleet placement
-    for (let i = 0; i < 5; i++) {
-      mockPlayer.placeShip.mockImplementationOnce(() => true);
+    for (let i = 0; i < Ship.VALID_NAMES.length; i++) {
+      spy.mockReturnValueOnce(true); // Force success onwards
     }
 
     computer.placeShipsRandomly();
 
-    expect(mockGameboard.resetGrid).toHaveBeenCalledTimes(1);
-    expect(mockPlayer.placeShip).toHaveBeenCalledTimes(
-      Computer.MAX_SHIP_PLACEMENT_ATTEMPTS + 5
+    expect(spy).toHaveBeenCalledTimes(Ship.VALID_NAMES.length * 2);
+    expect(mockGameboard.resetBoard).toHaveBeenCalledTimes(2);
+
+    // Check that the second resetBoard call happened after the first 5 tryPlaceShip calls
+    expect(
+      mockGameboard.resetBoard.mock.invocationCallOrder[1]
+    ).toBeGreaterThan(
+      spy.mock.invocationCallOrder[Ship.VALID_NAMES.length - 1]
     );
   });
 
