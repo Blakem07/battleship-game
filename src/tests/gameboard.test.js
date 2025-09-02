@@ -40,7 +40,7 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for isValidCoordinate
 
-  test.only("Gameboard.isValidCoordinate returns true for all cells in a 10x10 grid.", () => {
+  test("Gameboard.isValidCoordinate returns true for all cells in a 10x10 grid.", () => {
     const gameboard = new Gameboard();
 
     for (let row = 0; row < 10; row++) {
@@ -243,12 +243,24 @@ describe("Gameboard Class Tests", () => {
     const gameboard = new Gameboard();
     const lastCol = 9;
 
+    // Testing horizontal
     expect(
       gameboard.verifyShipPlacement(
         0,
         lastCol,
         Ship.VALID_NAMES[0],
         "horizontal",
+        Ship.VALID_LENGTHS["carrier"]
+      )
+    ).toBe(false);
+
+    // Testing vertical
+    expect(
+      gameboard.verifyShipPlacement(
+        9, // Bottom Row
+        0,
+        Ship.VALID_NAMES[0],
+        "vertical",
         Ship.VALID_LENGTHS["carrier"]
       )
     ).toBe(false);

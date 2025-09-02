@@ -114,7 +114,8 @@ export default class Gameboard {
    */
   verifyShipPlacement(row, column, shipName, direction, length) {
     const dir = direction.toLowerCase();
-    const spaceLeft = Gameboard.BOARD_COLS - column;
+    const horizontalSpaceLeft = Gameboard.BOARD_COLS - column;
+    const verticalSpaceLeft = Gameboard.BOARD_ROWS - row;
 
     if (length !== Ship.VALID_LENGTHS[shipName]) {
       throw new Error("Error ship length does not match");
@@ -138,7 +139,10 @@ export default class Gameboard {
 
     // Expected Failures
 
-    if (length > spaceLeft) {
+    if (
+      (dir === "horizontal" && length > horizontalSpaceLeft) ||
+      (dir === "vertical" && length > verticalSpaceLeft)
+    ) {
       return false;
     }
 
