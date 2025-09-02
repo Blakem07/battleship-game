@@ -68,8 +68,9 @@ describe("GameController Class Tests", () => {
       }, // occupies (9,7) to (9,8)
     ];
 
-    gameController.placePlayerShips(shipPositions);
+    const result = gameController.placePlayerShips(shipPositions);
 
+    expect(result).toEqual(true);
     expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
 
     shipPositions.forEach((ship, index) => {

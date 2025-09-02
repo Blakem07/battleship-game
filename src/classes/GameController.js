@@ -45,6 +45,8 @@ export default class GameController {
         shipPosition["direction"]
       );
     });
+
+    return true;
   }
   /**
    * PlaceComputerShips Method.
