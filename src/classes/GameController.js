@@ -14,15 +14,8 @@ export default class GameController {
    * @return {bool} - Returns true on success.
    */
   placeAllShips(shipPositions) {
-    // Handles player ship placement
-    shipPositions.forEach((position) => {
-      const row = position["row"];
-      const col = position["col"];
-      const shipName = position["shipName"];
-      const direction = position["direction"];
-
-      this.player.placeShip(row, col, shipName, direction);
-    });
+    this.placePlayerShips(shipPositions);
+    this.placeComputerShips("randomly");
   }
 
   /**
