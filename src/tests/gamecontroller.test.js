@@ -179,6 +179,7 @@ describe("GameController Class Tests", () => {
 
     test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
       const placeShipSpy = jest.spyOn(player, "placeShip");
+
       gameController.placeAllShips(shipPositions);
 
       shipPositions.forEach((position, index) => {
@@ -196,6 +197,27 @@ describe("GameController Class Tests", () => {
 
         expect(ship.name).toEqual(shipName);
       });
+
+      expect(placeShipSpy).toHaveBeenCalledTimes(shipPositions.length);
+
+      placeShipSpy.mockRestore();
+    });
+
+    test("GameController.placeAllShips places all Computer Ships correctly on the board.", () => {
+      const gameboard = computerPlayer.gameboard;
+      const placeShipSpy = jest.spyOn(computerPlayer, "placeShip");
+      const tryPlaceShipSpy = jest.spyOn(computer, "tryPlaceShip");
+
+      gameController.placeAllShips(shipPositions);
+
+      // Not fixed due to random placement retry loop
+      expect(placeShipSpy.mock.calls.length).toBeGreaterThanOrEqual(5);
+      // Fixed as retry loop occurs within here
+      expect(tryPlaceShipSpy).toHaveBeenCalledTimes(Ship.VALID_NAMES.length);
+      expect(gameboard.ships.length).toBe(Ship.VALID_NAMES.length);
+
+      placeShipSpy.mockRestore();
+      tryPlaceShipSpy.mockRestore();
     });
   });
 });
