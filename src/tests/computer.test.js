@@ -40,7 +40,7 @@ describe("Computer Class Tests", () => {
     computer.tryPlaceShip(Ship.VALID_NAMES[0]);
 
     expect(computer.getRandomInt).toHaveBeenCalledTimes(2);
-    expect(computer.getRandomInt).toHaveBeenCalledWith(0, 10);
+    expect(computer.getRandomInt).toHaveBeenCalledWith(0, 9);
 
     expect(mockPlayer.placeShip).toHaveBeenCalledTimes(1);
 
@@ -142,18 +142,16 @@ describe("Computer Class Tests", () => {
 
   // Tests for getRandomInt
 
-  test("Computer.getRandomInt returns a number between two constraints.", () => {
+  test("Computer.getRandomInt returns an integer between two constraints.", () => {
     const computer = new Computer();
 
     const lowerLimit = 0;
     const upperLimit = 10;
 
-    expect(computer.getRandomInt(upperLimit, lowerLimit)).toBeGreaterThan(
-      lowerLimit
-    );
+    const rand = computer.getRandomInt(lowerLimit, upperLimit);
 
-    expect(computer.getRandomInt(upperLimit, lowerLimit)).toBeLessThan(
-      upperLimit
-    );
+    expect(Number.isInteger(rand)).toEqual(true);
+    expect(rand).toBeGreaterThanOrEqual(lowerLimit);
+    expect(rand).toBeLessThanOrEqual(upperLimit);
   });
 });

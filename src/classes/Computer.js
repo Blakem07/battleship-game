@@ -72,8 +72,8 @@ export default class Computer {
     let attempts = 0;
 
     while (!placed && attempts < Computer.MAX_SHIP_PLACEMENT_ATTEMPTS) {
-      let rX = this.getRandomInt(0, 10);
-      let rY = this.getRandomInt(0, 10);
+      let rX = this.getRandomInt(0, 9);
+      let rY = this.getRandomInt(0, 9);
       let direction = Math.random() < 0.5 ? "horizontal" : "vertical";
 
       const isSuccessful = this.player.placeShip(rX, rY, shipName, direction);
@@ -98,6 +98,6 @@ export default class Computer {
    * @return {number} - Random number.
    */
   getRandomInt(min, max) {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }
