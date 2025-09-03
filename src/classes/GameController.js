@@ -10,12 +10,14 @@ export default class GameController {
    *
    * Places all of the players and computers ships on the board.
    *
-   * @param {Array<object>} - shipPositons (Beloning to the player).
-   * @return {bool} - Returns true on success.
+   * @param {Array<object>} - shipPositons (belonging to the player).
+   * @return {Boolean} - Returns true on success, else false.
    */
   placeAllShips(shipPositions) {
-    this.placePlayerShips(shipPositions);
-    this.placeComputerShips("randomly");
+    return (
+      this.placePlayerShips(shipPositions) &&
+      this.placeComputerShips("randomly")
+    );
   }
 
   /**

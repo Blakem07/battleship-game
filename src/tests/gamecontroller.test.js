@@ -11,11 +11,17 @@ describe("GameController Class Tests", () => {
   let gameController;
   let validShipPositions;
 
+  let placePlayerShipsSpy;
+  let placeComputerShipsSpy;
+
   beforeEach(() => {
     player = new Player(new Gameboard());
     computerPlayer = new Player(new Gameboard());
     computer = new Computer(computerPlayer);
     gameController = new GameController(player, computer);
+
+    placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
+    placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
     validShipPositions = [
       {
@@ -167,15 +173,6 @@ describe("GameController Class Tests", () => {
   });
 
   // Tests for GameController.placeAllShips
-  /***
-   * TODO: WORK IN PROGRESS....
-   * - Verify placePlayerShips is called with the correct input[x].
-   * - Verify placeComputerShips is called with the correct input[]
-   * - Write a method in gameboard to return all placed ships.
-   *        a. So that we can check that the number of ships place is correct.
-   * - Check all positions are within bounds.
-   * - Ensure no overlap
-   */
 
   test("GameController.placeAllShips places all Player Ships correctly on the board.", () => {
     const placeShipSpy = jest.spyOn(player, "placeShip");
@@ -218,5 +215,24 @@ describe("GameController Class Tests", () => {
 
     placeShipSpy.mockRestore();
     tryPlaceShipSpy.mockRestore();
+  });
+
+  test("GameController.placeAllShips returns true on success.", () => {
+    placePlayerShipsSpy.mockReturnValue(true);
+    placeComputerShipsSpy.mockReturnValue(true);
+
+    expect(gameController.placeAllShips()).toEqual(true);
+  });
+
+  test("GameController.placeAllShips returns false on failure.", () => {
+    placePlayerShipsSpy.mockReturnValueOnce(true);
+    placeComputerShipsSpy.mockReturnValueOnce(false);
+
+    expect(gameController.placeAllShips()).toEqual(false);
+
+    placePlayerShipsSpy.mockReturnValueOnce(false);
+    placeComputerShipsSpy.mockReturnValueOnce(false);
+
+    expect(gameController.placeAllShips()).toEqual(false);
   });
 });
