@@ -235,4 +235,10 @@ describe("GameController Class Tests", () => {
 
     expect(gameController.placeAllShips()).toEqual(false);
   });
+
+  // Tests for setup.
+  test("GameController.setupGame rests game state variables by calling rest game.", () => {
+    gameController.setupGame();
+    expect(gameController.resetGame).toHaveBeenCalledTimes(1);
+  });
 });

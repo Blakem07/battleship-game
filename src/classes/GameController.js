@@ -5,6 +5,17 @@ export default class GameController {
     this.currentTurn = "player";
     this.gameOver = false;
   }
+
+  /**
+   * Sets up the gameplay loop by reseting game state
+   * variables and placing ships.
+   */
+  setupGame() {
+    // Reset game state variables.
+    this.resetGame();
+    // Get Player input from UI and PlaceAllShips using their ship positions
+  }
+
   /**
    * PlaceAllShips Method.
    *
