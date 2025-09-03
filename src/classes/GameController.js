@@ -1,5 +1,3 @@
-import { forEach } from "neo-async";
-
 export default class GameController {
   constructor(player, computer) {
     this.player = player;
@@ -59,8 +57,8 @@ export default class GameController {
    *
    * Calls a method in Computer handling all ship placement.
    *
-   * @param {string} - Method name
-   * @return {*} - Calls Computer. placement method*
+   * @param {String} - Method name
+   * @return {Boolean} True if on success else false.
    */
   placeComputerShips(methodName) {
     methodName = `placeShips${this.capitalize(methodName)}`;

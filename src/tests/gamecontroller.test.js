@@ -51,6 +51,10 @@ describe("GameController Class Tests", () => {
     ];
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   test("GameController is initialized with references to Player and Computer.", () => {
     const mockPlayer = {};
     const mockComputer = {};
@@ -131,6 +135,28 @@ describe("GameController Class Tests", () => {
       gameController.placeComputerShips(method);
 
       expect(computer[methodName]).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test("GameController.placeComputerShips returns true on success.", () => {
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      const methodName = `placeShips${gameController.capitalize(method)}`;
+      jest.spyOn(computer, methodName).mockReturnValue(true);
+    });
+
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      expect(gameController.placeComputerShips(method)).toEqual(true);
+    });
+  });
+
+  test("placeComputerShips returns false when placement method fails", () => {
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      const methodName = `placeShips${gameController.capitalize(method)}`;
+      jest.spyOn(computer, methodName).mockReturnValue(false);
+    });
+
+    Computer.PLACEMENT_METHODS.forEach((method) => {
+      expect(gameController.placeComputerShips(method)).toBe(false);
     });
   });
 
