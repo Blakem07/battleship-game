@@ -29,7 +29,7 @@ export default class GameController {
   placePlayerShips(shipPositions) {
     const validKeys = ["row", "col", "shipName", "direction"];
 
-    shipPositions.forEach((shipPosition) => {
+    for (const shipPosition of shipPositions) {
       if (
         typeof shipPosition !== "object" ||
         shipPosition === null ||
@@ -38,13 +38,17 @@ export default class GameController {
         throw new Error("Error, one of the ship positions has invalid keys");
       }
 
-      this.player.placeShip(
+      const result = this.player.placeShip(
         shipPosition["row"],
         shipPosition["col"],
         shipPosition["shipName"],
         shipPosition["direction"]
       );
-    });
+
+      if (!result) {
+        return false; // This now exits placePlayerShips immediately
+      }
+    }
 
     return true;
   }
