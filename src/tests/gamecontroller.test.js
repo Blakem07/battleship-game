@@ -265,8 +265,9 @@ describe("GameController Class Tests", () => {
   });
 
   // Tests for setup.
-  test("GameController.setupGame rests game state variables by calling rest game.", () => {
+  test("GameController.setupGame resets game state variables by calling reset game.", () => {
+    const resetGameSpy = jest.spyOn(gameController, "resetGame");
     gameController.setupGame();
-    expect(gameController.resetGame).toHaveBeenCalledTimes(1);
+    expect(resetGameSpy).toHaveBeenCalledTimes(1);
   });
 });

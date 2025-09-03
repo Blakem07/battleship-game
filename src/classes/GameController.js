@@ -6,6 +6,18 @@ export default class GameController {
     this.gameOver = false;
     this.winner = null;
   }
+  
+  /**
+   * Resets game state variables, ensuring game is ready to replay.
+   */
+  resetGame() {
+    this.currentTurn = "player";
+    this.gameOver = false;
+    this.winner = null;
+
+    this.player.gameboard.resetBoard();
+    this.computer.player.gameboard.resetBoard();
+  }
 
   /**
    * Sets up the gameplay loop by reseting game state
