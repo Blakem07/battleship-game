@@ -4,6 +4,7 @@ export default class GameController {
     this.computer = computer;
     this.currentTurn = "player";
     this.gameOver = false;
+    this.winner = null;
   }
 
   /**

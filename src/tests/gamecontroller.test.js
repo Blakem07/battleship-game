@@ -236,6 +236,34 @@ describe("GameController Class Tests", () => {
     expect(gameController.placeAllShips()).toEqual(false);
   });
 
+  // Tests for resetBoard
+
+  test("GameController.resetGame resets current turn, gameover, winner and also calls reset board for both boards.", () => {
+    const computerResetBoardSpy = jest.spyOn(
+      gameController.computer.player.gameboard,
+      "resetBoard"
+    );
+    const playerResetBoardSpy = jest.spyOn(
+      gameController.player.gameboard,
+      "resetBoard"
+    );
+
+    gameController.currentTurn = "computer";
+    gameController.gameOver = true;
+    gameController.winner = "player";
+
+    gameController.resetGame();
+
+    // GameController Props
+    expect(gameController.currentTurn).toEqual("player");
+    expect(gameController.gameOver).toBe(false);
+    expect(gameController.winner).toEqual(null);
+
+    // Gameboard Props
+    expect(computerResetBoardSpy).toHaveBeenCalledTimes(1);
+    expect(playerResetBoardSpy).toHaveBeenCalledTimes(1);
+  });
+
   // Tests for setup.
   test("GameController.setupGame rests game state variables by calling rest game.", () => {
     gameController.setupGame();
