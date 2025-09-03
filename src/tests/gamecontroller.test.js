@@ -64,18 +64,17 @@ describe("GameController Class Tests", () => {
   // Tests for GameController.placePlayerShips
 
   test("GameController.placePlayerShips calls player.placeShips 5 times with correct args.", () => {
-    const mockPlayer = { placeShip: jest.fn() };
-    const mockComputer = {};
-
-    const gameController = new GameController(mockPlayer, mockComputer);
+    gameController.player = {
+      placeShip: jest.fn().mockReturnValue(true),
+    };
 
     const result = gameController.placePlayerShips(validShipPositions);
 
     expect(result).toEqual(true);
-    expect(mockPlayer.placeShip).toHaveBeenCalledTimes(5);
+    expect(gameController.player.placeShip).toHaveBeenCalledTimes(5);
 
     validShipPositions.forEach((ship, index) => {
-      expect(mockPlayer.placeShip).toHaveBeenNthCalledWith(
+      expect(gameController.player.placeShip).toHaveBeenNthCalledWith(
         index + 1,
         ship["row"],
         ship["col"],
@@ -99,12 +98,9 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.placePlayerShips throws error when validShipPositions is invalid or malformed", () => {
-    const mockPlayer = { placeShip: jest.fn() };
-    const mockComputer = {};
+    gameController.player = { placeShip: jest.fn() };
 
-    const gameController = new GameController(mockPlayer, mockComputer);
-
-    const invalidvalidShipPositions = [
+    const invalidShipPositions = [
       {
         row: 0,
         col: 0,
@@ -118,7 +114,7 @@ describe("GameController Class Tests", () => {
     ];
 
     expect(() => {
-      gameController.placePlayerShips(invalidvalidShipPositions);
+      gameController.placePlayerShips(invalidShipPositions);
     }).toThrow("Error, one of the ship positions has invalid keys");
   });
 

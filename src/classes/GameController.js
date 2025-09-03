@@ -1,3 +1,5 @@
+import { forEach } from "neo-async";
+
 export default class GameController {
   constructor(player, computer) {
     this.player = player;
@@ -19,12 +21,10 @@ export default class GameController {
   }
 
   /**
-   * placePlayerShips method.
+   * Places all ships for the player based on positions from the UI.
    *
-   * This method places all ships for the player based on ship
-   * positions passed to it by the UI.
-   *
-   * @param {Array} - shipPositions passed from UI
+   * @param {Array<Object>} shipPositions - Array of ship position objects.
+   * @returns {boolean} True if all ships placed successfully, otherwise false.
    */
   placePlayerShips(shipPositions) {
     const validKeys = ["row", "col", "shipName", "direction"];
@@ -37,7 +37,9 @@ export default class GameController {
       ) {
         throw new Error("Error, one of the ship positions has invalid keys");
       }
+    }
 
+    for (const shipPosition of shipPositions) {
       const result = this.player.placeShip(
         shipPosition["row"],
         shipPosition["col"],
