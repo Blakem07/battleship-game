@@ -85,6 +85,19 @@ describe("GameController Class Tests", () => {
     });
   });
 
+  test("GameController.placePlayerShips returns false on an expected failure.", () => {
+    gameController.player = { placeShip: jest.fn() };
+
+    // Failure on second placement
+    for (let call = 0; call < Ship.VALID_NAMES.length; call++) {
+      const returnValue = call === 1 ? false : true;
+      gameController.player.placeShip.mockImplementationOnce(() => returnValue);
+    }
+
+    const result = gameController.placePlayerShips(validShipPositions);
+    expect(result).toEqual(false);
+  });
+
   test("GameController.placePlayerShips throws error when validShipPositions is invalid or malformed", () => {
     const mockPlayer = { placeShip: jest.fn() };
     const mockComputer = {};
