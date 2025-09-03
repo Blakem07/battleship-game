@@ -6,7 +6,7 @@ export default class GameController {
     this.gameOver = false;
     this.winner = null;
   }
-  
+
   /**
    * Resets game state variables, ensuring game is ready to replay.
    */
@@ -22,11 +22,15 @@ export default class GameController {
   /**
    * Sets up the gameplay loop by reseting game state
    * variables and placing ships.
+   *
+   * @param {Function} getPlayerShipPositions UI Dependency Injection
    */
-  setupGame() {
+  setupGame(getPlayerShipPositions) {
     // Reset game state variables.
     this.resetGame();
     // Get Player input from UI and PlaceAllShips using their ship positions
+    const playerShipPostions = getPlayerShipPositions();
+    this.placeAllShips(playerShipPostions);
   }
 
   /**
