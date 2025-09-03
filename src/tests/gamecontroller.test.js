@@ -265,9 +265,28 @@ describe("GameController Class Tests", () => {
   });
 
   // Tests for setup.
-  test("GameController.setupGame resets game state variables by calling reset game.", () => {
+  test("GameController.setupGame resets game state variables by calling resetGame.", () => {
     const resetGameSpy = jest.spyOn(gameController, "resetGame");
-    gameController.setupGame();
+    // Mock placeAllShips to do nothing
+    jest.spyOn(gameController, "placeAllShips").mockImplementation(() => {});
+    // Pass a dummy function to avoid error calling getPlayerShipPositions()
+    const dummyGetPositions = () => [];
+
+    gameController.setupGame(dummyGetPositions);
+
     expect(resetGameSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test("GameController.setupGame calls placeAllShips with playerShipPositions retrieved from dependency injection.", () => {
+    const placeAllShipsSpy = jest
+      .spyOn(gameController, "placeAllShips")
+      .mockImplementation(() => {});
+    const mockPlayerShipPositions = { some: "positions" };
+    const mockGetPlayerShipPositions = jest.fn(() => mockPlayerShipPositions);
+
+    gameController.setupGame(mockGetPlayerShipPositions);
+
+    expect(placeAllShipsSpy).toHaveBeenCalledTimes(1);
+    expect(placeAllShipsSpy).toHaveBeenCalledWith(mockPlayerShipPositions);
   });
 });
