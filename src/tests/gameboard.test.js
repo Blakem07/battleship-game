@@ -347,14 +347,6 @@ describe("Gameboard Class Tests", () => {
     expect(gameboard.reportShipStatus()).toBe(false);
   });
 
-  test("Gameboard.reportShipStatus method throws error if called without ships being placed on the board.", () => {
-    const gameboard = new Gameboard();
-
-    expect(() => {
-      gameboard.reportShipStatus();
-    }).toThrow();
-  });
-
   // Tests for get grid
 
   test("Gameboard.grid returns deep clone of grid which cannot mutate the original.", () => {

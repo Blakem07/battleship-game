@@ -33,7 +33,12 @@ export default class GameController {
     this.placeAllShips(playerShipPostions);
   }
 
-  isGameOver() {}
+  isGameOver() {
+    const hasPlayerWon = this.computer.gameboard.reportShipStatus();
+    const hasComputerWon = this.player.gameboard.reportShipStatus();
+
+    if (hasPlayerWon || hasComputerWon) this.gameOver = true;
+  }
 
   /**
    * Plays one turn (player and computer firing shots)

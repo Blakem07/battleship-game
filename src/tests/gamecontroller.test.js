@@ -298,6 +298,27 @@ describe("GameController Class Tests", () => {
     expect(placeAllShipsSpy).toHaveBeenCalledWith(mockPlayerShipPositions);
   });
 
+  // Tests for isGameOver
+
+  test("GameController.isGameOver sets gameOver to true when all of a player's fleet has been sunk.", () => {
+    const playerReportShipStatusSpy = jest.spyOn(
+      gameController.player.gameboard,
+      "reportShipStatus"
+    );
+    const computerReportShipStatusSpy = jest.spyOn(
+      gameController.computer.gameboard,
+      "reportShipStatus"
+    );
+
+    expect(gameController.gameOver).toBe(false);
+
+    gameController.isGameOver();
+
+    expect(playerReportShipStatusSpy).toHaveBeenCalledTimes(1);
+    expect(computerReportShipStatusSpy).toHaveBeenCalledTimes(1);
+    expect(gameController.gameOver).toBe(true);
+  });
+
   // Tests for takeTurn
 
   test("GameController.takeTurn calls player's attack with correct arguments", () => {
