@@ -48,7 +48,23 @@ export default class GameController {
     this.takeTurn(computer, row, col);
   }
 
-  takeTurn(opponent, row, col) {}
+  /**
+   * Logic responsible for the player/computers turn.
+   *
+   * @param {number} [row] - The row coordinate of the attack (optional).
+   * @param {number} [col] - The column coordinate of the attack (optional).
+   */
+  takeTurn(row, col) {
+    const player = this.player;
+
+    // Determine the opponent
+    const opponent =
+      this.currentTurn === "player" ? this.computer : this.player;
+
+    if (this.currentTurn == "player") {
+      player.attack(opponent, row, col);
+    }
+  }
 
   /**
    * PlaceAllShips Method.
