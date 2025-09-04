@@ -34,6 +34,23 @@ export default class GameController {
   }
 
   /**
+   * Plays one turn (player and computer firing shots)
+   * and updates game state.
+   *
+   * @param {Function} getPlayerAttackPositon - UI Dependency Injection
+   */
+  playRound(getPlayerAttackPositon) {
+    const player = this.player;
+    const computer = this.computer;
+
+    // Player attacks first
+    const [row, col] = getPlayerAttackPositon();
+    this.takeTurn(computer, row, col);
+  }
+
+  takeTurn(opponent, row, col) {}
+
+  /**
    * PlaceAllShips Method.
    *
    * Places all of the players and computers ships on the board.
