@@ -2,11 +2,13 @@ import Ship from "../classes/Ship";
 import Computer from "../classes/Computer";
 
 describe("Computer Class Tests", () => {
-  test("Computer Class intialized with an instance of player.", () => {
-    const mockPlayer = {};
+  test("Computer is initialized with a Player and exposes its gameboard by reference", () => {
+    const mockGameboard = {};
+    const mockPlayer = { gameboard: mockGameboard };
     const computer = new Computer(mockPlayer);
 
     expect(computer.player).toBe(mockPlayer);
+    expect(computer.gameboard).toBe(mockGameboard);
   });
 
   // Tests for attack method
@@ -143,7 +145,8 @@ describe("Computer Class Tests", () => {
   // Tests for getRandomInt
 
   test("Computer.getRandomInt returns an integer between two constraints.", () => {
-    const computer = new Computer();
+    const mockPlayer = { Gameboard: {} };
+    const computer = new Computer(mockPlayer);
 
     const lowerLimit = 0;
     const upperLimit = 10;

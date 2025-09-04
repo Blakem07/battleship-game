@@ -7,6 +7,7 @@ export default class Computer {
 
   constructor(player) {
     this.player = player;
+    this.gameboard = this.player.gameboard;
   }
 
   /**
