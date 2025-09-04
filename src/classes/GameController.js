@@ -45,7 +45,10 @@ export default class GameController {
 
     // Player attacks first
     const [row, col] = getPlayerAttackPositon();
-    this.takeTurn(computer, row, col);
+    this.takeTurn(row, col);
+
+    // Computer attacks after
+    this.takeTurn();
   }
 
   /**

@@ -14,6 +14,9 @@ describe("GameController Class Tests", () => {
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
 
+  let mockPlayerAttackPosition;
+  let mockGetPlayerAttackPosition;
+
   beforeEach(() => {
     player = new Player(new Gameboard());
     computerPlayer = new Player(new Gameboard());
@@ -22,6 +25,9 @@ describe("GameController Class Tests", () => {
 
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
+
+    mockPlayerAttackPosition = [0, 1];
+    mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
 
     validShipPositions = [
       {
@@ -347,11 +353,21 @@ describe("GameController Class Tests", () => {
     gameController.playRound(mockGetPlayerAttackPosition);
 
     expect(mockGetPlayerAttackPosition).toHaveBeenCalledTimes(1); // Dependency injection, passing player attack position
-    expect(takeTurnSpy).toHaveBeenCalledTimes(1);
+    expect(takeTurnSpy).toHaveBeenCalledTimes(2);
     expect(takeTurnSpy).toHaveBeenCalledWith(
-      gameController.computer, // Opponent
       mockPlayerAttackPosition[0], // Row
       mockPlayerAttackPosition[1] // Col
     );
+  });
+
+  test("GameController.play round calls takeTurn for the computer.", () => {
+    const takeTurnSpy = jest
+      .spyOn(gameController, "takeTurn")
+      .mockImplementation(() => {});
+
+    gameController.playRound(mockGetPlayerAttackPosition);
+
+    expect(takeTurnSpy).toHaveBeenCalledTimes(2);
+    expect(takeTurnSpy).toHaveBeenCalledWith(); // Computer's implementation takes no args
   });
 });
