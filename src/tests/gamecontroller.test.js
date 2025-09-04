@@ -290,6 +290,20 @@ describe("GameController Class Tests", () => {
     expect(placeAllShipsSpy).toHaveBeenCalledWith(mockPlayerShipPositions);
   });
 
+  // Tests for takeTurn
+
+  test("GameController.takeTurn calls player's attack with correct arguments", () => {
+    const mockOpponent = gameController.computer;
+    const [row, col] = [0, 0];
+
+    const playerAttackSpy = jest.spyOn(gameController.player, "attack");
+
+    gameController.takeTurn(mockOpponent, row, col);
+
+    expect(playerAttackSpy).toHaveBeenCalledTimes(1);
+    expect(playerAttackSpy).toHaveBeenCalledWith(mockOpponent, row, col);
+  });
+
   // Tests for playRound
 
   test("GameController.playRound calls takeTurn for the player.", () => {
