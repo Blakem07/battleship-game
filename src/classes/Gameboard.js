@@ -173,7 +173,7 @@ export default class Gameboard {
 
     if (!this.isValidCoordinate(row, column)) {
       throw new Error(
-        "This is invalid as the given position is out of bounds."
+        `Invalid coordinate: (${row}, ${column}) is outside the board bounds.`
       );
     }
 

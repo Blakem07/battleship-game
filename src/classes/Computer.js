@@ -34,7 +34,7 @@ export default class Computer {
    * @return {bool} - True on success, else false.
    */
   placeShipsRandomly() {
-    const gameboard = this.player.gameboard;
+    const gameboard = this.gameboard;
     let fleetPlaced = false;
     let attempts = 0;
 

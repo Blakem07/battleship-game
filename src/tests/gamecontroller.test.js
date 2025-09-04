@@ -240,7 +240,7 @@ describe("GameController Class Tests", () => {
 
   test("GameController.resetGame resets current turn, gameover, winner and also calls reset board for both boards.", () => {
     const computerResetBoardSpy = jest.spyOn(
-      gameController.computer.player.gameboard,
+      gameController.computer.gameboard,
       "resetBoard"
     );
     const playerResetBoardSpy = jest.spyOn(
@@ -298,7 +298,7 @@ describe("GameController Class Tests", () => {
 
     const playerAttackSpy = jest.spyOn(gameController.player, "attack");
 
-    gameController.takeTurn(mockOpponent, row, col);
+    gameController.takeTurn(row, col);
 
     expect(playerAttackSpy).toHaveBeenCalledTimes(1);
     expect(playerAttackSpy).toHaveBeenCalledWith(mockOpponent, row, col);

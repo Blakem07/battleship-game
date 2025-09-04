@@ -16,7 +16,7 @@ export default class GameController {
     this.winner = null;
 
     this.player.gameboard.resetBoard();
-    this.computer.player.gameboard.resetBoard();
+    this.computer.gameboard.resetBoard();
   }
 
   /**
