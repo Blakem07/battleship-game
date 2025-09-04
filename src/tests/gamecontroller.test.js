@@ -289,4 +289,25 @@ describe("GameController Class Tests", () => {
     expect(placeAllShipsSpy).toHaveBeenCalledTimes(1);
     expect(placeAllShipsSpy).toHaveBeenCalledWith(mockPlayerShipPositions);
   });
+
+  // Tests for playRound
+
+  test("GameController.playRound calls takeTurn for the player.", () => {
+    const mockPlayerAttackPosition = [0, 1];
+    const mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
+
+    const takeTurnSpy = jest
+      .spyOn(gameController, "takeTurn")
+      .mockImplementation(() => {});
+
+    gameController.playRound(mockGetPlayerAttackPosition);
+
+    expect(mockGetPlayerAttackPosition).toHaveBeenCalledTimes(1); // Dependency injection, passing player attack position
+    expect(takeTurnSpy).toHaveBeenCalledTimes(1);
+    expect(takeTurnSpy).toHaveBeenCalledWith(
+      gameController.computer, // Opponent
+      mockPlayerAttackPosition[0], // Row
+      mockPlayerAttackPosition[1] // Col
+    );
+  });
 });
