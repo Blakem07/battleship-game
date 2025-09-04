@@ -325,6 +325,15 @@ describe("GameController Class Tests", () => {
     expect(secondTurn).toBe("computer");
   });
 
+  test("GameController.takeTurn exists before executing attacks when the game is over.", () => {
+    const playerAttackSpy = jest.spyOn(gameController.player, "attack");
+    gameController.gameOver = true;
+
+    gameController.takeTurn(0, 0);
+
+    expect(playerAttackSpy).not.toHaveBeenCalled();
+  });
+
   // Tests for playRound
 
   test("GameController.playRound calls takeTurn for the player.", () => {

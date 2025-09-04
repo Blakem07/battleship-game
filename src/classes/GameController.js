@@ -49,17 +49,19 @@ export default class GameController {
   }
 
   /**
-   * Logic responsible for the player/computers turn. Attacks based on current
-   * turn, then alternates current turn at the end.
+   * Handles the logic for a player's or computer's turn.
+   * Executes an attack based on the current turn,
+   * then alternates the turn.
    *
-   * @param {number} [row] - The row coordinate of the attack (optional).
-   * @param {number} [col] - The column coordinate of the attack (optional).
+   * @param {number} [row] - The row coordinate of the attack (player only).
+   * @param {number} [col] - The column coordinate of the attack (player only).
    */
   takeTurn(row, col) {
     const player = this.player;
     const computer = this.computer;
 
-    // Determine the opponent
+    if (this.gameOver) return;
+
     const opponent =
       this.currentTurn === "player" ? this.computer : this.player;
 
