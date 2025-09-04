@@ -33,6 +33,8 @@ export default class GameController {
     this.placeAllShips(playerShipPostions);
   }
 
+  isGameOver() {}
+
   /**
    * Plays one turn (player and computer firing shots)
    * and updates game state.
@@ -40,14 +42,15 @@ export default class GameController {
    * @param {Function} getPlayerAttackPositon - UI Dependency Injection
    */
   playRound(getPlayerAttackPositon) {
-    const player = this.player;
-    const computer = this.computer;
+    if (this.isGameOver()) return;
 
-    // Player attacks first
+    // Player's attack
     const [row, col] = getPlayerAttackPositon();
     this.takeTurn(row, col);
 
-    // Computer attacks after
+    if (this.isGameOver()) return;
+
+    // Computer's attack
     this.takeTurn();
   }
 

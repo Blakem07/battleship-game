@@ -11,6 +11,7 @@ describe("GameController Class Tests", () => {
   let gameController;
   let validShipPositions;
 
+  let takeTurnSpy;
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
 
@@ -23,6 +24,7 @@ describe("GameController Class Tests", () => {
     computer = new Computer(computerPlayer);
     gameController = new GameController(player, computer);
 
+    takeTurnSpy = jest.spyOn(gameController, "takeTurn");
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
@@ -342,14 +344,23 @@ describe("GameController Class Tests", () => {
 
   // Tests for playRound
 
+  test("GameController.playRound checks if the game is over before and in between player turns", () => {
+    const isGameOverSpy = jest.spyOn(gameController, "isGameOver");
+
+    gameController.playRound(mockGetPlayerAttackPosition);
+
+    expect(isGameOverSpy).toHaveBeenCalledTimes(2);
+    expect(takeTurnSpy).toHaveBeenCalledTimes(2);
+
+    expect(isGameOverSpy.mock.invocationCallOrder[0]).toBeLessThan(
+      takeTurnSpy.mock.invocationCallOrder[0]
+    );
+    expect(isGameOverSpy.mock.invocationCallOrder[1]).toBeLessThan(
+      takeTurnSpy.mock.invocationCallOrder[1]
+    );
+  });
+
   test("GameController.playRound calls takeTurn for the player.", () => {
-    const mockPlayerAttackPosition = [0, 1];
-    const mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
-
-    const takeTurnSpy = jest
-      .spyOn(gameController, "takeTurn")
-      .mockImplementation(() => {});
-
     gameController.playRound(mockGetPlayerAttackPosition);
 
     expect(mockGetPlayerAttackPosition).toHaveBeenCalledTimes(1); // Dependency injection, passing player attack position
@@ -361,10 +372,6 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.play round calls takeTurn for the computer.", () => {
-    const takeTurnSpy = jest
-      .spyOn(gameController, "takeTurn")
-      .mockImplementation(() => {});
-
     gameController.playRound(mockGetPlayerAttackPosition);
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
