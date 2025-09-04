@@ -56,6 +56,7 @@ export default class GameController {
    */
   takeTurn(row, col) {
     const player = this.player;
+    const computer = this.computer;
 
     // Determine the opponent
     const opponent =
@@ -63,6 +64,8 @@ export default class GameController {
 
     if (this.currentTurn == "player") {
       player.attack(opponent, row, col);
+    } else if (this.currentTurn == "computer") {
+      computer.randomAttack(opponent);
     }
   }
 
