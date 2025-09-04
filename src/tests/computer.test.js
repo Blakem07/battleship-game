@@ -26,7 +26,7 @@ describe("Computer Class Tests", () => {
     const result = computer.randomAttack(mockOpponent);
 
     expect(computer.getRandomInt).toHaveBeenCalledTimes(2);
-    expect(computer.getRandomInt).toHaveBeenCalledWith(0, 10);
+    expect(computer.getRandomInt).toHaveBeenCalledWith(0, 9);
     expect(computer.player.attack).toHaveBeenCalledWith(mockOpponent, 3, 7);
     expect(result).toBe("attack result");
   });

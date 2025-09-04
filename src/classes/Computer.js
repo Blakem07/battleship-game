@@ -19,8 +19,8 @@ export default class Computer {
    * @returns {*} - Result of player.attack()
    */
   randomAttack(opponent) {
-    const rX = this.getRandomInt(0, 10);
-    const rY = this.getRandomInt(0, 10);
+    const rX = this.getRandomInt(0, 9);
+    const rY = this.getRandomInt(0, 9);
 
     return this.player.attack(opponent, rX, rY);
   }

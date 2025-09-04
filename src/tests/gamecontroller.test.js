@@ -316,6 +316,15 @@ describe("GameController Class Tests", () => {
     expect(randomAttackSpy).toHaveBeenCalledWith(mockOpponent);
   });
 
+  test("GameController.takeTurn alterates current turn.", () => {
+    const firstTurn = gameController.currentTurn;
+    gameController.takeTurn(0, 0);
+    const secondTurn = gameController.currentTurn;
+
+    expect(firstTurn).toBe("player");
+    expect(secondTurn).toBe("computer");
+  });
+
   // Tests for playRound
 
   test("GameController.playRound calls takeTurn for the player.", () => {

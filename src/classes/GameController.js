@@ -49,7 +49,8 @@ export default class GameController {
   }
 
   /**
-   * Logic responsible for the player/computers turn.
+   * Logic responsible for the player/computers turn. Attacks based on current
+   * turn, then alternates current turn at the end.
    *
    * @param {number} [row] - The row coordinate of the attack (optional).
    * @param {number} [col] - The column coordinate of the attack (optional).
@@ -67,6 +68,8 @@ export default class GameController {
     } else if (this.currentTurn == "computer") {
       computer.randomAttack(opponent);
     }
+
+    this.currentTurn = this.currentTurn === "player" ? "computer" : "player";
   }
 
   /**
