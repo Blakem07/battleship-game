@@ -1,8 +1,53 @@
-/* Reset styles */
+@font-face {
+  font-family: military;
+  src: url("fonts/MilitaryKid.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --primary-color: rgb(78, 78, 78);
+
+  --primary-font-color: white;
+
+  --font-size-base: 16px;
+
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-md: 1rem; /* 16px (base) */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-6xl: 4rem; /* 64px */
+}
 
 /* Base styles */
 
+body {
+  height: 100vh;
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
+  overflow: hidden; /*Prevents scroll*/
+}
+
+h1 {
+  font-size: calc(var(--font-size-6xl) * 1.3);
+  font-family: military;
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.9), 6px 6px 10px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
 /* Layout styles */
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 /* Component styles */
 
