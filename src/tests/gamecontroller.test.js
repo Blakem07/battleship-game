@@ -14,6 +14,7 @@ describe("GameController Class Tests", () => {
   let setupGameSpy;
   let playerReportShipStatusSpy;
   let computerReportShipStatusSpy;
+  let playRoundSpy;
   let takeTurnSpy;
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
@@ -37,6 +38,7 @@ describe("GameController Class Tests", () => {
       gameController.computer.gameboard,
       "reportShipStatus"
     );
+    playRoundSpy = jest.spyOn(gameController, "playRound");
     takeTurnSpy = jest.spyOn(gameController, "takeTurn");
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
@@ -261,10 +263,33 @@ describe("GameController Class Tests", () => {
   // Tests for playGame
 
   test("GameController.playGame is passed a getShipPlayerPositions dependency injection and calls setupGame with it.", () => {
-    gameController.playGame(mockGetPlayerShipPositions);
+    playRoundSpy.mockImplementation(() => {
+      gameController.gameOver = true; // Prevents infinite loop
+    });
+
+    gameController.playGame(
+      mockGetPlayerShipPositions,
+      mockGetPlayerAttackPosition
+    );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
     expect(setupGameSpy).toHaveBeenCalledWith(mockGetPlayerShipPositions);
+  });
+
+  test("GameController.playGame calls playRound repeatedly until game is over (with dependency injection", () => {
+    let callCount = 0;
+    playRoundSpy.mockImplementation(() => {
+      callCount++;
+      if (callCount >= 5) gameController.gameOver = true; // Imitates while loop
+    });
+
+    gameController.playGame(
+      mockGetPlayerShipPositions,
+      mockGetPlayerAttackPosition
+    );
+
+    expect(playRoundSpy).toHaveBeenCalledWith(mockGetPlayerAttackPosition);
+    expect(playRoundSpy).toHaveBeenCalledTimes(5);
   });
 
   // Tests for resetGame
