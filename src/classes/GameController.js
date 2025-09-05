@@ -6,6 +6,12 @@ export default class GameController {
     this.gameOver = false;
     this.winner = null;
   }
+  /**
+   * @param {Function} getPlayerShipPositions UI Dependency Injection
+   */
+  playGame(getPlayerShipPositions) {
+    this.setupGame(getPlayerShipPositions);
+  }
 
   /**
    * Resets game state variables, ensuring game is ready to replay.

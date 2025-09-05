@@ -11,12 +11,15 @@ describe("GameController Class Tests", () => {
   let gameController;
   let validShipPositions;
 
+  let setupGameSpy;
   let playerReportShipStatusSpy;
   let computerReportShipStatusSpy;
   let takeTurnSpy;
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
 
+  let mockGetPlayerShipPositions;
+  let mockPlayerShipPositions;
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
 
@@ -26,6 +29,7 @@ describe("GameController Class Tests", () => {
     computer = new Computer(computerPlayer);
     gameController = new GameController(player, computer);
 
+    setupGameSpy = jest.spyOn(gameController, "setupGame");
     playerReportShipStatusSpy = jest.spyOn(
       gameController.player.gameboard,
       "reportShipStatus"
@@ -38,6 +42,8 @@ describe("GameController Class Tests", () => {
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
+    mockGetPlayerShipPositions = jest.fn(() => validShipPositions);
+    mockPlayerShipPositions = { some: "positions" };
     mockPlayerAttackPosition = [0, 1];
     mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
 
@@ -254,7 +260,16 @@ describe("GameController Class Tests", () => {
     expect(gameController.placeAllShips()).toEqual(false);
   });
 
-  // Tests for resetBoard
+  // Tests for playGame
+
+  test("GameController.playGame is passed a getShipPlayerPositions dependency injection and calls setupGame with it.", () => {
+    gameController.playGame(mockGetPlayerShipPositions);
+
+    expect(setupGameSpy).toHaveBeenCalledTimes(1);
+    expect(setupGameSpy).toHaveBeenCalledWith(mockGetPlayerShipPositions);
+  });
+
+  // Tests for resetGame
 
   test("GameController.resetGame resets current turn, gameover, winner and also calls reset board for both boards.", () => {
     const computerResetBoardSpy = jest.spyOn(
@@ -299,8 +314,6 @@ describe("GameController Class Tests", () => {
     const placeAllShipsSpy = jest
       .spyOn(gameController, "placeAllShips")
       .mockImplementation(() => {});
-    const mockPlayerShipPositions = { some: "positions" };
-    const mockGetPlayerShipPositions = jest.fn(() => mockPlayerShipPositions);
 
     gameController.setupGame(mockGetPlayerShipPositions);
 
