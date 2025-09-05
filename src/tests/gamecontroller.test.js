@@ -11,6 +11,8 @@ describe("GameController Class Tests", () => {
   let gameController;
   let validShipPositions;
 
+  let playerReportShipStatusSpy;
+  let computerReportShipStatusSpy;
   let takeTurnSpy;
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
@@ -24,6 +26,14 @@ describe("GameController Class Tests", () => {
     computer = new Computer(computerPlayer);
     gameController = new GameController(player, computer);
 
+    playerReportShipStatusSpy = jest.spyOn(
+      gameController.player.gameboard,
+      "reportShipStatus"
+    );
+    computerReportShipStatusSpy = jest.spyOn(
+      gameController.computer.gameboard,
+      "reportShipStatus"
+    );
     takeTurnSpy = jest.spyOn(gameController, "takeTurn");
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
@@ -301,15 +311,6 @@ describe("GameController Class Tests", () => {
   // Tests for isGameOver
 
   test("GameController.isGameOver sets gameOver to true when all of a player's fleet has been sunk.", () => {
-    const playerReportShipStatusSpy = jest.spyOn(
-      gameController.player.gameboard,
-      "reportShipStatus"
-    );
-    const computerReportShipStatusSpy = jest.spyOn(
-      gameController.computer.gameboard,
-      "reportShipStatus"
-    );
-
     expect(gameController.gameOver).toBe(false);
 
     gameController.isGameOver();
@@ -317,6 +318,28 @@ describe("GameController Class Tests", () => {
     expect(playerReportShipStatusSpy).toHaveBeenCalledTimes(1);
     expect(computerReportShipStatusSpy).toHaveBeenCalledTimes(1);
     expect(gameController.gameOver).toBe(true);
+  });
+
+  test("GameController.isGameOver correctly assigns the winner to the player.", () => {
+    expect(gameController.winner).toEqual(null);
+
+    computerReportShipStatusSpy.mockReturnValueOnce(true); // Computer fleet DESTROYED
+    playerReportShipStatusSpy.mockReturnValue(false); // Player fleet OK
+
+    gameController.isGameOver();
+
+    expect(gameController.winner).toEqual("player");
+  });
+
+  test("GameController.isGameOver correctly assigns the winner to the computer.", () => {
+    expect(gameController.winner).toEqual(null);
+
+    computerReportShipStatusSpy.mockReturnValueOnce(false); // Computer OK
+    playerReportShipStatusSpy.mockReturnValue(true); // Player fleet DESTROYED
+
+    gameController.isGameOver();
+
+    expect(gameController.winner).toEqual("computer");
   });
 
   // Tests for takeTurn

@@ -33,11 +33,21 @@ export default class GameController {
     this.placeAllShips(playerShipPostions);
   }
 
+  /**
+   * Determines whether the game if over by checking
+   * if any fleet has been sunk.
+   */
   isGameOver() {
-    const hasPlayerWon = this.computer.gameboard.reportShipStatus();
-    const hasComputerWon = this.player.gameboard.reportShipStatus();
+    const isComputerFleetSunk = this.computer.gameboard.reportShipStatus();
+    const isPlayerFleetSunk = this.player.gameboard.reportShipStatus();
 
-    if (hasPlayerWon || hasComputerWon) this.gameOver = true;
+    if (isComputerFleetSunk || isPlayerFleetSunk) this.gameOver = true;
+
+    if (isComputerFleetSunk) {
+      this.winner = "player";
+    } else if (isPlayerFleetSunk) {
+      this.winner = "computer";
+    }
   }
 
   /**
