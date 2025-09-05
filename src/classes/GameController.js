@@ -11,13 +11,16 @@ export default class GameController {
    *
    * @param {Function} getPlayerShipPositions - UI Dependency Injection
    * @param {Function} getPlayerAttackPositon - UI Dependency Injection
+   * @param {Function} declareWinner - UI Dependency Injection
    */
-  playGame(getPlayerShipPositions, getPlayerAttackPositon) {
+  playGame(getPlayerShipPositions, getPlayerAttackPositon, declareWinner) {
     this.setupGame(getPlayerShipPositions);
 
     while (!this.gameOver) {
       this.playRound(getPlayerAttackPositon);
     }
+
+    declareWinner(this.winner);
   }
 
   /**

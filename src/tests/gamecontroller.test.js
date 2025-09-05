@@ -19,6 +19,7 @@ describe("GameController Class Tests", () => {
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
 
+  let mockDeclareWinner;
   let mockGetPlayerShipPositions;
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
@@ -43,6 +44,7 @@ describe("GameController Class Tests", () => {
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
+    mockDeclareWinner = jest.fn();
     mockGetPlayerShipPositions = jest.fn(() => validShipPositions);
     mockPlayerAttackPosition = [0, 1];
     mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
@@ -269,7 +271,8 @@ describe("GameController Class Tests", () => {
 
     gameController.playGame(
       mockGetPlayerShipPositions,
-      mockGetPlayerAttackPosition
+      mockGetPlayerAttackPosition,
+      mockDeclareWinner
     );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
@@ -285,11 +288,29 @@ describe("GameController Class Tests", () => {
 
     gameController.playGame(
       mockGetPlayerShipPositions,
-      mockGetPlayerAttackPosition
+      mockGetPlayerAttackPosition,
+      mockDeclareWinner
     );
 
     expect(playRoundSpy).toHaveBeenCalledWith(mockGetPlayerAttackPosition);
     expect(playRoundSpy).toHaveBeenCalledTimes(5);
+  });
+
+  test("GameController.playGame calls the declare winner dependency injection once the game is over.", () => {
+    playRoundSpy.mockImplementation(() => {
+      gameController.gameOver = true; // Prevents infinite loop
+    });
+
+    gameController.playGame(
+      mockGetPlayerShipPositions,
+      mockGetPlayerAttackPosition,
+      mockDeclareWinner
+    );
+
+    expect(setupGameSpy).toHaveBeenCalledTimes(1);
+    expect(playRoundSpy).toHaveBeenCalledTimes(1);
+    expect(mockDeclareWinner).toHaveBeenCalledTimes(1);
+    expect(mockDeclareWinner).toHaveBeenCalledWith(gameController.winner);
   });
 
   // Tests for resetGame
