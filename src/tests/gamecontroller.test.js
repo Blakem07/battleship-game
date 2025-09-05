@@ -19,7 +19,6 @@ describe("GameController Class Tests", () => {
   let placeComputerShipsSpy;
 
   let mockGetPlayerShipPositions;
-  let mockPlayerShipPositions;
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
 
@@ -43,7 +42,6 @@ describe("GameController Class Tests", () => {
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
     mockGetPlayerShipPositions = jest.fn(() => validShipPositions);
-    mockPlayerShipPositions = { some: "positions" };
     mockPlayerAttackPosition = [0, 1];
     mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
 
@@ -318,7 +316,7 @@ describe("GameController Class Tests", () => {
     gameController.setupGame(mockGetPlayerShipPositions);
 
     expect(placeAllShipsSpy).toHaveBeenCalledTimes(1);
-    expect(placeAllShipsSpy).toHaveBeenCalledWith(mockPlayerShipPositions);
+    expect(placeAllShipsSpy).toHaveBeenCalledWith(validShipPositions);
   });
 
   // Tests for isGameOver
