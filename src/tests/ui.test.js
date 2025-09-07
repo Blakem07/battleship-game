@@ -9,6 +9,7 @@ describe("UI Class Tests", () => {
   let ui;
 
   let createCellMock;
+  let placeShipMock;
 
   let rows;
   let cols;
@@ -21,6 +22,7 @@ describe("UI Class Tests", () => {
     ui = new UI();
 
     createCellMock = jest.fn(() => document.createElement("div"));
+    placeShipMock = jest.fn();
 
     rows = Gameboard.BOARD_ROWS; // 10
     cols = Gameboard.BOARD_COLS; // 10
@@ -90,5 +92,28 @@ describe("UI Class Tests", () => {
     const cell = ui.createCell(VALID_ROW, VALID_COL);
 
     expect(cell.classList[0]).toEqual("grid-cell");
+  });
+
+  // Tests for addPlaceShipClickListeners
+
+  test("UI.addPlaceShipClickListeners each cell calls the expected callback.", () => {
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: createCellMock,
+    });
+
+    ui.addPlaceShipClickListeners(gridContainer, placeShipMock);
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const event = new MouseEvent("click", { bubbles: true });
+        gridContainer.children[row].children[col].dispatchEvent(event);
+      }
+    }
+
+    expect(placeShipMock).toHaveBeenCalledTimes(rows * cols);
+    expect(placeShipMock).toHaveBeenCalledWith(0, 0);
+    expect(placeShipMock).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 });
