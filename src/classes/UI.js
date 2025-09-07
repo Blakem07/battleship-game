@@ -47,4 +47,23 @@ export default class UI {
 
     return cell;
   }
+
+  /**
+   * Places click event listeners on all cells within a grid which
+   * causes the placeShip callback to be called.
+   *
+   * @param {HTMLElement} gridContainer - 2D DOM Structure
+   * @param {Callback} placeShip - Places a ship
+   */
+  addPlaceShipClickListeners(gridContainer, placeShip) {
+    for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
+      for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
+        const cell = gridContainer.children[row].children[col];
+
+        cell.addEventListener("click", () => {
+          placeShip(row, col);
+        });
+      }
+    }
+  }
 }
