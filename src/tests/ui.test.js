@@ -12,6 +12,8 @@ describe("UI Class Tests", () => {
 
   let rows;
   let cols;
+  let VALID_ROW;
+  let VALID_COL;
 
   let gridContainer;
 
@@ -22,6 +24,8 @@ describe("UI Class Tests", () => {
 
     rows = Gameboard.BOARD_ROWS; // 10
     cols = Gameboard.BOARD_COLS; // 10
+    VALID_ROW = 0;
+    VALID_COL = 0;
 
     gridContainer = document.createElement("div");
   });
@@ -66,8 +70,15 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.createCell element returns a div element.", () => {
-    const cell = ui.createCell(0, 0);
+    const cell = ui.createCell(VALID_ROW, VALID_COL);
 
     expect(cell instanceof HTMLElement).toBe(true);
+  });
+
+  test("UI.createCell element has the correct data row/col", () => {
+    const cell = ui.createCell(VALID_ROW, VALID_COL);
+
+    expect(cell.dataset.row).toEqual(`${VALID_ROW}`);
+    expect(cell.dataset.col).toEqual(`${VALID_COL}`);
   });
 });

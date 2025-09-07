@@ -32,6 +32,9 @@ export default class UI {
   createCell(row, col) {
     const cell = document.createElement("div");
 
+    cell.dataset.row = row;
+    cell.dataset.col = col;
+
     return cell;
   }
 }
