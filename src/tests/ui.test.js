@@ -33,6 +33,8 @@ describe("UI Class Tests", () => {
     jest.restoreAllMocks();
   });
 
+  // Tests for populate grid
+
   test("UI.populateGrid calls createCell for the correct amount rows and cols.", () => {
     ui.populateGrid(gridContainer, {
       row: rows,
@@ -69,6 +71,8 @@ describe("UI Class Tests", () => {
     });
   });
 
+  // Tests for create cell
+
   test("UI.createCell element returns a div element.", () => {
     const cell = ui.createCell(VALID_ROW, VALID_COL);
 
@@ -80,5 +84,11 @@ describe("UI Class Tests", () => {
 
     expect(cell.dataset.row).toEqual(`${VALID_ROW}`);
     expect(cell.dataset.col).toEqual(`${VALID_COL}`);
+  });
+
+  test("UI.createCell element has the correct class.", () => {
+    const cell = ui.createCell(VALID_ROW, VALID_COL);
+
+    expect(cell.classList[0]).toEqual("grid-cell");
   });
 });

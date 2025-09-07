@@ -29,11 +29,21 @@ export default class UI {
     }
   }
 
+  /**
+   * Creates a grid cell element with row and column data attributes.
+   *
+   * @param {number} row - The row index of the cell.
+   * @param {number} col - The column index of the cell.
+   * @returns {HTMLElement} A div element representing a grid cell,
+   *                       with dataset attributes for row and column,
+   *                       and a CSS class "grid-cell" applied.
+   */
   createCell(row, col) {
     const cell = document.createElement("div");
 
     cell.dataset.row = row;
     cell.dataset.col = col;
+    cell.classList.add("grid-cell");
 
     return cell;
   }
