@@ -43,3 +43,15 @@ npm install --save-dev babel-jest @babel/core @babel/preset-env
     To run one test - npx jest
     To auto run tests on changes - npx jest --watchAll
     To run server & jest concurrently - npm run dev
+
+## Running Tests
+
+This project uses [Jest](https://jestjs.io/) for unit testing.
+
+The `jsdom` environment is used to simulate a browser-like environment for tests involving the DOM or browser APIs. This is configured using a file-level directive:
+
+```js
+/**
+ * @jest-environment jsdom
+ */
+```

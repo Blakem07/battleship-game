@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import Gameboard from "../classes/Gameboard.js";
 import UI from "../classes/UI.js";
 
