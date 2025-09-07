@@ -18,7 +18,7 @@ describe("UI Class Tests", () => {
   beforeEach(() => {
     ui = new UI();
 
-    createCellMock = jest.fn();
+    createCellMock = jest.fn(() => document.createElement("div"));
 
     rows = Gameboard.BOARD_ROWS; // 10
     cols = Gameboard.BOARD_COLS; // 10
@@ -49,5 +49,19 @@ describe("UI Class Tests", () => {
     });
 
     expect(gridContainer.children.length).toEqual(rows);
+  });
+
+  test("UI.populateGrid has the grid recieve the correct number of rows and columns", () => {
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: createCellMock,
+    });
+
+    expect(gridContainer.children.length).toEqual(rows);
+
+    Array.from(gridContainer.children).forEach((row) => {
+      expect(row.children.length).toEqual(cols);
+    });
   });
 });
