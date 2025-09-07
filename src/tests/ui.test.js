@@ -21,7 +21,13 @@ describe("UI Class Tests", () => {
     const rows = Gameboard.BOARD_ROWS; // 10
     const cols = Gameboard.BOARD_COLS; // 10
 
-    ui.populateGrid({ row: rows, col: cols, createCell: createCellMock });
+    const gridContainer = document.createElement("div");
+
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: createCellMock,
+    });
 
     expect(createCellMock).toHaveBeenCalledTimes(rows * cols);
     expect(createCellMock).toHaveBeenCalledWith(0, 0); // First
