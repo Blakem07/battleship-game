@@ -28,4 +28,10 @@ export default class UI {
       gridContainer.append(rowCell);
     }
   }
+
+  createCell(row, col) {
+    const cell = document.createElement("div");
+
+    return cell;
+  }
 }

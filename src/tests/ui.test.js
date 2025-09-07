@@ -64,4 +64,10 @@ describe("UI Class Tests", () => {
       expect(row.children.length).toEqual(cols);
     });
   });
+
+  test("UI.createCell element returns a div element.", () => {
+    const cell = ui.createCell(0, 0);
+
+    expect(cell instanceof HTMLElement).toBe(true);
+  });
 });
