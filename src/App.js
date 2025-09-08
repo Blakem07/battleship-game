@@ -8,6 +8,7 @@ import { UI, GameController, Player, Computer, Gameboard } from "./classes";
 function App() {
   const { playerBoard, computerBoard } = setupBoards();
   const { player, computer } = setupPlayers(playerBoard, computerBoard);
+  const gameController = setupGameController();
 }
 
 /**
@@ -35,6 +36,17 @@ function setupPlayers(playerBoard, computerBoard) {
   const computer = new Computer(computerPlayer);
 
   return { player, computer };
+}
+
+/**
+ * Creates and initializes the GameController instance.
+ *
+ * @returns {GameController} A new GameController object.
+ */
+function setupGameController() {
+  const gameController = new GameController();
+
+  return gameController;
 }
 
 export default App;
