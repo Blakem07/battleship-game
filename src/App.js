@@ -8,8 +8,10 @@ import { UI, GameController, Player, Computer, Gameboard } from "./classes";
 function App() {
   const { playerBoard, computerBoard } = setupBoards();
   const { player, computer } = setupPlayers(playerBoard, computerBoard);
-  const gameController = setupGameController();
+  const gameController = setupGameController(player, computer);
   const ui = setupUI();
+
+  renderGrids(ui);
 }
 
 /**
@@ -59,6 +61,25 @@ function setupUI() {
   const ui = new UI();
 
   return ui;
+}
+
+/**
+ * Renders the player and computer grids in the DOM using the provided UI instance.
+ *
+ * Uses the default 10x10 Battleship board dimensions defined by the Gameboard class.
+ * Each grid is populated with cells created by the UI's createCell method.
+ *
+ * @param {UI} uiInstance - The UI object responsible for DOM manipulation.
+ */
+function renderGrids(uiInstance) {
+  const defaultGridSetup = {
+    row: Gameboard.BOARD_ROWS,
+    col: Gameboard.BOARD_COLS,
+    createCell: uiInstance.createCell,
+  };
+
+  uiInstance.populateGrid(uiInstance.playerGrid, defaultGridSetup);
+  uiInstance.populateGrid(uiInstance.computerGrid, defaultGridSetup);
 }
 
 export default App;

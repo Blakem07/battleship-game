@@ -1,7 +1,10 @@
 import Gameboard from "./Gameboard";
 
 export default class UI {
-  constructor() {}
+  constructor() {
+    this.playerGrid = document.querySelector("#player-grid");
+    this.computerGrid = document.querySelector("#computer-grid");
+  }
 
   /**
    * Populates a container element with a grid of elements.=
