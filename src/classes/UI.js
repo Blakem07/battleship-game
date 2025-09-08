@@ -77,6 +77,36 @@ export default class UI {
     popup.id = "placeShipPopup";
     popup.classList.add("popup");
 
+    // Header
+    const header = document.createElement("h2");
+    header.textContent = "Place Your Ships";
+    popup.append(header);
+
+    // Ship Selection
+
+    const shipSelectionDiv = document.createElement("div");
+    shipSelectionDiv.id = "shipSelection";
+    popup.append(shipSelectionDiv);
+
+    // Ship Placement Grid
+
+    const placementGridDiv = document.createElement("div");
+    placementGridDiv.id = "shipPlacement";
+    placementGridDiv.classList.add("grid");
+    popup.append(placementGridDiv);
+
+    // Buttons
+
+    const confirmPlacement = document.createElement("button");
+    confirmPlacement.id = "confirmPlacement";
+    confirmPlacement.textContent = "Confirm Placement";
+    popup.append(confirmPlacement);
+
+    const cancelPlacement = document.createElement("button");
+    cancelPlacement.id = "cancelPlacement";
+    cancelPlacement.textContent = "Cancel Placement";
+    popup.append(cancelPlacement);
+
     HTMLBody.append(popup);
 
     return popup;

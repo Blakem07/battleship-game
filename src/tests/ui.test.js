@@ -131,4 +131,14 @@ describe("UI Class Tests", () => {
     expect(popup.id).toEqual("placeShipPopup");
     expect(popup.classList).toContain("popup");
   });
+
+  test("UI.createShipPopup creates a pop up div with the correct structure.", () => {
+    const popup = ui.createShipPopup();
+
+    const shipSelectionDiv = popup.querySelector("#shipSelection");
+    const placementGridDiv = popup.querySelector("#shipPlacement");
+
+    expect(shipSelectionDiv instanceof HTMLElement).toBe(true);
+    expect(placementGridDiv instanceof HTMLElement).toBe(true);
+  });
 });
