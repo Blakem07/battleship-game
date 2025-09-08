@@ -9,6 +9,7 @@ function App() {
   const { playerBoard, computerBoard } = setupBoards();
   const { player, computer } = setupPlayers(playerBoard, computerBoard);
   const gameController = setupGameController();
+  const ui = setupUI();
 }
 
 /**
@@ -47,6 +48,17 @@ function setupGameController() {
   const gameController = new GameController();
 
   return gameController;
+}
+
+/**
+ * Creates and initializes the UI instance.
+ *
+ * @returns {UI} A new UI object responsible for managing the user interface.
+ */
+function setupUI() {
+  const ui = new UI();
+
+  return ui;
 }
 
 export default App;
