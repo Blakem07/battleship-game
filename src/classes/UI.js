@@ -96,6 +96,11 @@ export default class UI {
     const placementGridDiv = document.createElement("div");
     placementGridDiv.id = "shipPlacement";
     placementGridDiv.classList.add("grid-small");
+    this.populateGrid(placementGridDiv, {
+      row: Gameboard.BOARD_ROWS,
+      col: Gameboard.BOARD_COLS,
+      createCell: this.createCell,
+    });
     popup.append(placementGridDiv);
 
     // Blur Overlay
