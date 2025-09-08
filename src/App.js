@@ -6,7 +6,20 @@ import { UI, GameController, Player, Computer, Gameboard } from "./classes";
  * Responsible for bootstrapping game state and rendering the grids.
  */
 function App() {
-  const { player, computer } = setupPlayers();
+  const { playerBoard, computerBoard } = setupBoards();
+  const { player, computer } = setupPlayers(playerBoard, computerBoard);
+}
+
+/**
+ * Creates and initializes gameboard instances for the player and computer.
+ *
+ * @returns {Object} An object containing the player's and computer's gameboards.
+ */
+function setupBoards() {
+  const playerBoard = new Gameboard();
+  const computerBoard = new Gameboard();
+
+  return { playerBoard, computerBoard };
 }
 
 /**
