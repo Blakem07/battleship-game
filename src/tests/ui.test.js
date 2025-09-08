@@ -118,4 +118,17 @@ describe("UI Class Tests", () => {
     expect(callback).toHaveBeenCalledWith(0, 0);
     expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
+
+  // Tests for createShipPopup
+
+  test("UI.createShipPopup appends a div pop up to the body of the HTML document.", () => {
+    const HTMLBody = document.querySelector("body");
+    const popup = ui.createShipPopup();
+
+    const HTMLBodyChildren = Array.from(HTMLBody.children);
+
+    expect(HTMLBodyChildren).toContain(popup);
+    expect(popup.id).toEqual("placeShipPopup");
+    expect(popup.classList).toContain("popup");
+  });
 });

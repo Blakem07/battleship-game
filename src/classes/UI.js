@@ -69,4 +69,16 @@ export default class UI {
       }
     }
   }
+
+  createShipPopup() {
+    const HTMLBody = document.querySelector("body");
+    const popup = document.createElement("div");
+
+    popup.id = "placeShipPopup";
+    popup.classList.add("popup");
+
+    HTMLBody.append(popup);
+
+    return popup;
+  }
 }
