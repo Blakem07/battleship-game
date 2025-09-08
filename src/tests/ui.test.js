@@ -94,16 +94,18 @@ describe("UI Class Tests", () => {
     expect(cell.classList[0]).toEqual("grid-cell");
   });
 
-  // Tests for addPlaceShipClickListeners
+  // Tests for addGridClickListeners
 
-  test("UI.addPlaceShipClickListeners each cell calls the expected callback.", () => {
+  test("UI.addGridClickListeners each cell calls the expected callback.", () => {
     ui.populateGrid(gridContainer, {
       row: rows,
       col: cols,
       createCell: createCellMock,
     });
 
-    ui.addPlaceShipClickListeners(gridContainer, placeShipMock);
+    const callback = placeShipMock;
+
+    ui.addGridClickListeners(gridContainer, callback);
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -112,8 +114,8 @@ describe("UI Class Tests", () => {
       }
     }
 
-    expect(placeShipMock).toHaveBeenCalledTimes(rows * cols);
-    expect(placeShipMock).toHaveBeenCalledWith(0, 0);
-    expect(placeShipMock).toHaveBeenCalledWith(rows - 1, cols - 1);
+    expect(callback).toHaveBeenCalledTimes(rows * cols);
+    expect(callback).toHaveBeenCalledWith(0, 0);
+    expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 });
