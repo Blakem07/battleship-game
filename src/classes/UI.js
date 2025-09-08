@@ -4,6 +4,8 @@ export default class UI {
   constructor() {
     this.playerGrid = document.querySelector("#player-grid");
     this.computerGrid = document.querySelector("#computer-grid");
+
+    this.createShipPopup();
   }
 
   /**
@@ -107,7 +109,12 @@ export default class UI {
     cancelPlacement.textContent = "Cancel Placement";
     popup.append(cancelPlacement);
 
-    HTMLBody.append(popup);
+    // Blur Overlay
+    const overlay = document.createElement("div");
+    overlay.id = "placeShipOverlay";
+    overlay.append(popup);
+
+    HTMLBody.append(overlay);
 
     return popup;
   }

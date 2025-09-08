@@ -56,6 +56,32 @@ main {
   gap: 15px;
 }
 
+#placeShipPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* center the popup */
+  background: var(--primary-color);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 1001; /* higher than overlay */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+#placeShipOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.6); /* dim background */
+  z-index: 1000; /* below the popup */
+}
+
 .grid {
   height: 640px;
   width: 640px;
