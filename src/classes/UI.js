@@ -98,18 +98,6 @@ export default class UI {
     placementGridDiv.classList.add("grid-small");
     popup.append(placementGridDiv);
 
-    // Buttons
-
-    const confirmPlacement = document.createElement("button");
-    confirmPlacement.id = "confirmPlacement";
-    confirmPlacement.textContent = "Confirm Placement";
-    popup.append(confirmPlacement);
-
-    const cancelPlacement = document.createElement("button");
-    cancelPlacement.id = "cancelPlacement";
-    cancelPlacement.textContent = "Cancel Placement";
-    popup.append(cancelPlacement);
-
     // Blur Overlay
     const overlay = document.createElement("div");
     overlay.id = "placeShipOverlay";
