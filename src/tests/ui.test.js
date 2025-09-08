@@ -121,13 +121,16 @@ describe("UI Class Tests", () => {
 
   // Tests for createShipPopup
 
-  test("UI.createShipPopup appends a div pop up to the body of the HTML document.", () => {
+  test("UI.createShipPopup appends a pop up to the overlay then to the HTML doc.", () => {
     const HTMLBody = document.querySelector("body");
     const popup = ui.createShipPopup();
+    const overlay = document.querySelector("#placeShipOverlay");
 
     const HTMLBodyChildren = Array.from(HTMLBody.children);
+    const overlayChildren = Array.from(overlay.children);
 
-    expect(HTMLBodyChildren).toContain(popup);
+    expect(HTMLBodyChildren).toContain(overlay);
+    expect(overlayChildren).toContainEqual(popup);
     expect(popup.id).toEqual("placeShipPopup");
     expect(popup.classList).toContain("popup");
   });
