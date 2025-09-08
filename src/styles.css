@@ -57,8 +57,11 @@ main {
 }
 
 #placeShipPopup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: fixed;
-  top: 50%;
+  top: 53%;
   left: 50%;
   transform: translate(-50%, -50%); /* center the popup */
   background: var(--primary-color);
@@ -69,6 +72,23 @@ main {
   max-width: 90%;
   max-height: 90%;
   overflow-y: auto;
+}
+
+#shipSelection {
+  border: 1px var(--secondary-color) solid;
+  height: 40px;
+  width: 100%;
+}
+
+.grid-small {
+  height: 384px; /* 60% of 640 */
+  width: 384px; /* 60% of 640 */
+  border: 5px var(--secondary-color) solid;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
 }
 
 #placeShipOverlay {

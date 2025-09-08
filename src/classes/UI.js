@@ -88,13 +88,14 @@ export default class UI {
 
     const shipSelectionDiv = document.createElement("div");
     shipSelectionDiv.id = "shipSelection";
+    shipSelectionDiv.textContent = "Place Your...";
     popup.append(shipSelectionDiv);
 
     // Ship Placement Grid
 
     const placementGridDiv = document.createElement("div");
     placementGridDiv.id = "shipPlacement";
-    placementGridDiv.classList.add("grid");
+    placementGridDiv.classList.add("grid-small");
     popup.append(placementGridDiv);
 
     // Buttons
