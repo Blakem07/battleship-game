@@ -8,6 +8,10 @@ import UI from "../classes/UI.js";
 describe("UI Class Tests", () => {
   let ui;
 
+  let populateGridSpy;
+  let createCellSpy;
+  let addGridClickListenersSpy;
+
   let createCellMock;
   let placeShipMock;
 
@@ -20,6 +24,10 @@ describe("UI Class Tests", () => {
 
   beforeEach(() => {
     ui = new UI();
+
+    populateGridSpy = jest.spyOn(ui, "populateGrid");
+    createCellSpy = jest.spyOn(ui, "createCell");
+    addGridClickListenersSpy = jest.spyOn(ui, "addGridClickListeners");
 
     createCellMock = jest.fn(() => document.createElement("div"));
     placeShipMock = jest.fn();
@@ -143,5 +151,22 @@ describe("UI Class Tests", () => {
 
     expect(shipSelectionDiv instanceof HTMLElement).toBe(true);
     expect(placementGridDiv instanceof HTMLElement).toBe(true);
+  });
+
+  test("UI.createShipPopup renders grid cells and delegates placeShip click events", () => {
+    ui.createShipPopup();
+
+    // Check grid population
+    expect(populateGridSpy).toHaveBeenCalledTimes(1);
+    expect(createCellSpy).toHaveBeenCalledTimes(rows * cols);
+    expect(createCellSpy).toHaveBeenCalledWith(0, 0); // First
+    expect(createCellSpy).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
+
+    // Check event delegation
+    expect(addGridClickListenersSpy).toHaveBeenCalledTimes(1);
+    expect(addGridClickListenersSpy).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.any(Function)
+    );
   });
 });
