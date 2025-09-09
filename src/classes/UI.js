@@ -136,6 +136,24 @@ export default class UI {
     const div = document.createElement("div");
     div.id = "orientationSwitch";
 
+    const horizontalLabel = document.createElement("label");
+    horizontalLabel.textContent = "Horizontal";
+    div.appendChild(horizontalLabel);
+
+    const verticalLabel = document.createElement("label");
+    verticalLabel.textContent = "Vertical";
+    div.appendChild(verticalLabel);
+
+    const horizontalSwitch = document.createElement("input");
+    horizontalSwitch.id = "horizontalSwitch";
+    horizontalSwitch.type = "checkbox";
+    horizontalLabel.appendChild(horizontalSwitch);
+
+    const verticalSwitch = document.createElement("input");
+    verticalSwitch.id = "verticalSwitch";
+    verticalSwitch.type = "checkbox";
+    verticalLabel.appendChild(verticalSwitch);
+
     return div;
   }
 }

@@ -178,4 +178,19 @@ describe("UI Class Tests", () => {
     expect(switchElement instanceof HTMLElement).toBe(true);
     expect(switchElement.id).toEqual("orientationSwitch");
   });
+
+  test("UI.createOrientationSwitch creates an element with the correct structure.", () => {
+    const switchElement = ui.createOrientationSwitch();
+
+    const switchElementChildren = Array.from(switchElement.children);
+    const labels = switchElement.querySelectorAll("label");
+
+    expect(switchElementChildren.length).toBeGreaterThan(0); // Fails if no children
+    expect(labels.length).toBe(switchElementChildren.length);
+
+    labels.forEach((label) => {
+      const input = label.querySelector("input"); // Check that each label contains an input element
+      expect(input).not.toBeNull();
+    });
+  });
 });
