@@ -93,22 +93,8 @@ export default class UI {
 
     // Placement Orientation
 
-    const placementOrientationDiv = this.createOrientationSwitch;
-
-    /**
-    for (let i = 0; i < 2; i++) {
-      const label = document.createElement("label");
-      const input = document.createElement("input");
-
-      label.textContent = i == 0 ? "Horizontal" : "Vertical";
-
-      input.type = "checkbox";
-      input.id = i == 0 ? "horizontalSwitch" : "verticalSwitch";
-
-      label.append(input);
-      placementOrientationDiv.append(label);
-    }
-    popup.append(placementOrientationDiv);*/
+    const orientationSwitch = this.createOrientationSwitch();
+    popup.append(orientationSwitch);
 
     // Ship Placement Grid
 
@@ -132,6 +118,16 @@ export default class UI {
     return popup;
   }
 
+  /**
+   * Creates and returns a DOM element containing a pair of radio buttons
+   * for selecting orientation: "Horizontal" or "Vertical".
+   *
+   * - Each radio button is associated with a label.
+   * - Both inputs share the same 'name' attribute ("orientation") so only one can be selected at a time.
+   * - The returned <div> can be appended to the DOM wherever needed.
+   *
+   * @returns {HTMLDivElement} A <div> containing labeled radio buttons for orientation selection.
+   */
   createOrientationSwitch() {
     const div = document.createElement("div");
     div.id = "orientationSwitch";
@@ -146,12 +142,14 @@ export default class UI {
 
     const horizontalSwitch = document.createElement("input");
     horizontalSwitch.id = "horizontalSwitch";
-    horizontalSwitch.type = "checkbox";
+    horizontalSwitch.type = "radio";
+    horizontalSwitch.name = "orientation";
     horizontalLabel.appendChild(horizontalSwitch);
 
     const verticalSwitch = document.createElement("input");
     verticalSwitch.id = "verticalSwitch";
-    verticalSwitch.type = "checkbox";
+    verticalSwitch.type = "radio";
+    verticalSwitch.name = "orientation";
     verticalLabel.appendChild(verticalSwitch);
 
     return div;
