@@ -1,11 +1,26 @@
 import Gameboard from "./Gameboard";
 
 export default class UI {
+  #shipPlacementOrientation;
+
   constructor() {
     this.playerGrid = document.querySelector("#player-grid");
     this.computerGrid = document.querySelector("#computer-grid");
 
+    this.#shipPlacementOrientation = "horizontal";
+
     this.createShipPopup();
+  }
+
+  get shipPlacementOrientation() {
+    return this.#shipPlacementOrientation;
+  }
+
+  set shipPlacementOrientation(_) {
+    this.#shipPlacementOrientation =
+      this.#shipPlacementOrientation === "horizontal"
+        ? "vertical"
+        : "horizontal";
   }
 
   /**
