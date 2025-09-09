@@ -91,6 +91,25 @@ export default class UI {
     shipSelectionDiv.textContent = "Place Your...";
     popup.append(shipSelectionDiv);
 
+    // Placement Orientation
+
+    const placementOrientationDiv = this.createOrientationSwitch;
+
+    /**
+    for (let i = 0; i < 2; i++) {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+
+      label.textContent = i == 0 ? "Horizontal" : "Vertical";
+
+      input.type = "checkbox";
+      input.id = i == 0 ? "horizontalSwitch" : "verticalSwitch";
+
+      label.append(input);
+      placementOrientationDiv.append(label);
+    }
+    popup.append(placementOrientationDiv);*/
+
     // Ship Placement Grid
 
     const placementGridDiv = document.createElement("div");
@@ -111,5 +130,12 @@ export default class UI {
     HTMLBody.append(overlay);
 
     return popup;
+  }
+
+  createOrientationSwitch() {
+    const div = document.createElement("div");
+    div.id = "orientationSwitch";
+
+    return div;
   }
 }
