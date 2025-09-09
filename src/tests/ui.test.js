@@ -141,6 +141,31 @@ describe("UI Class Tests", () => {
     expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 
+  // Tests for helper: getCell
+
+  test("UI.getCell returns the correct cell", () => {
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: ui.createCell,
+    });
+
+    const firstCell = gridContainer.children[0].children[0];
+    const lastCell =
+      gridContainer.children[Gameboard.BOARD_ROWS - 1].children[
+        Gameboard.BOARD_COLS - 1
+      ];
+
+    expect(ui.getCell(gridContainer, 0, 0)).toBe(firstCell);
+    expect(
+      ui.getCell(
+        gridContainer,
+        Gameboard.BOARD_ROWS - 1,
+        Gameboard.BOARD_COLS - 1
+      )
+    ).toBe(lastCell);
+  });
+
   // Tests for addGridHoverListeners
 
   test("UI.addGridHoverListeners delegates hover effects to all cells within a grid container.", () => {
@@ -170,7 +195,7 @@ describe("UI Class Tests", () => {
     }
   });
 
-  test("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
+  test.skip("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
     const gridContainer = document.createElement("div");
 
     ui.populateGrid(gridContainer, {

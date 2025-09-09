@@ -86,6 +86,19 @@ export default class UI {
       }
     }
   }
+  
+  /**
+   * Returns the cell element at the specified row and column within the grid container.
+   *
+   * @param {HTMLElement} gridContainer - The container element holding the grid cells.
+   * @param {number} row - The zero-based row index of the desired cell.
+   * @param {number} col - The zero-based column index of the desired cell.
+   * @returns {HTMLElement | null} The cell element matching the given row and column, or null if not found.
+   */
+  getCell(gridContainer, row, col) {
+    const selector = `.grid-cell[data-row="${row}"][data-col="${col}"]`;
+    return gridContainer.querySelector(selector);
+  }
 
   addGridHoverListeners(gridContainer) {
     const cells = gridContainer.querySelectorAll(".grid-cell");
