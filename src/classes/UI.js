@@ -87,6 +87,20 @@ export default class UI {
     }
   }
 
+  addGridHoverListeners(gridContainer) {
+    const cells = gridContainer.querySelectorAll(".grid-cell");
+
+    cells.forEach((cell) => {
+      cell.addEventListener("mouseenter", () => {
+        cell.classList.add("hover-effect");
+      });
+
+      cell.addEventListener("mouseleave", () => {
+        cell.classList.remove("hover-effect");
+      });
+    });
+  }
+
   createShipPopup() {
     const HTMLBody = document.querySelector("body");
     const popup = document.createElement("div");
@@ -121,6 +135,7 @@ export default class UI {
       col: Gameboard.BOARD_COLS,
       createCell: this.createCell,
     });
+    this.addGridHoverListeners(placementGridDiv);
     popup.append(placementGridDiv);
 
     // Blur Overlay

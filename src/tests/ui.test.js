@@ -141,6 +141,33 @@ describe("UI Class Tests", () => {
     expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 
+  test("UI.addGridHoverListeners delegates hover effects to all cells within a grid container.", () => {
+    const gridContainer = document.createElement("div");
+
+    ui.populateGrid(gridContainer, {
+      row: Gameboard.BOARD_ROWS,
+      col: Gameboard.BOARD_COLS,
+      createCell: ui.createCell,
+    });
+
+    ui.addGridHoverListeners(gridContainer);
+
+    for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
+      for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
+        const cell = gridContainer.children[row].children[col];
+
+        const enterCellEvent = new MouseEvent("mouseenter", { bubbles: true });
+        const leaveCellEvent = new MouseEvent("mouseleave", { bubbles: true });
+
+        cell.dispatchEvent(enterCellEvent);
+        expect(Array.from(cell.classList)).toContain("hover-effect");
+
+        cell.dispatchEvent(leaveCellEvent);
+        expect(Array.from(cell.classList)).not.toContain("hover-effect");
+      }
+    }
+  });
+
   // Tests for createShipPopup
 
   test("UI.createShipPopup appends a pop up to the overlay then to the HTML doc.", () => {
