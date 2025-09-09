@@ -8,10 +8,12 @@ import UI from "../classes/UI.js";
 describe("UI Class Tests", () => {
   let ui;
 
+  let orientationSetterSpy;
   let populateGridSpy;
   let createCellSpy;
   let addGridClickListenersSpy;
 
+  let createSwitchMock;
   let createCellMock;
   let placeShipMock;
 
@@ -25,10 +27,22 @@ describe("UI Class Tests", () => {
   beforeEach(() => {
     ui = new UI();
 
+    orientationSetterSpy = jest.spyOn(ui, "shipPlacementOrientation", "set");
     populateGridSpy = jest.spyOn(ui, "populateGrid");
     createCellSpy = jest.spyOn(ui, "createCell");
     addGridClickListenersSpy = jest.spyOn(ui, "addGridClickListeners");
 
+    createSwitchMock = jest.fn(() => {
+      const horizontalInput = document.createElement("input");
+      horizontalInput.type = "radio";
+      horizontalInput.name = "orientation";
+
+      const verticalInput = document.createElement("input");
+      verticalInput.type = "radio";
+      verticalInput.name = "orientation";
+
+      return { horizontalInput, verticalInput };
+    });
     createCellMock = jest.fn(() => document.createElement("div"));
     placeShipMock = jest.fn();
 
@@ -192,5 +206,22 @@ describe("UI Class Tests", () => {
       const input = label.querySelector("input"); // Check that each label contains an input element
       expect(input).not.toBeNull();
     });
+  });
+
+  // Tests for addSwitchClickListener
+
+  test("UI.addSwitchClickListener inputs call calls the orientation setter.", () => {
+    const { horizontalInput, verticalInput } = createSwitchMock();
+
+    ui.addSwitchClickListener(verticalInput);
+    ui.addSwitchClickListener(horizontalInput);
+
+    verticalInput.dispatchEvent(new Event("click"));
+    expect(ui.shipPlacementOrientation).toEqual("vertical"); // Default is horizontal
+
+    horizontalInput.dispatchEvent(new Event("click"));
+    expect(ui.shipPlacementOrientation).toEqual("horizontal");
+
+    expect(orientationSetterSpy).toHaveBeenCalledTimes(2);
   });
 });

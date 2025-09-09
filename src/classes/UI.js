@@ -158,15 +158,33 @@ export default class UI {
     const horizontalSwitch = document.createElement("input");
     horizontalSwitch.id = "horizontalSwitch";
     horizontalSwitch.type = "radio";
+    horizontalSwitch.checked = "checked";
     horizontalSwitch.name = "orientation";
+    this.addSwitchClickListener(horizontalSwitch);
     horizontalLabel.appendChild(horizontalSwitch);
 
     const verticalSwitch = document.createElement("input");
     verticalSwitch.id = "verticalSwitch";
     verticalSwitch.type = "radio";
     verticalSwitch.name = "orientation";
+    this.addSwitchClickListener(verticalSwitch);
     verticalLabel.appendChild(verticalSwitch);
 
     return div;
+  }
+
+  /**
+   * Adds a click event listener to the given input element.
+   * When clicked, this toggles the shipPlacementOrientation property via its setter.
+   *
+   * @param {HTMLElement} inputEle - The input element to attach the click listener to.
+   * @returns {HTMLElement} The same input element, with the listener attached.
+   */
+  addSwitchClickListener(inputEle) {
+    inputEle.addEventListener("click", () => {
+      this.shipPlacementOrientation = "_"; // Toggles setter
+    });
+
+    return inputEle;
   }
 }
