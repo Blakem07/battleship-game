@@ -141,6 +141,8 @@ describe("UI Class Tests", () => {
     expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 
+  // Tests for addGridHoverListeners
+
   test("UI.addGridHoverListeners delegates hover effects to all cells within a grid container.", () => {
     const gridContainer = document.createElement("div");
 
@@ -164,6 +166,41 @@ describe("UI Class Tests", () => {
 
         cell.dispatchEvent(leaveCellEvent);
         expect(Array.from(cell.classList)).not.toContain("hover-effect");
+      }
+    }
+  });
+
+  test("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
+    const gridContainer = document.createElement("div");
+
+    ui.populateGrid(gridContainer, {
+      row: Gameboard.BOARD_ROWS,
+      col: Gameboard.BOARD_COLS,
+      createCell: ui.createCell,
+    });
+
+    ui.addGridHoverListeners(gridContainer);
+
+    ui.hoverableCellCount = 5;
+
+    for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
+      for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
+        const cell = gridContainer.children[row].children[col];
+        const cellsArray = Array.from(gridContainer.children[row].children);
+        const cellGroup = cellsArray.slice(col, col + 5);
+
+        const enterCellEvent = new MouseEvent("mouseenter", { bubbles: true });
+        const leaveCellEvent = new MouseEvent("mouseleave", { bubbles: true });
+
+        cell.dispatchEvent(enterCellEvent);
+        cellGroup.forEach((cell) => {
+          expect(cell.classList.contains("hover-effect")).toBe(true);
+        });
+
+        cell.dispatchEvent(leaveCellEvent);
+        cellGroup.forEach((cell) => {
+          expect(cell.classList.contains("hover-effect")).toBe(false);
+        });
       }
     }
   });
