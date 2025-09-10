@@ -7,6 +7,7 @@ export default class UI {
     this.playerGrid = document.querySelector("#player-grid");
     this.computerGrid = document.querySelector("#computer-grid");
 
+    this.cellHighlightCount = 5;
     this.#shipPlacementOrientation = "horizontal";
 
     this.createShipPopup();
@@ -86,7 +87,7 @@ export default class UI {
       }
     }
   }
-  
+
   /**
    * Returns the cell element at the specified row and column within the grid container.
    *
@@ -98,6 +99,23 @@ export default class UI {
   getCell(gridContainer, row, col) {
     const selector = `.grid-cell[data-row="${row}"][data-col="${col}"]`;
     return gridContainer.querySelector(selector);
+  }
+
+  getCellGroup(gridContainer, row, col) {
+    let rowPosition = row;
+    let colPosition = col;
+
+    const cellGroup = [];
+
+    for (let count = 0; count < this.cellHighlightCount; count++) {
+      const cell = this.getCell(gridContainer, rowPosition, colPosition);
+      cellGroup.push(cell);
+
+      if (this.#shipPlacementOrientation == "horizontal") colPosition++;
+      if (this.#shipPlacementOrientation == "vertical") rowPosition++;
+    }
+
+    return cellGroup;
   }
 
   addGridHoverListeners(gridContainer) {

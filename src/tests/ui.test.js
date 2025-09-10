@@ -24,6 +24,8 @@ describe("UI Class Tests", () => {
 
   let gridContainer;
 
+  let initialCellPositionsVertical;
+
   beforeEach(() => {
     ui = new UI();
 
@@ -52,7 +54,17 @@ describe("UI Class Tests", () => {
     VALID_COL = 0;
 
     gridContainer = document.createElement("div");
+
+    initialCellPositionsVertical = [
+      { row: 1, col: 0 },
+      { row: 2, col: 0 },
+      { row: 3, col: 0 },
+      { row: 1, col: 5 },
+      { row: 2, col: 5 },
+      { row: 3, col: 5 },
+    ];
   });
+
   afterEach(() => {
     jest.restoreAllMocks();
   });
@@ -164,6 +176,71 @@ describe("UI Class Tests", () => {
         Gameboard.BOARD_COLS - 1
       )
     ).toBe(lastCell);
+  });
+
+  // Tests for helper: getCellGroup
+
+  test("UI.getCellGroup returns the correct horizontal cell group starting at given row and column.", () => {
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: ui.createCell,
+    });
+
+    const initialCellPositions = [
+      { row: 0, col: 0 },
+      { row: 0, col: 5 },
+      { row: 4, col: 0 },
+      { row: 4, col: 5 },
+      { row: 9, col: 0 },
+      { row: 9, col: 5 },
+    ];
+
+    initialCellPositions.forEach((position) => {
+      const row = position.row;
+      const col = position.col;
+
+      const cellGroup = ui.getCellGroup(gridContainer, row, col);
+
+      expect(cellGroup.length).toEqual(ui.cellHighlightCount);
+
+      cellGroup.forEach((cell, index) => {
+        const location = col + index; // Moves horizontally from starting cell
+
+        const expectedCell = document.querySelector(
+          `.grid-cell[data-row="${row}"][data-col="${location}"]`
+        );
+        expect(cell).toEqual(expectedCell);
+      });
+    });
+  });
+
+  test("UI.getCellGroup returns the correct vertical cell group starting at the given row and column", () => {
+    ui.shipPlacementOrientation = "_"; // Toggles vertical
+
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: ui.createCell,
+    });
+
+    initialCellPositionsVertical.forEach((position) => {
+      const row = position.row;
+      const col = position.col;
+
+      const cellGroup = ui.getCellGroup(gridContainer, row, col);
+
+      expect(cellGroup.length).toEqual(ui.cellHighlightCount);
+
+      cellGroup.forEach((cell, index) => {
+        const location = row + index; // Moves vertically from starting cell
+
+        const expectedCell = document.querySelector(
+          `.grid-cell[data-row="${location}"][data-col="${col}"]`
+        );
+        expect(cell).toEqual(expectedCell);
+      });
+    });
   });
 
   // Tests for addGridHoverListeners
