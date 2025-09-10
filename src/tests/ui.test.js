@@ -26,6 +26,7 @@ describe("UI Class Tests", () => {
 
   let horizontalEdgeCells;
   let initialCellPositionsVertical;
+  let verticalEdgeCells;
 
   beforeEach(() => {
     ui = new UI();
@@ -72,6 +73,14 @@ describe("UI Class Tests", () => {
       { row: 1, col: 5 },
       { row: 2, col: 5 },
       { row: 3, col: 5 },
+    ];
+
+    verticalEdgeCells = [
+      { row: 7, col: 0 }, // Starts 3 rows from bottom — highlight length 5 goes past bottom edge
+      { row: 8, col: 3 }, // Starts 2 rows from bottom — highlight length 5 goes past bottom edge
+      { row: 9, col: 5 }, // Starts at last row — highlight length 5 overflows heavily
+      { row: 7, col: 7 }, // Near bottom-right edge, overflow expected
+      { row: 8, col: 9 }, // Bottom-right corner, overflow expected
     ];
   });
 
@@ -270,6 +279,28 @@ describe("UI Class Tests", () => {
         );
         expect(cell).toEqual(expectedCell);
       });
+    });
+  });
+
+  test("UI.getCellGroup handles vertical edge cases correctly.", () => {
+    ui.shipPlacementOrientation = "_"; // Toggles vertical
+
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: ui.createCell,
+    });
+
+    verticalEdgeCells.forEach((position) => {
+      const row = position.row;
+      const col = position.col;
+
+      const spaceLeft = Gameboard.BOARD_ROWS - row;
+      const expectedLength = Math.min(ui.cellHighlightCount, spaceLeft);
+
+      const cellGroup = ui.getCellGroup(gridContainer, row, col);
+
+      expect(cellGroup.length).toEqual(expectedLength);
     });
   });
 
