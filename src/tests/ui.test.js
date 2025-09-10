@@ -394,8 +394,8 @@ describe("UI Class Tests", () => {
     expect(placementGridDiv instanceof HTMLElement).toBe(true);
   });
 
-  test.skip("UI.createShipPopup renders grid cells and delegates placeShip click events", () => {
-    ui.createShipPopup();
+  test("UI.createShipPopup renders grid cells and attatches placeShip click events", () => {
+    ui.createShipPopup(placeShipMock);
 
     // Check grid population
     expect(populateGridSpy).toHaveBeenCalledTimes(1);
@@ -403,7 +403,7 @@ describe("UI Class Tests", () => {
     expect(createCellSpy).toHaveBeenCalledWith(0, 0); // First
     expect(createCellSpy).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
 
-    // Check event delegation
+    // Check event 
     expect(addGridClickListenersSpy).toHaveBeenCalledTimes(1);
     expect(addGridClickListenersSpy).toHaveBeenCalledWith(
       expect.anything(),

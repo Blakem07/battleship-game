@@ -9,8 +9,6 @@ export default class UI {
 
     this.cellHighlightCount = 5;
     this.#shipPlacementOrientation = "horizontal";
-
-    this.createShipPopup();
   }
 
   get shipPlacementOrientation() {
@@ -146,7 +144,23 @@ export default class UI {
     });
   }
 
-  createShipPopup() {
+  /**
+   * Creates and displays the "Place Your Ships" popup UI for ship placement.
+   *
+   * This method generates a popup modal that includes:
+   * - A header prompting the player to place ships
+   * - A ship selection section
+   * - An orientation switch (horizontal/vertical)
+   * - A grid for ship placement
+   *
+   * It also attaches necessary event listeners for hover effects and click events
+   * that invoke the provided `placeShipFn` when a ship is placed.
+   *
+   * @param {Function} placeShipFn - A callback function that handles placing a ship on the gameboard.
+   *                                 It is called when the user clicks a valid placement cell.
+   * @returns {HTMLElement} The DOM element representing the popup (for possible later reference or removal).
+   */
+  createShipPopup(placeShipFn) {
     const HTMLBody = document.querySelector("body");
     const popup = document.createElement("div");
 
@@ -181,6 +195,7 @@ export default class UI {
       createCell: this.createCell,
     });
     this.addGridHoverListeners(placementGridDiv);
+    this.addGridClickListeners(placementGridDiv, placeShipFn);
     popup.append(placementGridDiv);
 
     // Blur Overlay
