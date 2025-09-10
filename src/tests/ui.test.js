@@ -24,6 +24,7 @@ describe("UI Class Tests", () => {
 
   let gridContainer;
 
+  let horizontalEdgeCells;
   let initialCellPositionsVertical;
 
   beforeEach(() => {
@@ -54,6 +55,15 @@ describe("UI Class Tests", () => {
     VALID_COL = 0;
 
     gridContainer = document.createElement("div");
+
+    horizontalEdgeCells = [
+      { row: 0, col: 0 }, // Top-left corner
+      { row: 0, col: 6 }, // Top, near right edge for length 5 segment
+      { row: 4, col: 0 }, // Middle-left edge
+      { row: 4, col: 6 }, // Middle-right edge
+      { row: 9, col: 0 }, // Bottom-left corner
+      { row: 9, col: 6 }, // Bottom-right edge
+    ];
 
     initialCellPositionsVertical = [
       { row: 1, col: 0 },
@@ -212,6 +222,26 @@ describe("UI Class Tests", () => {
         );
         expect(cell).toEqual(expectedCell);
       });
+    });
+  });
+
+  test("UI.getCellGroup handles horizontal edge cases correctly.", () => {
+    ui.populateGrid(gridContainer, {
+      row: rows,
+      col: cols,
+      createCell: ui.createCell,
+    });
+
+    horizontalEdgeCells.forEach((position) => {
+      const row = position.row;
+      const col = position.col;
+
+      const spaceLeft = Gameboard.BOARD_COLS - col;
+      const expectedLength = Math.min(ui.cellHighlightCount, spaceLeft);
+
+      const cellGroup = ui.getCellGroup(gridContainer, row, col);
+
+      expect(cellGroup.length).toEqual(expectedLength);
     });
   });
 

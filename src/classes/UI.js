@@ -109,7 +109,8 @@ export default class UI {
 
     for (let count = 0; count < this.cellHighlightCount; count++) {
       const cell = this.getCell(gridContainer, rowPosition, colPosition);
-      cellGroup.push(cell);
+
+      if (cell) cellGroup.push(cell); // Handles edge cases
 
       if (this.#shipPlacementOrientation == "horizontal") colPosition++;
       if (this.#shipPlacementOrientation == "vertical") rowPosition++;
