@@ -333,7 +333,7 @@ describe("UI Class Tests", () => {
     }
   });
 
-  test.skip("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
+  test("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
     const gridContainer = document.createElement("div");
 
     ui.populateGrid(gridContainer, {

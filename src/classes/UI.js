@@ -119,16 +119,29 @@ export default class UI {
     return cellGroup;
   }
 
+  /**
+   * Adds hover event listeners to each grid cell that apply or remove
+   * a "hover-effect" class to a group of cells (not just the one hovered).
+   *
+   * This is used to visually preview multi-cell ship placement
+   * by highlighting a group of cells starting from the hovered cell,
+   * determined by getCellGroup().
+   */
   addGridHoverListeners(gridContainer) {
     const cells = gridContainer.querySelectorAll(".grid-cell");
 
     cells.forEach((cell) => {
+      const row = parseInt(cell.dataset.row, 10);
+      const col = parseInt(cell.dataset.col, 10);
+
       cell.addEventListener("mouseenter", () => {
-        cell.classList.add("hover-effect");
+        const group = this.getCellGroup(gridContainer, row, col);
+        group.forEach((c) => c.classList.add("hover-effect"));
       });
 
       cell.addEventListener("mouseleave", () => {
-        cell.classList.remove("hover-effect");
+        const group = this.getCellGroup(gridContainer, row, col);
+        group.forEach((c) => c.classList.remove("hover-effect"));
       });
     });
   }
