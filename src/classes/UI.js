@@ -245,14 +245,14 @@ export default class UI {
     horizontalSwitch.type = "radio";
     horizontalSwitch.checked = "checked";
     horizontalSwitch.name = "orientation";
-    this.addSwitchClickListener(horizontalSwitch);
+    this.addSwitchChangeListener(horizontalSwitch);
     horizontalLabel.appendChild(horizontalSwitch);
 
     const verticalSwitch = document.createElement("input");
     verticalSwitch.id = "verticalSwitch";
     verticalSwitch.type = "radio";
     verticalSwitch.name = "orientation";
-    this.addSwitchClickListener(verticalSwitch);
+    this.addSwitchChangeListener(verticalSwitch);
     verticalLabel.appendChild(verticalSwitch);
 
     return div;
@@ -265,8 +265,8 @@ export default class UI {
    * @param {HTMLElement} inputEle - The input element to attach the click listener to.
    * @returns {HTMLElement} The same input element, with the listener attached.
    */
-  addSwitchClickListener(inputEle) {
-    inputEle.addEventListener("click", () => {
+  addSwitchChangeListener(inputEle) {
+    inputEle.addEventListener("change", () => {
       const nextOrientation =
         this.shipPlacementOrientation == "horizontal"
           ? "vertical"

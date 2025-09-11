@@ -399,16 +399,16 @@ describe("UI Class Tests", () => {
 
   // Tests for addSwitchClickListener
 
-  test("UI.addSwitchClickListener inputs call calls the orientation setter.", () => {
+  test("UI.addSwitchChangeListener inputs call calls the orientation setter.", () => {
     const { horizontalInput, verticalInput } = createSwitchMock();
 
-    ui.addSwitchClickListener(verticalInput);
-    ui.addSwitchClickListener(horizontalInput);
+    ui.addSwitchChangeListener(verticalInput);
+    ui.addSwitchChangeListener(horizontalInput);
 
-    verticalInput.dispatchEvent(new Event("click"));
+    verticalInput.dispatchEvent(new Event("change"));
     expect(ui.shipPlacementOrientation).toEqual("vertical"); // Default is horizontal
 
-    horizontalInput.dispatchEvent(new Event("click"));
+    horizontalInput.dispatchEvent(new Event("change"));
     expect(ui.shipPlacementOrientation).toEqual("horizontal");
 
     expect(orientationSetterSpy).toHaveBeenCalledTimes(2);
