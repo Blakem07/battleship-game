@@ -38,14 +38,10 @@ export default class UI {
     { row: rows, col: cols, createCell: createCell }
   ) {
     for (let row = 0; row < rows; row++) {
-      const rowCell = document.createElement("div");
-
       for (let col = 0; col < cols; col++) {
-        const colCell = createCell(row, col);
-        rowCell.append(colCell);
+        const cell = createCell(row, col);
+        gridContainer.append(cell);
       }
-
-      gridContainer.append(rowCell);
     }
   }
 
@@ -78,7 +74,9 @@ export default class UI {
   addGridClickListeners(gridContainer, callback) {
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
-        const cell = gridContainer.children[row].children[col];
+        const cells = gridContainer.querySelectorAll(".grid-cell");
+        const index = row * Gameboard.BOARD_COLS + col;
+        const cell = cells[index];
 
         cell.addEventListener("click", () => {
           callback(row, col);

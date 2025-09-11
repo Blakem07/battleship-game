@@ -100,20 +100,12 @@ describe("UI Class Tests", () => {
     expect(createCellSpy).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
   });
 
-  test("UI.populateGrid has the grid recieve the correct number of row elements.", () => {
+  test("UI.populateGrid fills the grid with the correct number of cells.", () => {
     ui.populateGrid(gridContainer, gridOptions);
 
-    expect(gridContainer.children.length).toEqual(rows);
-  });
+    const amountOfCells = gridContainer.children.length;
 
-  test("UI.populateGrid has the grid recieve the correct number of rows and columns", () => {
-    ui.populateGrid(gridContainer, gridOptions);
-
-    expect(gridContainer.children.length).toEqual(rows);
-
-    Array.from(gridContainer.children).forEach((row) => {
-      expect(row.children.length).toEqual(cols);
-    });
+    expect(amountOfCells).toEqual(rows * cols);
   });
 
   // Tests for create cell
@@ -149,13 +141,16 @@ describe("UI Class Tests", () => {
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
         const event = new MouseEvent("click", { bubbles: true });
-        gridContainer.children[row].children[col].dispatchEvent(event);
+        const cell = ui.getCell(gridContainer, row, col);
+
+        cell.dispatchEvent(event);
+
+        // Assert callback was called with expected row and col
+        expect(callback).toHaveBeenCalledWith(row, col);
       }
     }
 
     expect(callback).toHaveBeenCalledTimes(rows * cols);
-    expect(callback).toHaveBeenCalledWith(0, 0);
-    expect(callback).toHaveBeenCalledWith(rows - 1, cols - 1);
   });
 
   // Tests for helper: getCell
@@ -163,11 +158,9 @@ describe("UI Class Tests", () => {
   test("UI.getCell returns the correct cell", () => {
     ui.populateGrid(gridContainer, gridOptions);
 
-    const firstCell = gridContainer.children[0].children[0];
+    const firstCell = gridContainer.children[0];
     const lastCell =
-      gridContainer.children[Gameboard.BOARD_ROWS - 1].children[
-        Gameboard.BOARD_COLS - 1
-      ];
+      gridContainer.children[Gameboard.BOARD_ROWS * Gameboard.BOARD_COLS - 1];
 
     expect(ui.getCell(gridContainer, 0, 0)).toBe(firstCell);
     expect(
@@ -273,17 +266,13 @@ describe("UI Class Tests", () => {
   // Tests for addGridHoverListeners
 
   test("UI.addGridHoverListeners delegates hover effects to all cells within a grid container.", () => {
-    ui.populateGrid(gridContainer, {
-      row: Gameboard.BOARD_ROWS,
-      col: Gameboard.BOARD_COLS,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     ui.addGridHoverListeners(gridContainer);
 
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
-        const cell = gridContainer.children[row].children[col];
+        const cell = ui.getCell(gridContainer, row, col);
 
         const enterCellEvent = new MouseEvent("mouseenter", { bubbles: true });
         const leaveCellEvent = new MouseEvent("mouseleave", { bubbles: true });
@@ -298,11 +287,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
-    ui.populateGrid(gridContainer, {
-      row: Gameboard.BOARD_ROWS,
-      col: Gameboard.BOARD_COLS,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     ui.addGridHoverListeners(gridContainer);
 
@@ -310,9 +295,8 @@ describe("UI Class Tests", () => {
 
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
-        const cell = gridContainer.children[row].children[col];
-        const cellsArray = Array.from(gridContainer.children[row].children);
-        const cellGroup = cellsArray.slice(col, col + 5);
+        const cell = ui.getCell(gridContainer, row, col);
+        const cellGroup = ui.getCellGroup(gridContainer, row, col);
 
         const enterCellEvent = new MouseEvent("mouseenter", { bubbles: true });
         const leaveCellEvent = new MouseEvent("mouseleave", { bubbles: true });
@@ -397,7 +381,7 @@ describe("UI Class Tests", () => {
     });
   });
 
-  // Tests for addSwitchClickListener
+  // Tests for addSwitchChangeListener
 
   test("UI.addSwitchChangeListener inputs call calls the orientation setter.", () => {
     const { horizontalInput, verticalInput } = createSwitchMock();
