@@ -23,6 +23,7 @@ describe("UI Class Tests", () => {
   let VALID_COL;
 
   let gridContainer;
+  let gridOptions; // Used in ui.populateGrid()
 
   let horizontalEdgeCells;
   let initialCellPositionsVertical;
@@ -56,6 +57,7 @@ describe("UI Class Tests", () => {
     VALID_COL = 0;
 
     gridContainer = document.createElement("div");
+    gridOptions = { row: rows, col: cols, createCell: ui.createCell };
 
     horizontalEdgeCells = [
       { row: 0, col: 0 }, // Top-left corner
@@ -91,33 +93,21 @@ describe("UI Class Tests", () => {
   // Tests for populate grid
 
   test("UI.populateGrid calls createCell for the correct amount rows and cols.", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: createCellMock,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
-    expect(createCellMock).toHaveBeenCalledTimes(rows * cols);
-    expect(createCellMock).toHaveBeenCalledWith(0, 0); // First
-    expect(createCellMock).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
+    expect(createCellSpy).toHaveBeenCalledTimes(rows * cols);
+    expect(createCellSpy).toHaveBeenCalledWith(0, 0); // First
+    expect(createCellSpy).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
   });
 
   test("UI.populateGrid has the grid recieve the correct number of row elements.", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: createCellMock,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     expect(gridContainer.children.length).toEqual(rows);
   });
 
   test("UI.populateGrid has the grid recieve the correct number of rows and columns", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: createCellMock,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     expect(gridContainer.children.length).toEqual(rows);
 
@@ -150,11 +140,7 @@ describe("UI Class Tests", () => {
   // Tests for addGridClickListeners
 
   test("UI.addGridClickListeners each cell calls the expected callback.", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: createCellMock,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     const callback = placeShipMock;
 
@@ -175,11 +161,7 @@ describe("UI Class Tests", () => {
   // Tests for helper: getCell
 
   test("UI.getCell returns the correct cell", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     const firstCell = gridContainer.children[0].children[0];
     const lastCell =
@@ -200,11 +182,7 @@ describe("UI Class Tests", () => {
   // Tests for helper: getCellGroup
 
   test("UI.getCellGroup returns the correct horizontal cell group starting at given row and column.", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     const initialCellPositions = [
       { row: 0, col: 0 },
@@ -235,11 +213,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.getCellGroup handles horizontal edge cases correctly.", () => {
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     horizontalEdgeCells.forEach((position) => {
       const row = position.row;
@@ -257,11 +231,7 @@ describe("UI Class Tests", () => {
   test("UI.getCellGroup returns the correct vertical cell group starting at the given row and column", () => {
     ui.shipPlacementOrientation = "_"; // Toggles vertical
 
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     initialCellPositionsVertical.forEach((position) => {
       const row = position.row;
@@ -285,11 +255,7 @@ describe("UI Class Tests", () => {
   test("UI.getCellGroup handles vertical edge cases correctly.", () => {
     ui.shipPlacementOrientation = "_"; // Toggles vertical
 
-    ui.populateGrid(gridContainer, {
-      row: rows,
-      col: cols,
-      createCell: ui.createCell,
-    });
+    ui.populateGrid(gridContainer, gridOptions);
 
     verticalEdgeCells.forEach((position) => {
       const row = position.row;
