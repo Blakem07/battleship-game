@@ -15,11 +15,12 @@ export default class UI {
     return this.#shipPlacementOrientation;
   }
 
-  set shipPlacementOrientation(_) {
-    this.#shipPlacementOrientation =
-      this.#shipPlacementOrientation === "horizontal"
-        ? "vertical"
-        : "horizontal";
+  set shipPlacementOrientation(orientation) {
+    if (orientation === "horizontal" || orientation === "vertical") {
+      this.#shipPlacementOrientation = orientation;
+    } else {
+      throw new Error("Invalid orientation");
+    }
   }
 
   /**
@@ -266,7 +267,12 @@ export default class UI {
    */
   addSwitchClickListener(inputEle) {
     inputEle.addEventListener("click", () => {
-      this.shipPlacementOrientation = "_"; // Toggles setter
+      const nextOrientation =
+        this.shipPlacementOrientation == "horizontal"
+          ? "vertical"
+          : "horizontal";
+
+      this.shipPlacementOrientation = nextOrientation; // Toggles setter
     });
 
     return inputEle;

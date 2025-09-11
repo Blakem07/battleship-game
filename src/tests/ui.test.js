@@ -229,7 +229,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.getCellGroup returns the correct vertical cell group starting at the given row and column", () => {
-    ui.shipPlacementOrientation = "_"; // Toggles vertical
+    ui.shipPlacementOrientation = "vertical"; // Toggles vertical
 
     ui.populateGrid(gridContainer, gridOptions);
 
@@ -253,7 +253,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.getCellGroup handles vertical edge cases correctly.", () => {
-    ui.shipPlacementOrientation = "_"; // Toggles vertical
+    ui.shipPlacementOrientation = "vertical";
 
     ui.populateGrid(gridContainer, gridOptions);
 
@@ -273,8 +273,6 @@ describe("UI Class Tests", () => {
   // Tests for addGridHoverListeners
 
   test("UI.addGridHoverListeners delegates hover effects to all cells within a grid container.", () => {
-    const gridContainer = document.createElement("div");
-
     ui.populateGrid(gridContainer, {
       row: Gameboard.BOARD_ROWS,
       col: Gameboard.BOARD_COLS,
@@ -300,8 +298,6 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.addGridHoverListeners triggers horizontal hover effects correctly on grid cells", () => {
-    const gridContainer = document.createElement("div");
-
     ui.populateGrid(gridContainer, {
       row: Gameboard.BOARD_ROWS,
       col: Gameboard.BOARD_COLS,
