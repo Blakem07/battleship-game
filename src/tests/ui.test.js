@@ -226,7 +226,7 @@ describe("UI Class Tests", () => {
       cellGroup.forEach((cell, index) => {
         const location = col + index; // Moves horizontally from starting cell
 
-        const expectedCell = document.querySelector(
+        const expectedCell = gridContainer.querySelector(
           `.grid-cell[data-row="${row}"][data-col="${location}"]`
         );
         expect(cell).toEqual(expectedCell);
@@ -274,7 +274,7 @@ describe("UI Class Tests", () => {
       cellGroup.forEach((cell, index) => {
         const location = row + index; // Moves vertically from starting cell
 
-        const expectedCell = document.querySelector(
+        const expectedCell = gridContainer.querySelector(
           `.grid-cell[data-row="${location}"][data-col="${col}"]`
         );
         expect(cell).toEqual(expectedCell);
@@ -403,7 +403,7 @@ describe("UI Class Tests", () => {
     expect(createCellSpy).toHaveBeenCalledWith(0, 0); // First
     expect(createCellSpy).toHaveBeenCalledWith(rows - 1, cols - 1); // Last
 
-    // Check event 
+    // Check event
     expect(addGridClickListenersSpy).toHaveBeenCalledTimes(1);
     expect(addGridClickListenersSpy).toHaveBeenCalledWith(
       expect.anything(),
