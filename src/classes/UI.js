@@ -1,14 +1,38 @@
+import Ship from "./Ship";
 import Gameboard from "./Gameboard";
 
 export default class UI {
+  #currentShipIndex;
   #shipPlacementOrientation;
 
   constructor() {
     this.playerGrid = document.querySelector("#player-grid");
     this.computerGrid = document.querySelector("#computer-grid");
 
+    this.#currentShipIndex = 0;
+    this.shipsToPlace = [...Ship.VALID_NAMES];
+
     this.cellHighlightCount = 5;
     this.#shipPlacementOrientation = "horizontal";
+  }
+
+  advanceToNextShip() {
+    this.#currentShipIndex++;
+    if (this.#currentShipIndex >= this.shipsToPlace.length) {
+      this.#currentShipIndex = null; // Sets to null at end
+    }
+  }
+
+  get currentShipIndex() {
+    return this.#currentShipIndex;
+  }
+
+  /**
+   * Returns the name of the ship currently being placed.
+   * If all ships have been placed, returns null.
+   */
+  get currentShip() {
+    return this.shipsToPlace[this.#currentShipIndex] || null;
   }
 
   get shipPlacementOrientation() {
@@ -65,21 +89,20 @@ export default class UI {
   }
 
   /**
-   * Places click event listeners on all cells within a grid which
-   * causes the placeShip callback to be called.
+   * Adds click event listeners to all cells in a grid.
+   * Only triggers the callback if the correct grid is used for its purpose.
    *
-   * @param {HTMLElement} gridContainer - 2D DOM Structure
-   * @param {Function} callback - Function to be called when a cell is clicked (e.g., placeShip or attackShip)
+   * @param {HTMLElement} gridContainer - The grid DOM element.
+   * @param {Function} callback - The function to call (e.g., placeShip or attackShip).
    */
   addGridClickListeners(gridContainer, callback) {
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
-        const cells = gridContainer.querySelectorAll(".grid-cell");
-        const index = row * Gameboard.BOARD_COLS + col;
-        const cell = cells[index];
-
+        const cell = this.getCell(gridContainer, row, col);
         cell.addEventListener("click", () => {
-          callback(row, col);
+          if (gridContainer.id == "shipPlacement") {
+            callback(row, col, this.currentShip, this.shipPlacementOrientation);
+          }
         });
       }
     }

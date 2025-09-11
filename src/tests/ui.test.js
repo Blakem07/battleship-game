@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 
+import Ship from "../classes/Ship.js";
 import Gameboard from "../classes/Gameboard.js";
 import UI from "../classes/UI.js";
 
@@ -90,6 +91,30 @@ describe("UI Class Tests", () => {
     jest.restoreAllMocks();
   });
 
+  // Tests for advanceToNextShip
+
+  test("UI.advanceToNextShip increments ui.#currentShipIndex and sets to null at end.", () => {
+    for (let count = 0; count <= Ship.VALID_NAMES.length; count++) {
+      if (count != Ship.VALID_NAMES.length) {
+        expect(ui.currentShipIndex).toEqual(count);
+      } else {
+        expect(ui.currentShipIndex).toBeNull();
+      }
+
+      ui.advanceToNextShip();
+    }
+  });
+
+  // Tests for get currentShip
+
+  test("UI.currentShip getter returns the correct ship.", () => {
+    for (let count = 0; count < Ship.VALID_NAMES.length; count++) {
+      expect(ui.currentShip).toEqual(Ship.VALID_NAMES[count]);
+
+      ui.advanceToNextShip();
+    }
+  });
+
   // Tests for populate grid
 
   test("UI.populateGrid calls createCell for the correct amount rows and cols.", () => {
@@ -133,6 +158,7 @@ describe("UI Class Tests", () => {
 
   test("UI.addGridClickListeners each cell calls the expected callback.", () => {
     ui.populateGrid(gridContainer, gridOptions);
+    gridContainer.id = "shipPlacement";
 
     const callback = placeShipMock;
 
@@ -144,13 +170,29 @@ describe("UI Class Tests", () => {
         const cell = ui.getCell(gridContainer, row, col);
 
         cell.dispatchEvent(event);
-
-        // Assert callback was called with expected row and col
-        expect(callback).toHaveBeenCalledWith(row, col);
       }
     }
 
     expect(callback).toHaveBeenCalledTimes(rows * cols);
+  });
+
+  test("UI.addGridClickListeners handles the placeShip callback correctly", () => {
+    ui.populateGrid(gridContainer, gridOptions);
+    gridContainer.id = "shipPlacement";
+    const callback = placeShipMock;
+
+    ui.addGridClickListeners(gridContainer, callback);
+
+    const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
+    const event = new MouseEvent("click", { bubbles: true });
+    cell.dispatchEvent(event);
+
+    expect(callback).toHaveBeenCalledWith(
+      VALID_ROW,
+      VALID_COL,
+      expect.stringMatching(new RegExp(`^(${Ship.VALID_NAMES.join("|")})$`)),
+      expect.stringMatching(/^(horizontal|vertical)$/)
+    );
   });
 
   // Tests for helper: getCell
