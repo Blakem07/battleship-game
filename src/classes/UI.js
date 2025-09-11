@@ -99,6 +99,15 @@ export default class UI {
     return gridContainer.querySelector(selector);
   }
 
+  /**
+   * Retrieves a group of cells from the grid starting at the specified row and column,
+   * extending in the direction specified by the ship placement orientation.
+   *
+   * @param {HTMLElement} gridContainer - The container element representing the grid.
+   * @param {number} row - The starting row index in the grid.
+   * @param {number} col - The starting column index in the grid.
+   * @returns {Array<HTMLElement>} An array of cell elements that form the group based on the current cellHighlightCount and orientation.
+   */
   getCellGroup(gridContainer, row, col) {
     let rowPosition = row;
     let colPosition = col;
