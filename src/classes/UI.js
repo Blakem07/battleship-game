@@ -16,8 +16,20 @@ export default class UI {
     this.#shipPlacementOrientation = "horizontal";
   }
 
+  /**
+   * Advances to the next ship in the placement sequence.
+   * Updates the UI prompt to indicate the next ship to be placed.
+   * Resets the cell highlight count based on the length of the current ship.
+   * If all ships have been placed, sets the current ship index to null and resets highlight count.
+   */
   advanceToNextShip() {
+    const shipSelectionDiv = document.querySelector("#shipSelection");
+
     this.#currentShipIndex++;
+
+    if (shipSelectionDiv) {
+      shipSelectionDiv.textContent = `Place your ${this.currentShip}`;
+    }
 
     this.cellHighlightCount = Ship.VALID_LENGTHS[this.currentShip];
 
@@ -105,6 +117,7 @@ export default class UI {
         const cell = this.getCell(gridContainer, row, col);
         cell.addEventListener("click", () => {
           if (gridContainer.id == "shipPlacement") {
+            this.advanceToNextShip();
             callback(row, col, this.currentShip, this.shipPlacementOrientation);
           }
         });
@@ -204,14 +217,14 @@ export default class UI {
 
     // Header
     const header = document.createElement("h2");
-    header.textContent = "Place Your Ships";
+    header.textContent = "Welcome to Battleship!";
     popup.append(header);
 
     // Ship Selection
 
     const shipSelectionDiv = document.createElement("div");
     shipSelectionDiv.id = "shipSelection";
-    shipSelectionDiv.textContent = "Place Your...";
+    shipSelectionDiv.textContent = `Place your ${this.currentShip}`;
     popup.append(shipSelectionDiv);
 
     // Placement Orientation

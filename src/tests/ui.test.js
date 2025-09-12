@@ -89,11 +89,14 @@ describe("UI Class Tests", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    document.body.innerHTML = "";
   });
 
   // Tests for advanceToNextShip
 
   test("UI.advanceToNextShip increments ui.#currentShipIndex and sets to null at end.", () => {
+    ui.createShipPopup(); // Needed for header text update
+
     for (let count = 0; count <= Ship.VALID_NAMES.length; count++) {
       if (count != Ship.VALID_NAMES.length) {
         expect(ui.currentShipIndex).toEqual(count);
@@ -106,6 +109,8 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.advanceToNextShip increments cell highlight count to match the current ship length and sets to 1 at the end.", () => {
+    ui.createShipPopup();
+
     for (let count = 0; count < Ship.VALID_NAMES.length; count++) {
       const currentShip = Ship.VALID_NAMES[count];
       const shipLength = Ship.VALID_LENGTHS[currentShip];
@@ -116,6 +121,27 @@ describe("UI Class Tests", () => {
     }
 
     expect(ui.cellHighlightCount).toEqual(1);
+  });
+
+  test("UI.advanceToNextShip sets createShipPopup ship selection text to the name of the current ship being placed", () => {
+    ui.createShipPopup();
+
+    const expectedHeaderText = Ship.VALID_NAMES.map((name) => {
+      return `Place your ${name}`;
+    });
+
+    const shipSelectionDiv = document.querySelector("#shipSelection");
+    let text = shipSelectionDiv.textContent;
+
+    expect(text).toEqual(expectedHeaderText[0]);
+
+    for (let count = 1; count < Ship.VALID_NAMES.length; count++) {
+      ui.advanceToNextShip();
+
+      text = shipSelectionDiv.textContent;
+
+      expect(text).toEqual(expectedHeaderText[count]);
+    }
   });
 
   // Tests for get currentShip
