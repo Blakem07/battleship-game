@@ -109,16 +109,33 @@ export default class UI {
    * Only triggers the callback if the correct grid is used for its purpose.
    *
    * @param {HTMLElement} gridContainer - The grid DOM element.
-   * @param {Function} callback - The function to call (e.g., placeShip or attackShip).
+   * @param {Function} placeShipFn - Dependency Injection.
+   * @param {Function} verifyShipPlacementFn - Dependency Injection.
    */
-  addGridClickListeners(gridContainer, callback) {
+  addGridClickListeners(gridContainer, placeShipFn, verifyShipPlacementFn) {
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
         const cell = this.getCell(gridContainer, row, col);
+
         cell.addEventListener("click", () => {
           if (gridContainer.id == "shipPlacement") {
-            this.advanceToNextShip();
-            callback(row, col, this.currentShip, this.shipPlacementOrientation);
+            if (
+              verifyShipPlacementFn(
+                row,
+                col,
+                this.currentShip,
+                this.shipPlacementOrientation,
+                Ship.VALID_LENGTHS[this.currentShip]
+              )
+            ) {
+              placeShipFn(
+                row,
+                col,
+                this.currentShip,
+                this.shipPlacementOrientation
+              );
+              this.advanceToNextShip();
+            }
           }
         });
       }
@@ -208,7 +225,7 @@ export default class UI {
    *                                 It is called when the user clicks a valid placement cell.
    * @returns {HTMLElement} The DOM element representing the popup (for possible later reference or removal).
    */
-  createShipPopup(placeShipFn) {
+  createShipPopup(placeShipFn, verifyShipPlacementFn) {
     const HTMLBody = document.querySelector("body");
     const popup = document.createElement("div");
 
@@ -243,7 +260,11 @@ export default class UI {
       createCell: this.createCell,
     });
     this.addGridHoverListeners(placementGridDiv);
-    this.addGridClickListeners(placementGridDiv, placeShipFn);
+    this.addGridClickListeners(
+      placementGridDiv,
+      placeShipFn,
+      verifyShipPlacementFn
+    );
     popup.append(placementGridDiv);
 
     // Blur Overlay

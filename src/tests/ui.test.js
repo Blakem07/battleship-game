@@ -17,6 +17,7 @@ describe("UI Class Tests", () => {
   let createSwitchMock;
   let createCellMock;
   let placeShipMock;
+  let verifyShipPlacementMock;
 
   let rows;
   let cols;
@@ -51,6 +52,7 @@ describe("UI Class Tests", () => {
     });
     createCellMock = jest.fn(() => document.createElement("div"));
     placeShipMock = jest.fn();
+    verifyShipPlacementMock = jest.fn(() => true);
 
     rows = Gameboard.BOARD_ROWS; // 10
     cols = Gameboard.BOARD_COLS; // 10
@@ -201,7 +203,11 @@ describe("UI Class Tests", () => {
 
     const callback = placeShipMock;
 
-    ui.addGridClickListeners(gridContainer, callback);
+    ui.addGridClickListeners(
+      gridContainer,
+      placeShipMock,
+      verifyShipPlacementMock
+    );
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -220,7 +226,11 @@ describe("UI Class Tests", () => {
     gridContainer.id = "shipPlacement";
     const callback = placeShipMock;
 
-    ui.addGridClickListeners(gridContainer, callback);
+    ui.addGridClickListeners(
+      gridContainer,
+      placeShipMock,
+      verifyShipPlacementMock
+    );
 
     const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
     const event = new MouseEvent("click", { bubbles: true });
@@ -232,6 +242,46 @@ describe("UI Class Tests", () => {
       expect.stringMatching(new RegExp(`^(${Ship.VALID_NAMES.join("|")})$`)),
       expect.stringMatching(/^(horizontal|vertical)$/)
     );
+  });
+
+  test("UI.addGridClickListeners placeShip does not proceed when verifyShipPlacement returns false", () => {
+    ui.populateGrid(gridContainer, gridOptions);
+    gridContainer.id = "shipPlacement";
+
+    verifyShipPlacementMock.mockReturnValue(false);
+
+    ui.addGridClickListeners(
+      gridContainer,
+      placeShipMock,
+      verifyShipPlacementMock
+    );
+
+    const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
+    const event = new MouseEvent("click", { bubbles: true });
+    cell.dispatchEvent(event);
+
+    expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
+    expect(placeShipMock).not.toHaveBeenCalled();
+  });
+
+  test("UI.addGridClickListeners placeShip proceeds when verifyShipPlacement returns true", () => {
+    ui.populateGrid(gridContainer, gridOptions);
+    gridContainer.id = "shipPlacement";
+
+    verifyShipPlacementMock.mockReturnValue(true);
+
+    ui.addGridClickListeners(
+      gridContainer,
+      placeShipMock,
+      verifyShipPlacementMock
+    );
+
+    const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
+    const event = new MouseEvent("click", { bubbles: true });
+    cell.dispatchEvent(event);
+
+    expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
+    expect(placeShipMock).toHaveBeenCalledTimes(1);
   });
 
   // Tests for helper: getCell
@@ -422,7 +472,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.createShipPopup renders grid cells and attatches placeShip click events", () => {
-    ui.createShipPopup(placeShipMock);
+    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
 
     // Check grid population
     expect(populateGridSpy).toHaveBeenCalledTimes(1);
@@ -434,6 +484,7 @@ describe("UI Class Tests", () => {
     expect(addGridClickListenersSpy).toHaveBeenCalledTimes(1);
     expect(addGridClickListenersSpy).toHaveBeenCalledWith(
       expect.anything(),
+      expect.any(Function),
       expect.any(Function)
     );
   });

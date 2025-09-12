@@ -11,7 +11,10 @@ function App() {
   const gameController = setupGameController(player, computer);
   const ui = setupUI();
 
-  ui.createShipPopup(player.placeShip.bind(player));
+  ui.createShipPopup(
+    player.placeShip.bind(player),
+    playerBoard.verifyShipPlacement.bind(playerBoard)
+  );
   renderGrids(ui);
 }
 
