@@ -11,7 +11,7 @@ function App() {
   const gameController = setupGameController(player, computer);
   const ui = setupUI();
 
-  ui.createShipPopup(player.placeShip);
+  ui.createShipPopup(player.placeShip.bind(player));
   renderGrids(ui);
 }
 

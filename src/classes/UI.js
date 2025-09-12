@@ -18,8 +18,12 @@ export default class UI {
 
   advanceToNextShip() {
     this.#currentShipIndex++;
+
+    this.cellHighlightCount = Ship.VALID_LENGTHS[this.currentShip];
+
     if (this.#currentShipIndex >= this.shipsToPlace.length) {
       this.#currentShipIndex = null; // Sets to null at end
+      this.cellHighlightCount = 1;
     }
   }
 

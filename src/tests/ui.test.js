@@ -105,6 +105,19 @@ describe("UI Class Tests", () => {
     }
   });
 
+  test("UI.advanceToNextShip increments cell highlight count to match the current ship length and sets to 1 at the end.", () => {
+    for (let count = 0; count < Ship.VALID_NAMES.length; count++) {
+      const currentShip = Ship.VALID_NAMES[count];
+      const shipLength = Ship.VALID_LENGTHS[currentShip];
+
+      expect(ui.cellHighlightCount).toEqual(shipLength);
+
+      ui.advanceToNextShip();
+    }
+
+    expect(ui.cellHighlightCount).toEqual(1);
+  });
+
   // Tests for get currentShip
 
   test("UI.currentShip getter returns the correct ship.", () => {
