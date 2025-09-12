@@ -218,22 +218,45 @@ describe("Gameboard Class Tests", () => {
     });
   });
 
-  test("Gameboard.verifyShipPlacement returns false if position already occupied", () => {
+  test("Gameboard.verifyShipPlacement returns false when positions overlap horizontally", () => {
     const gameboard = new Gameboard();
 
-    const occupiedRow = 0;
-    const occupiedCol = 0;
+    const startRow = 0;
+    const startCol = 0;
 
     expect(
-      gameboard.placeShip(occupiedRow, occupiedCol, Ship.VALID_NAMES[0])
+      gameboard.placeShip(startRow, startCol, Ship.VALID_NAMES[0], "horizontal")
     ).toBe(true);
 
     expect(
       gameboard.verifyShipPlacement(
-        occupiedRow,
-        occupiedCol,
+        startRow,
+        startCol,
         Ship.VALID_NAMES[0],
         "horizontal",
+        Ship.VALID_LENGTHS["carrier"]
+      )
+    ).toBe(false);
+  });
+
+  test("Gameboard.verfiyShipPlacement returns false when positions overlap vertically", () => {
+    const gameboard = new Gameboard();
+
+    const startRow = 4;
+    const startCol = 0;
+
+    expect(
+      gameboard.placeShip(startRow, startCol, Ship.VALID_NAMES[0], "horizontal")
+    ).toBe(true);
+
+    const overlappingRow = 2;
+
+    expect(
+      gameboard.verifyShipPlacement(
+        overlappingRow,
+        startCol,
+        Ship.VALID_NAMES[0],
+        "vertical",
         Ship.VALID_LENGTHS["carrier"]
       )
     ).toBe(false);

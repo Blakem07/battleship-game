@@ -146,9 +146,19 @@ export default class Gameboard {
       return false;
     }
 
-    for (let i = column; i < column + length; i++) {
-      if (this.#grid[row][i] !== null) {
-        return false; // Positon already occupied
+    // Horizontal overlap
+    if (dir === "horizontal") {
+      for (let c = column; c < column + length; c++) {
+        if (this.#grid[row][c] !== null) {
+          return false; // Position already occupied
+        }
+      }
+    } else {
+      // vertical
+      for (let r = row; r < row + length; r++) {
+        if (this.#grid[r][column] !== null) {
+          return false; // Position already occupied
+        }
       }
     }
 
