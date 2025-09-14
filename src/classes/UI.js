@@ -113,33 +113,48 @@ export default class UI {
    * @param {Function} verifyShipPlacementFn - Dependency Injection.
    */
   addGridClickListeners(gridContainer, placeShipFn, verifyShipPlacementFn) {
+    const isShipPlacementGrid = gridContainer.id === "shipPlacement";
+
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
         const cell = this.getCell(gridContainer, row, col);
 
-        cell.addEventListener("click", () => {
-          if (gridContainer.id == "shipPlacement") {
-            if (
-              verifyShipPlacementFn(
-                row,
-                col,
-                this.currentShip,
-                this.shipPlacementOrientation,
-                Ship.VALID_LENGTHS[this.currentShip]
-              )
-            ) {
-              placeShipFn(
-                row,
-                col,
-                this.currentShip,
-                this.shipPlacementOrientation
-              );
-              this.advanceToNextShip();
-            }
-          }
-        });
+        if (isShipPlacementGrid) {
+          cell.addEventListener("click", () => {
+            this.handlePlaceShipClick(
+              row,
+              col,
+              placeShipFn,
+              verifyShipPlacementFn
+            );
+          });
+        }
       }
     }
+  }
+  
+  /**
+   * Handles a single click event for placing a ship on the gameboard.
+   * Verifies the placement, places the ship if valid, and advances to the next ship.
+   *
+   * @param {number} row - The row index of the clicked cell.
+   * @param {number} col - The column index of the clicked cell.
+   * @param {Function} placeShipFn - Function to place the ship on the board.
+   * @param {Function} verifyShipPlacementFn - Function to check if the ship can be placed at the given location.
+   */
+  handlePlaceShipClick(row, col, placeShipFn, verifyShipPlacementFn) {
+    const isValidPlacement = verifyShipPlacementFn(
+      row,
+      col,
+      this.currentShip,
+      this.shipPlacementOrientation,
+      Ship.VALID_LENGTHS[this.currentShip]
+    );
+
+    if (!isValidPlacement) return;
+
+    placeShipFn(row, col, this.currentShip, this.shipPlacementOrientation);
+    this.advanceToNextShip();
   }
 
   /**

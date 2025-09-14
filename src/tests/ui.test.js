@@ -221,7 +221,9 @@ describe("UI Class Tests", () => {
     expect(callback).toHaveBeenCalledTimes(rows * cols);
   });
 
-  test("UI.addGridClickListeners handles the placeShip callback correctly", () => {
+  // Tests for handlePlaceShipClick
+
+  test("UI.handlePlaceShipClick calls placeShip correctly", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
     const callback = placeShipMock;
@@ -244,7 +246,7 @@ describe("UI Class Tests", () => {
     );
   });
 
-  test("UI.addGridClickListeners placeShip does not proceed when verifyShipPlacement returns false", () => {
+  test("UI.handlePlaceShipClick placeShip does not proceed when verifyShipPlacement returns false", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
 
@@ -264,7 +266,7 @@ describe("UI Class Tests", () => {
     expect(placeShipMock).not.toHaveBeenCalled();
   });
 
-  test("UI.addGridClickListeners placeShip proceeds when verifyShipPlacement returns true", () => {
+  test("UI.handlePlaceShipClick placeShip proceeds when verifyShipPlacement returns true", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
 
