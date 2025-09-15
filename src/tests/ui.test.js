@@ -6,6 +6,8 @@ import Ship from "../classes/Ship.js";
 import Gameboard from "../classes/Gameboard.js";
 import UI from "../classes/UI.js";
 
+import { validShipPositions } from "../classes/constants.js";
+
 describe("UI Class Tests", () => {
   let ui;
 
@@ -107,6 +109,24 @@ describe("UI Class Tests", () => {
     jest.restoreAllMocks();
     jest.clearAllMocks();
     document.body.innerHTML = "";
+  });
+
+  // Tests for recordShipPosition
+
+  test("UI.recordShipPosition stores ship positions using the correct format", () => {
+    ui.recordShipPosition(
+      VALID_ROW, // 0
+      VALID_COL // 0
+    );
+
+    expect(ui.playerShipPositions).toEqual([
+      {
+        row: 0,
+        col: 0,
+        shipName: Ship.VALID_NAMES[0],
+        direction: "horizontal",
+      },
+    ]);
   });
 
   // Tests for advanceToNextShip

@@ -4,6 +4,7 @@ import Gameboard from "./Gameboard";
 export default class UI {
   #currentShipIndex;
   #shipPlacementOrientation;
+  #playerShipPositions;
 
   constructor() {
     this.playerGrid = document.querySelector("#player-grid");
@@ -14,6 +15,28 @@ export default class UI {
 
     this.cellHighlightCount = 5;
     this.#shipPlacementOrientation = "horizontal";
+
+    this.#playerShipPositions = [];
+  }
+
+  /**
+   * Records the position, ship name, and direction of a ship placement.
+   *
+   * Assumes that `this.currentShip` and `this.shipPlacementOrientation` are
+   * already set before calling this method.
+   *
+   * @param {number} row - The row coordinate of the ship placement.
+   * @param {number} col - The column coordinate of the ship placement.
+   */
+  recordShipPosition(row, col) {
+    const shipPosition = {
+      row,
+      col,
+      shipName: this.currentShip,
+      direction: this.shipPlacementOrientation,
+    };
+
+    this.#playerShipPositions.push(shipPosition);
   }
 
   /**
@@ -51,6 +74,10 @@ export default class UI {
     if (popup) {
       placeShipOverlay.style.display = "none";
     }
+  }
+
+  get playerShipPositions() {
+    return this.#playerShipPositions;
   }
 
   get currentShipIndex() {
@@ -168,7 +195,7 @@ export default class UI {
     if (!isValidPlacement) return;
 
     placeShipFn(row, col, this.currentShip, this.shipPlacementOrientation);
-    
+
     this.markCellsAsPlaced(row, col);
     this.advanceToNextShip();
   }
