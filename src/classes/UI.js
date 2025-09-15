@@ -36,6 +36,20 @@ export default class UI {
     if (this.#currentShipIndex >= this.shipsToPlace.length) {
       this.#currentShipIndex = null; // Sets to null at end
       this.cellHighlightCount = 1;
+
+      this.closeShipPopup();
+    }
+  }
+
+  /**
+   * Closes the ship placement popup by hiding its overlay element.
+   * Sets the display style of the popup element with ID "placeShipOverlay" to "none".
+   */
+  closeShipPopup() {
+    const popup = document.querySelector("#placeShipOverlay");
+
+    if (popup) {
+      placeShipOverlay.style.display = "none";
     }
   }
 
@@ -132,7 +146,7 @@ export default class UI {
       }
     }
   }
-  
+
   /**
    * Handles a single click event for placing a ship on the gameboard.
    * Verifies the placement, places the ship if valid, and advances to the next ship.

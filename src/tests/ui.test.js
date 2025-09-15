@@ -13,6 +13,7 @@ describe("UI Class Tests", () => {
   let populateGridSpy;
   let createCellSpy;
   let addGridClickListenersSpy;
+  let closeShipPopupSpy;
 
   let createSwitchMock;
   let createCellMock;
@@ -38,6 +39,7 @@ describe("UI Class Tests", () => {
     populateGridSpy = jest.spyOn(ui, "populateGrid");
     createCellSpy = jest.spyOn(ui, "createCell");
     addGridClickListenersSpy = jest.spyOn(ui, "addGridClickListeners");
+    closeShipPopupSpy = jest.spyOn(ui, "closeShipPopup");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -108,6 +110,8 @@ describe("UI Class Tests", () => {
 
       ui.advanceToNextShip();
     }
+
+    expect(closeShipPopupSpy).toHaveBeenCalledTimes(1);
   });
 
   test("UI.advanceToNextShip increments cell highlight count to match the current ship length and sets to 1 at the end.", () => {
@@ -144,6 +148,19 @@ describe("UI Class Tests", () => {
 
       expect(text).toEqual(expectedHeaderText[count]);
     }
+  });
+
+  // Tests for closePlaceShipPopup
+
+  test("UI.closeShipPopup closes the ship popup used to place ships at the start of the game.", () => {
+    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+    const placeShipOverlay = document.querySelector("#placeShipOverlay");
+
+    ui.closeShipPopup();
+
+    const isPopupHidden = placeShipOverlay.style.display === "none";
+
+    expect(isPopupHidden).toBe(true);
   });
 
   // Tests for get currentShip
