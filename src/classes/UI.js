@@ -168,6 +168,8 @@ export default class UI {
     if (!isValidPlacement) return;
 
     placeShipFn(row, col, this.currentShip, this.shipPlacementOrientation);
+    
+    this.markCellsAsPlaced(row, col);
     this.advanceToNextShip();
   }
 
@@ -183,10 +185,14 @@ export default class UI {
     const placeShipPopup = document.querySelector("#placeShipPopup");
     const playerGrid = document.querySelector("#player-grid");
 
-    const allCells = [
-      ...this.getCellGroup(placeShipPopup, row, col),
-      ...this.getCellGroup(playerGrid, row, col),
-    ];
+    const popupCells = placeShipPopup
+      ? this.getCellGroup(placeShipPopup, row, col)
+      : [];
+    const playerCells = playerGrid
+      ? this.getCellGroup(playerGrid, row, col)
+      : [];
+
+    const allCells = [...popupCells, ...playerCells];
 
     for (const cell of allCells) {
       cell.classList.add("placed");

@@ -14,6 +14,8 @@ describe("UI Class Tests", () => {
   let createCellSpy;
   let addGridClickListenersSpy;
   let closeShipPopupSpy;
+  let markCellsAsPlacedSpy;
+  let advanceToNextShipSpy;
 
   let createSwitchMock;
   let createCellMock;
@@ -41,6 +43,8 @@ describe("UI Class Tests", () => {
     createCellSpy = jest.spyOn(ui, "createCell");
     addGridClickListenersSpy = jest.spyOn(ui, "addGridClickListeners");
     closeShipPopupSpy = jest.spyOn(ui, "closeShipPopup");
+    markCellsAsPlacedSpy = jest.spyOn(ui, "markCellsAsPlaced");
+    advanceToNextShipSpy = jest.spyOn(ui, "advanceToNextShip");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -310,6 +314,8 @@ describe("UI Class Tests", () => {
 
     expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
     expect(placeShipMock).toHaveBeenCalledTimes(1);
+    expect(markCellsAsPlacedSpy).toHaveBeenCalledTimes(1);
+    expect(advanceToNextShipSpy).toHaveBeenCalledTimes(1);
   });
 
   // Tests for markCellsAsPlaced
@@ -339,6 +345,25 @@ describe("UI Class Tests", () => {
     ui.markCellsAsPlaced(VALID_ROW, VALID_COL);
 
     const cellGroup = ui.getCellGroup(playerGrid, VALID_ROW, VALID_COL);
+
+    for (const cell of cellGroup) {
+      const isMarked = cell.classList.contains("placed");
+
+      expect(isMarked).toBe(true);
+    }
+  });
+
+  test("UI.markCellsAsPlaced does not throw if a grid is missing", () => {
+    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+
+    const grid = document.querySelector("#placeShipPopup");
+    // Exclude the player grid
+
+    expect(() => {
+      ui.markCellsAsPlaced(VALID_ROW, VALID_COL);
+    }).not.toThrow();
+
+    const cellGroup = ui.getCellGroup(grid, VALID_ROW, VALID_COL);
 
     for (const cell of cellGroup) {
       const isMarked = cell.classList.contains("placed");
