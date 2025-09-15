@@ -172,6 +172,28 @@ export default class UI {
   }
 
   /**
+   * Adds the 'placed' CSS class to all grid cells corresponding to the given row and column
+   * in both the ship placement popup (#placeShipPopup) and the main player grid (#player-grid).
+   * Assumes that valid row and column values are provided.
+   *
+   * @param {number} row - The row index of the cells to mark.
+   * @param {number} col - The column index of the cells to mark.
+   */
+  markCellsAsPlaced(row, col) {
+    const placeShipPopup = document.querySelector("#placeShipPopup");
+    const playerGrid = document.querySelector("#player-grid");
+
+    const allCells = [
+      ...this.getCellGroup(placeShipPopup, row, col),
+      ...this.getCellGroup(playerGrid, row, col),
+    ];
+
+    for (const cell of allCells) {
+      cell.classList.add("placed");
+    }
+  }
+
+  /**
    * Returns the cell element at the specified row and column within the grid container.
    *
    * @param {HTMLElement} gridContainer - The container element holding the grid cells.

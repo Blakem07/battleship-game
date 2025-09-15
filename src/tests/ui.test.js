@@ -27,6 +27,7 @@ describe("UI Class Tests", () => {
 
   let gridContainer;
   let gridOptions; // Used in ui.populateGrid()
+  let createPlayerGrid;
 
   let horizontalEdgeCells;
   let initialCellPositionsVertical;
@@ -63,6 +64,13 @@ describe("UI Class Tests", () => {
 
     gridContainer = document.createElement("div");
     gridOptions = { row: rows, col: cols, createCell: ui.createCell };
+    createPlayerGrid = () => {
+      const grid = document.createElement("div");
+      grid.id = "player-grid";
+      ui.populateGrid(grid, gridOptions);
+      document.body.appendChild(grid);
+      return grid;
+    };
 
     horizontalEdgeCells = [
       { row: 0, col: 0 }, // Top-left corner
@@ -93,6 +101,7 @@ describe("UI Class Tests", () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    jest.clearAllMocks();
     document.body.innerHTML = "";
   });
 
@@ -301,6 +310,41 @@ describe("UI Class Tests", () => {
 
     expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
     expect(placeShipMock).toHaveBeenCalledTimes(1);
+  });
+
+  // Tests for markCellsAsPlaced
+
+  test("UI.markCellsAsPlaced adds the 'placed' class to the shipPopup cells", () => {
+    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+
+    const grid = document.querySelector("#placeShipPopup");
+    const playerGrid = createPlayerGrid(); // Required because markCellsAsPlaced also affects #player-grid
+
+    ui.markCellsAsPlaced(VALID_ROW, VALID_COL);
+
+    const cellGroup = ui.getCellGroup(grid, VALID_ROW, VALID_COL);
+
+    for (const cell of cellGroup) {
+      const isMarked = cell.classList.contains("placed");
+
+      expect(isMarked).toBe(true);
+    }
+  });
+
+  test("UI.markCellsAsPlaced adds the 'placed' class to the player-grid", () => {
+    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+
+    const playerGrid = createPlayerGrid();
+
+    ui.markCellsAsPlaced(VALID_ROW, VALID_COL);
+
+    const cellGroup = ui.getCellGroup(playerGrid, VALID_ROW, VALID_COL);
+
+    for (const cell of cellGroup) {
+      const isMarked = cell.classList.contains("placed");
+
+      expect(isMarked).toBe(true);
+    }
   });
 
   // Tests for helper: getCell
