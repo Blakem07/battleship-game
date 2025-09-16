@@ -76,6 +76,10 @@ export default class UI {
     }
   }
 
+  getPlayerShipPositions() {
+    return this.#playerShipPositions;
+  }
+
   get playerShipPositions() {
     return this.#playerShipPositions;
   }

@@ -20,6 +20,7 @@ describe("GameController Class Tests", () => {
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
 
+  let uiMock;
   let mockDeclareWinner;
   let mockGetPlayerShipPositions;
   let mockPlayerAttackPosition;
@@ -45,10 +46,18 @@ describe("GameController Class Tests", () => {
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
+    uiMock = { playerShipPositions: [] };
     mockDeclareWinner = jest.fn();
-    mockGetPlayerShipPositions = jest.fn(() => validShipPositions);
+    mockGetPlayerShipPositions = jest.fn(() => {
+      return uiMock.playerShipPositions;
+    });
+    getValidPlayerShipPositionsMock = jest.fn(() => {
+      return validShipPositions;
+    });
     mockPlayerAttackPosition = [0, 1];
     mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
+
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
@@ -63,6 +72,26 @@ describe("GameController Class Tests", () => {
 
     expect(gameController.player).toBe(mockPlayer);
     expect(gameController.computer).toBe(mockComputer);
+  });
+
+  // Tests for waitForFiveShips
+
+  test("GameController.waitForFiveShips waits and returns playerShipPositions once 5 have been recorded.", async () => {
+    const waitPromise = gameController.waitForFiveShips(
+      mockGetPlayerShipPositions
+    );
+
+    for (let i = 0; i < 5; i++) {
+      uiMock.playerShipPositions.push({ name: "mockShip" });
+
+      jest.advanceTimersByTime(500); // Fast-forward time by 500ms
+      await Promise.resolve(); // Wait for javascript to catch up
+    }
+
+    const result = await waitPromise;
+
+    // Check that the result matches the expected final state
+    expect(result).toEqual(uiMock.playerShipPositions);
   });
 
   // Tests for GameController.placePlayerShips
@@ -238,13 +267,13 @@ describe("GameController Class Tests", () => {
     });
 
     gameController.playGame(
-      mockGetPlayerShipPositions,
+      getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       mockDeclareWinner
     );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
-    expect(setupGameSpy).toHaveBeenCalledWith(mockGetPlayerShipPositions);
+    expect(setupGameSpy).toHaveBeenCalledWith(getValidPlayerShipPositionsMock);
   });
 
   test("GameController.playGame calls playRound repeatedly until game is over (with dependency injection", () => {
@@ -255,7 +284,7 @@ describe("GameController Class Tests", () => {
     });
 
     gameController.playGame(
-      mockGetPlayerShipPositions,
+      getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       mockDeclareWinner
     );
@@ -270,7 +299,7 @@ describe("GameController Class Tests", () => {
     });
 
     gameController.playGame(
-      mockGetPlayerShipPositions,
+      getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       mockDeclareWinner
     );
@@ -322,12 +351,12 @@ describe("GameController Class Tests", () => {
     expect(resetGameSpy).toHaveBeenCalledTimes(1);
   });
 
-  test("GameController.setupGame calls placeAllShips with playerShipPositions retrieved from dependency injection.", () => {
+  test("GameController.setupGame calls placeAllShips with playerShipPositions retrieved from dependency injection.", async () => {
     const placeAllShipsSpy = jest
       .spyOn(gameController, "placeAllShips")
       .mockImplementation(() => {});
 
-    gameController.setupGame(mockGetPlayerShipPositions);
+    await gameController.setupGame(getValidPlayerShipPositionsMock);
 
     expect(placeAllShipsSpy).toHaveBeenCalledTimes(1);
     expect(placeAllShipsSpy).toHaveBeenCalledWith(validShipPositions);

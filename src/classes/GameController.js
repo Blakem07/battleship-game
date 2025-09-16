@@ -6,6 +6,27 @@ export default class GameController {
     this.gameOver = false;
     this.winner = null;
   }
+
+  /**
+   * Repeatedly checks the player's ship positions every 500ms until 5 or more ships have been placed.
+   * Once the condition is met, the polling stops and the function resolves with the final ship positions.
+   *
+   * @param {Function} getPlayerShipPositions - A function that returns the current array of player ship positions.
+   * @returns {Promise<Array>} A promise that resolves with the ship positions once 5 or more are recorded.
+   */
+  waitForFiveShips(getPlayerShipPositions) {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        const positions = getPlayerShipPositions();
+
+        if (positions.length >= 5) {
+          clearInterval(interval);
+          resolve(positions);
+        }
+      }, 500);
+    });
+  }
+
   /**
    * Starts the game.
    *
@@ -41,11 +62,11 @@ export default class GameController {
    *
    * @param {Function} getPlayerShipPositions UI Dependency Injection
    */
-  setupGame(getPlayerShipPositions) {
+  async setupGame(getPlayerShipPositions) {
     // Reset game state variables.
     this.resetGame();
     // Get Player input from UI and PlaceAllShips using their ship positions
-    const playerShipPostions = getPlayerShipPositions();
+    const playerShipPostions = await getPlayerShipPositions();
     this.placeAllShips(playerShipPostions);
   }
 
