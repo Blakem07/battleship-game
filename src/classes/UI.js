@@ -390,6 +390,18 @@ export default class UI {
     return popup;
   }
 
+  createWinnerPopup(winner) {
+    const popup = document.createElement("div");
+    const header = document.createElement("h1");
+
+    header.textContent = winner;
+
+    popup.append(header);
+    popup.id = "winnerPopup";
+
+    return popup;
+  }
+
   createBlurOverlay() {
     const HTMLBody = document.querySelector("body");
     const overlay = document.createElement("div");

@@ -608,6 +608,17 @@ describe("UI Class Tests", () => {
     );
   });
 
+  // Tests for createWinnerPopup
+
+  test("UI.createWinnerPopup displays the winner and returns popup", () => {
+    const winner = "player";
+    const popup = ui.createWinnerPopup(winner);
+    const header = popup.querySelector("h1");
+
+    expect(popup instanceof HTMLDivElement).toBe(true);
+    expect(header.textContent).toEqual(winner);
+  });
+
   // Tests for createBlurOverlay
 
   test("UI.createBlurOverlay returns and appends the overlay to the DOM", () => {
