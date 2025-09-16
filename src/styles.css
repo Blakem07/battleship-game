@@ -122,7 +122,7 @@ main {
   grid-template-rows: repeat(10, 1fr);
 }
 
-#placeShipOverlay {
+.blurOverlay {
   position: fixed;
   top: 0;
   left: 0;

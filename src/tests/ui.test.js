@@ -608,6 +608,18 @@ describe("UI Class Tests", () => {
     );
   });
 
+  // Tests for createBlurOverlay
+
+  test("UI.createBlurOverlay returns and appends the overlay to the DOM", () => {
+    const overlay = ui.createBlurOverlay();
+
+    expect(overlay instanceof HTMLDivElement).toBe(true);
+    expect(overlay.classList).toContain("blurOverlay");
+
+    const HTMLBody = document.querySelector("body");
+    expect(HTMLBody.children).toContain(overlay);
+  });
+
   // Tests for createOrientationSwitch
 
   test("UI.createOrientationSwitch returns div html element.", () => {

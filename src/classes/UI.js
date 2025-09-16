@@ -21,7 +21,7 @@ export default class UI {
 
     this.#playerAttackPosition = null;
   }
-  
+
   /**
    * Records the player's attack position on the grid.
    *
@@ -381,13 +381,24 @@ export default class UI {
     popup.append(placementGridDiv);
 
     // Blur Overlay
-    const overlay = document.createElement("div");
+    const overlay = this.createBlurOverlay();
     overlay.id = "placeShipOverlay";
     overlay.append(popup);
 
     HTMLBody.append(overlay);
 
     return popup;
+  }
+
+  createBlurOverlay() {
+    const HTMLBody = document.querySelector("body");
+    const overlay = document.createElement("div");
+
+    overlay.classList.add("blurOverlay");
+
+    HTMLBody.append(overlay);
+
+    return overlay;
   }
 
   /**
