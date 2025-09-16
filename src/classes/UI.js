@@ -5,6 +5,7 @@ export default class UI {
   #currentShipIndex;
   #shipPlacementOrientation;
   #playerShipPositions;
+  #playerAttackPosition;
 
   constructor() {
     this.playerGrid = document.querySelector("#player-grid");
@@ -17,6 +18,22 @@ export default class UI {
     this.#shipPlacementOrientation = "horizontal";
 
     this.#playerShipPositions = [];
+
+    this.#playerAttackPosition = null;
+  }
+  
+  /**
+   * Records the player's attack position on the grid.
+   *
+   * This method stores the given `row` and `col` as the player's most recent attack position.
+   * It uses a private field (`#playerAttackPosition`) to ensure that the attack position
+   * is encapsulated and cannot be accessed directly from outside the class.
+   *
+   * @param {number} row - The row index of the attack position on the grid.
+   * @param {number} col - The column index of the attack position on the grid.
+   */
+  recordPlayerAttack(row, col) {
+    this.#playerAttackPosition = { row, col };
   }
 
   /**
@@ -76,8 +93,16 @@ export default class UI {
     }
   }
 
+  getPlayerAttackPosition() {
+    return this.#playerAttackPosition;
+  }
+
   getPlayerShipPositions() {
     return this.#playerShipPositions;
+  }
+
+  get playerAttackPosition() {
+    return this.#playerAttackPosition;
   }
 
   get playerShipPositions() {

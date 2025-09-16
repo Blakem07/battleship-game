@@ -21,7 +21,7 @@ describe("GameController Class Tests", () => {
   let placeComputerShipsSpy;
 
   let uiMock;
-  let mockDeclareWinner;
+  let displayWinnerMock;
   let mockGetPlayerShipPositions;
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
@@ -47,7 +47,7 @@ describe("GameController Class Tests", () => {
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
 
     uiMock = { playerShipPositions: [] };
-    mockDeclareWinner = jest.fn();
+    displayWinnerMock = jest.fn();
     mockGetPlayerShipPositions = jest.fn(() => {
       return uiMock.playerShipPositions;
     });
@@ -269,7 +269,7 @@ describe("GameController Class Tests", () => {
     gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
-      mockDeclareWinner
+      displayWinnerMock
     );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
@@ -286,7 +286,7 @@ describe("GameController Class Tests", () => {
     gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
-      mockDeclareWinner
+      displayWinnerMock
     );
 
     expect(playRoundSpy).toHaveBeenCalledWith(mockGetPlayerAttackPosition);
@@ -301,13 +301,13 @@ describe("GameController Class Tests", () => {
     gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
-      mockDeclareWinner
+      displayWinnerMock
     );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
     expect(playRoundSpy).toHaveBeenCalledTimes(1);
-    expect(mockDeclareWinner).toHaveBeenCalledTimes(1);
-    expect(mockDeclareWinner).toHaveBeenCalledWith(gameController.winner);
+    expect(displayWinnerMock).toHaveBeenCalledTimes(1);
+    expect(displayWinnerMock).toHaveBeenCalledWith(gameController.winner);
   });
 
   // Tests for resetGame

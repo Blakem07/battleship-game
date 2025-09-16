@@ -111,6 +111,17 @@ describe("UI Class Tests", () => {
     document.body.innerHTML = "";
   });
 
+  // Tests for recordPlayerAttack
+
+  test("UI.recordPlayerAttack stores the attack position using the correct format", () => {
+    ui.recordPlayerAttack(VALID_ROW, VALID_COL);
+
+    expect(ui.playerAttackPosition).toEqual({
+      row: VALID_COL,
+      col: VALID_COL,
+    });
+  });
+
   // Tests for recordShipPosition
 
   test("UI.recordShipPosition stores ship positions using the correct format", () => {
