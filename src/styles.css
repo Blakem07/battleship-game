@@ -122,17 +122,6 @@ main {
   grid-template-rows: repeat(10, 1fr);
 }
 
-.blurOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.6); /* dim background */
-  z-index: 1000; /* below the popup */
-}
-
 .grid {
   height: 640px;
   width: 640px;
@@ -180,6 +169,49 @@ footer {
 }
 
 /* Component styles */
+
+#winnerPopup {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  /* Size */
+  width: 300px;
+  height: 300px;
+  max-width: 90%;
+  max-height: 90%;
+  padding: 20px;
+
+  /* Positioning */
+  position: fixed;
+  top: 53%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+
+  /* Appearance */
+  background: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+  /* Overflow */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.blurOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.6); /* dim background */
+  z-index: 1000; /* below the popup */
+}
 
 /* State styles */
 

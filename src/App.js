@@ -16,6 +16,8 @@ function App() {
     playerBoard.verifyShipPlacement.bind(playerBoard)
   );
   renderGrids(ui);
+
+  ui.displayWinner("Player");
 }
 
 /**

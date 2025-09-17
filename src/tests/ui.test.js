@@ -18,6 +18,8 @@ describe("UI Class Tests", () => {
   let closeShipPopupSpy;
   let markCellsAsPlacedSpy;
   let advanceToNextShipSpy;
+  let createWinnerPopupSpy;
+  let createBlurOverlaySpy;
 
   let createSwitchMock;
   let createCellMock;
@@ -47,6 +49,8 @@ describe("UI Class Tests", () => {
     closeShipPopupSpy = jest.spyOn(ui, "closeShipPopup");
     markCellsAsPlacedSpy = jest.spyOn(ui, "markCellsAsPlaced");
     advanceToNextShipSpy = jest.spyOn(ui, "advanceToNextShip");
+    createWinnerPopupSpy = jest.spyOn(ui, "createWinnerPopup");
+    createBlurOverlaySpy = jest.spyOn(ui, "createBlurOverlay");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -608,6 +612,19 @@ describe("UI Class Tests", () => {
     );
   });
 
+  // Tests for displayWinner
+
+  test("UI.displayWinner creates and appends the winner popup and overlay.", () => {
+    ui.displayWinner();
+
+    expect(createWinnerPopupSpy).toHaveBeenCalledTimes(1);
+    expect(createBlurOverlaySpy).toHaveBeenCalledTimes(1);
+
+    const blurOverlay = document.querySelector(".blurOverlay");
+    const winnerPopup = document.querySelector("#winnerPopup");
+    expect(blurOverlay.children).toContain(winnerPopup);
+  });
+
   // Tests for createWinnerPopup
 
   test("UI.createWinnerPopup displays the winner and returns popup", () => {
@@ -616,7 +633,7 @@ describe("UI Class Tests", () => {
     const header = popup.querySelector("h1");
 
     expect(popup instanceof HTMLDivElement).toBe(true);
-    expect(header.textContent).toEqual(winner);
+    expect(header.textContent).toContain(winner);
   });
 
   // Tests for createBlurOverlay

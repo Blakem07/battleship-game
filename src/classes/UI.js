@@ -390,11 +390,35 @@ export default class UI {
     return popup;
   }
 
+  /**
+   * Displays the winner announcement popup on the screen.
+   *
+   * This method creates a popup element containing winner information
+   * and an overlay to blur the background. It appends the popup to the overlay.
+   *
+   * @param {string} winner - The name or identifier of the winner to display.
+   */
+  displayWinner(winner) {
+    const popup = this.createWinnerPopup(winner);
+    const overlay = this.createBlurOverlay();
+
+    overlay.append(popup);
+  }
+
+  /**
+   * Creates a popup element displaying the winner's name.
+   *
+   * This method generates a <div> element with a header (<h1>) containing
+   * the provided winner's name. The popup is assigned the ID "winnerPopup".
+   *
+   * @param {string} winner - The name or identifier of the winner.
+   * @returns {HTMLDivElement} The DOM element representing the winner popup.
+   */
   createWinnerPopup(winner) {
     const popup = document.createElement("div");
     const header = document.createElement("h1");
 
-    header.textContent = winner;
+    header.textContent = `${winner} Won!`;
 
     popup.append(header);
     popup.id = "winnerPopup";
@@ -402,6 +426,16 @@ export default class UI {
     return popup;
   }
 
+  /**
+   * Creates and appends a blur overlay to the document body.
+   *
+   * This method generates a <div> element with the class "blurOverlay",
+   * appends it to the <body>, and returns the overlay element.
+   * The overlay is typically used to dim or blur the background
+   * when displaying modal content like a winner popup.
+   *
+   * @returns {HTMLDivElement} The DOM element representing the blur overlay.
+   */
   createBlurOverlay() {
     const HTMLBody = document.querySelector("body");
     const overlay = document.createElement("div");
