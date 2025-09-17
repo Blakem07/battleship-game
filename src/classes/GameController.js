@@ -128,9 +128,11 @@ export default class GameController {
     if (this.isGameOver()) return;
 
     // Player's attack
-    const { row, col } = await this.waitForPlayerAttack(
-      getPlayerAttackPosition
-    ); // Need to write await for waitForPlayerAttack
+    const playerAttackPosition = getPlayerAttackPosition
+      ? await getPlayerAttackPosition()
+      : this.getDefaultAttackPosition();
+
+    const { row, col } = playerAttackPosition;
     this.takeTurn(row, col);
 
     if (this.isGameOver()) return;

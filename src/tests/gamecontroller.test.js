@@ -19,15 +19,13 @@ describe("GameController Class Tests", () => {
   let takeTurnSpy;
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
+  let getDefaultAttackPositionSpy;
 
   let uiMock;
   let displayWinnerMock;
   let mockGetPlayerShipPositions;
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
-
-  let VALID_ROW;
-  let VALID_COL;
 
   beforeEach(() => {
     player = new Player(new Gameboard());
@@ -48,6 +46,11 @@ describe("GameController Class Tests", () => {
     takeTurnSpy = jest.spyOn(gameController, "takeTurn");
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
+    getDefaultAttackPositionSpy = jest.spyOn(
+      gameController,
+      "getDefaultAttackPosition"
+    );
+
     displayWinnerMock = jest.fn();
     uiMock = { playerShipPositions: [], playerAttackPosition: null };
     mockGetPlayerShipPositions = jest.fn(() => {
@@ -57,9 +60,6 @@ describe("GameController Class Tests", () => {
       return validShipPositions;
     });
     mockGetPlayerAttackPosition = jest.fn(() => uiMock.playerAttackPosition);
-
-    VALID_ROW = 0;
-    VALID_COL = 0;
 
     jest.useFakeTimers();
   });
@@ -502,7 +502,15 @@ describe("GameController Class Tests", () => {
     expect(takeTurnSpy).toHaveBeenCalledWith(); // Computer's implementation takes no args
   });
 
-  // Tests for getDefaultAttackPositon
+  test("GameController.playRound calls getDefaultAttackPosition when no DI is provided", async () => {
+    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
+    await gameController.playRound();
+
+    expect(getDefaultAttackPositionSpy).toHaveBeenCalledTimes(1);
+    expect(takeTurnSpy).toHaveBeenCalledTimes(2);
+  });
+
+  // Tests for getDefaultAttackPosition
 
   test("GameController.getDefaultAttackPosition returns a valid default attack position within board boundaries", () => {
     const { row, col } = gameController.getDefaultAttackPosition();
