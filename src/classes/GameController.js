@@ -46,6 +46,17 @@ export default class GameController {
   }
 
   /**
+   * Returns a default attack position used when no player input is available.
+   * Currently hardcoded to the top-left corner (0, 0).
+   * This is used as a fallback in test environments or non-interactive scenarios.
+   *
+   * @returns {{ row: number, col: number }} A default attack coordinate.
+   */
+  getDefaultAttackPosition() {
+    return { row: 0, col: 0 };
+  }
+
+  /**
    * Starts the game.
    *
    * @param {Function} getPlayerShipPositions - UI Dependency Injection

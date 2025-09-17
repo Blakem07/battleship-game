@@ -26,6 +26,9 @@ describe("GameController Class Tests", () => {
   let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
 
+  let VALID_ROW;
+  let VALID_COL;
+
   beforeEach(() => {
     player = new Player(new Gameboard());
     computerPlayer = new Player(new Gameboard());
@@ -54,6 +57,9 @@ describe("GameController Class Tests", () => {
       return validShipPositions;
     });
     mockGetPlayerAttackPosition = jest.fn(() => uiMock.playerAttackPosition);
+
+    VALID_ROW = 0;
+    VALID_COL = 0;
 
     jest.useFakeTimers();
   });
@@ -494,5 +500,18 @@ describe("GameController Class Tests", () => {
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
     expect(takeTurnSpy).toHaveBeenCalledWith(); // Computer's implementation takes no args
+  });
+
+  // Tests for getDefaultAttackPositon
+
+  test("GameController.getDefaultAttackPosition returns a valid default attack position within board boundaries", () => {
+    const { row, col } = gameController.getDefaultAttackPosition();
+
+    expect(typeof row).toBe("number");
+    expect(typeof col).toBe("number");
+    expect(row).toBeGreaterThanOrEqual(0);
+    expect(col).toBeGreaterThanOrEqual(0);
+    expect(row).toBeLessThan(Gameboard.BOARD_ROWS);
+    expect(col).toBeLessThan(Gameboard.BOARD_COLS);
   });
 });
