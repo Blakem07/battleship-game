@@ -471,7 +471,8 @@ describe("GameController Class Tests", () => {
   test("GameController.playRound checks if the game is over before and in between player turns", async () => {
     const isGameOverSpy = jest.spyOn(gameController, "isGameOver");
 
-    gameController.playRound(mockGetPlayerAttackPosition);
+    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
+    await gameController.playRound();
 
     expect(isGameOverSpy).toHaveBeenCalledTimes(2);
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
@@ -485,18 +486,15 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playRound calls takeTurn for the player.", async () => {
-    gameController.playRound(mockGetPlayerAttackPosition);
+    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
+    await gameController.playRound();
 
-    expect(mockGetPlayerAttackPosition).toHaveBeenCalledTimes(1); // Dependency injection, passing player attack position
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
-    expect(takeTurnSpy).toHaveBeenCalledWith(
-      mockPlayerAttackPosition[0], // Row
-      mockPlayerAttackPosition[1] // Col
-    );
   });
 
-  test("GameController.play round calls takeTurn for the computer.", () => {
-    gameController.playRound(mockGetPlayerAttackPosition);
+  test("GameController.play round calls takeTurn for the computer.", async () => {
+    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
+    await gameController.playRound();
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
     expect(takeTurnSpy).toHaveBeenCalledWith(); // Computer's implementation takes no args
