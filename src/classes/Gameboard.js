@@ -211,8 +211,12 @@ export default class Gameboard {
    * @return {boolean} - Returns true if all ships have been sunk, false otherwise.
    */
   reportShipStatus() {
-    for (let ship in this.#ships) {
-      if (!this.#ships[ship].isSunk()) {
+    const ships = this.ships; // calls getter which returns cloned ships array
+
+    if (ships.length === 0) return false;
+
+    for (let ship of ships) {
+      if (!ship.isSunk()) {
         return false;
       }
     }
@@ -242,17 +246,10 @@ export default class Gameboard {
    * @return {Array<objects>} - Array of cloned ships.
    */
   get ships() {
-    const shipsArray = [];
-
     if (!this.#ships) {
-      return []; // return empty array if ships storage is undefined
+      return [];
     }
-
-    Object.values(this.#ships).map((ship) => {
-      shipsArray.push(ship.clone());
-    });
-
-    return shipsArray;
+    return Object.values(this.#ships).map((ship) => ship.clone());
   }
 
   /**

@@ -392,6 +392,8 @@ describe("GameController Class Tests", () => {
   test("GameController.isGameOver sets gameOver to true when all of a player's fleet has been sunk.", () => {
     expect(gameController.gameOver).toBe(false);
 
+    computerReportShipStatusSpy.mockReturnValue(true);
+
     const result = gameController.isGameOver();
 
     expect(result).toEqual(true);
@@ -471,7 +473,6 @@ describe("GameController Class Tests", () => {
   test("GameController.playRound checks if the game is over before and in between player turns", async () => {
     const isGameOverSpy = jest.spyOn(gameController, "isGameOver");
 
-    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
     await gameController.playRound();
 
     expect(isGameOverSpy).toHaveBeenCalledTimes(2);
@@ -486,14 +487,12 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playRound calls takeTurn for the player.", async () => {
-    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
     await gameController.playRound();
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
   });
 
   test("GameController.play round calls takeTurn for the computer.", async () => {
-    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
     await gameController.playRound();
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
@@ -501,7 +500,6 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playRound calls getDefaultAttackPosition when no DI is provided", async () => {
-    jest.spyOn(gameController, "isGameOver").mockReturnValue(false);
     await gameController.playRound();
 
     expect(getDefaultAttackPositionSpy).toHaveBeenCalledTimes(1);

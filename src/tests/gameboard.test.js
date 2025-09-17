@@ -328,6 +328,11 @@ describe("Gameboard Class Tests", () => {
 
   // Tests for report ship status method.
 
+  test("Gameboard.reportShipStatus method return false if no ships have been placed", () => {
+    const gameboard = new Gameboard();
+    expect(gameboard.reportShipStatus()).toBe(false);
+  });
+
   test("Gameboard.reportShipStatus method returns true when all of their ships have been sunk.", () => {
     const gameboard = new Gameboard();
 
