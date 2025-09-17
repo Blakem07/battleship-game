@@ -103,6 +103,8 @@ export default class GameController {
     } else if (isPlayerFleetSunk) {
       this.winner = "computer";
     }
+
+    return this.gameOver;
   }
 
   /**

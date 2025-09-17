@@ -386,8 +386,9 @@ describe("GameController Class Tests", () => {
   test("GameController.isGameOver sets gameOver to true when all of a player's fleet has been sunk.", () => {
     expect(gameController.gameOver).toBe(false);
 
-    gameController.isGameOver();
+    const result = gameController.isGameOver();
 
+    expect(result).toEqual(true);
     expect(playerReportShipStatusSpy).toHaveBeenCalledTimes(1);
     expect(computerReportShipStatusSpy).toHaveBeenCalledTimes(1);
     expect(gameController.gameOver).toBe(true);
