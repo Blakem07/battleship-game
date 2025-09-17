@@ -93,11 +93,11 @@ export default class GameController {
    *
    * @param {Function} getPlayerAttackPositon - UI Dependency Injection
    */
-  playRound(getPlayerAttackPositon) {
+  async playRound(getPlayerAttackPositon) {
     if (this.isGameOver()) return;
 
     // Player's attack
-    const [row, col] = getPlayerAttackPositon();
+    const [row, col] = await getPlayerAttackPositon(); // Need to write await for waitForPlayerAttack
     this.takeTurn(row, col);
 
     if (this.isGameOver()) return;

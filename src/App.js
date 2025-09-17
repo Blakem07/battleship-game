@@ -17,7 +17,11 @@ function App() {
   );
   renderGrids(ui);
 
-  ui.displayWinner("Player");
+  gameController.playGame(
+    ui.getPlayerShipPositions,
+    ui.getPlayerAttackPosition,
+    ui.displayWinner
+  );
 }
 
 /**
@@ -52,8 +56,8 @@ function setupPlayers(playerBoard, computerBoard) {
  *
  * @returns {GameController} A new GameController object.
  */
-function setupGameController() {
-  const gameController = new GameController();
+function setupGameController(player, computer) {
+  const gameController = new GameController(player, computer);
 
   return gameController;
 }
