@@ -426,6 +426,14 @@ export default class UI {
     return popup;
   }
 
+  createPlayAgainButton() {
+    const button = document.createElement("button");
+
+    button.textContent = "Play Again";
+
+    return button;
+  }
+
   /**
    * Creates and appends a blur overlay to the document body.
    *

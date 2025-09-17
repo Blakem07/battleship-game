@@ -636,6 +636,15 @@ describe("UI Class Tests", () => {
     expect(header.textContent).toContain(winner);
   });
 
+  // Tests for createPlayAgainButton
+
+  test("UI.createPlayAgainButton creates a button and returns it", () => {
+    const button = ui.createPlayAgainButton();
+
+    expect(button instanceof HTMLButtonElement).toBe(true);
+    expect(button.textContent).toEqual("Play Again");
+  });
+
   // Tests for createBlurOverlay
 
   test("UI.createBlurOverlay returns and appends the overlay to the DOM", () => {
