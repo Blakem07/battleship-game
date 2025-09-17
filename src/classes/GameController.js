@@ -99,7 +99,9 @@ export default class GameController {
     // Reset game state variables.
     this.resetGame();
     // Get Player input from UI and PlaceAllShips using their ship positions
-    const playerShipPostions = await getPlayerShipPositions();
+    const playerShipPostions = await this.waitForFiveShips(
+      getPlayerShipPositions
+    );
     this.placeAllShips(playerShipPostions);
   }
 

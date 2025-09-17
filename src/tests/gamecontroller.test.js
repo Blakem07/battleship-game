@@ -20,6 +20,7 @@ describe("GameController Class Tests", () => {
   let placePlayerShipsSpy;
   let placeComputerShipsSpy;
   let getDefaultAttackPositionSpy;
+  let waitForFiveShipsSpy;
 
   let uiMock;
   let displayWinnerMock;
@@ -49,6 +50,7 @@ describe("GameController Class Tests", () => {
       gameController,
       "getDefaultAttackPosition"
     );
+    waitForFiveShipsSpy = jest.spyOn(gameController, "waitForFiveShips");
 
     displayWinnerMock = jest.fn();
     uiMock = { playerShipPositions: [], playerAttackPosition: null };
@@ -286,6 +288,8 @@ describe("GameController Class Tests", () => {
   // Tests for playGame
 
   test("GameController.playGame is passed a getShipPlayerPositions dependency injection and calls setupGame with it.", async () => {
+    waitForFiveShipsSpy.mockResolvedValue(validShipPositions);
+
     playRoundSpy.mockImplementation(() => {
       gameController.gameOver = true; // Prevents infinite loop
       return Promise.resolve(); // Important for async compatibility
@@ -302,6 +306,8 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playGame calls playRound repeatedly until game is over (with dependency injection", async () => {
+    waitForFiveShipsSpy.mockResolvedValue(validShipPositions);
+
     let callCount = 0;
     playRoundSpy.mockImplementation(() => {
       callCount++;
@@ -322,6 +328,8 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playGame calls the declare winner dependency injection once the game is over.", async () => {
+    waitForFiveShipsSpy.mockResolvedValue(validShipPositions);
+
     playRoundSpy.mockImplementation(() => {
       gameController.gameOver = true; // Prevents infinite loop
       return Promise.resolve();
@@ -369,6 +377,8 @@ describe("GameController Class Tests", () => {
 
   // Tests for setup.
   test("GameController.setupGame resets game state variables by calling resetGame.", () => {
+    waitForFiveShipsSpy.mockResolvedValue(validShipPositions); // Prevents timeout from polling
+
     const resetGameSpy = jest.spyOn(gameController, "resetGame");
     // Mock placeAllShips to do nothing
     jest.spyOn(gameController, "placeAllShips").mockImplementation(() => {});
@@ -381,6 +391,8 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.setupGame calls placeAllShips with playerShipPositions retrieved from dependency injection.", async () => {
+    waitForFiveShipsSpy.mockResolvedValue(validShipPositions); // Prevents timeout from polling
+
     const placeAllShipsSpy = jest
       .spyOn(gameController, "placeAllShips")
       .mockImplementation(() => {});

@@ -18,8 +18,8 @@ function App() {
   renderGrids(ui);
 
   gameController.playGame(
-    ui.getPlayerShipPositions,
-    ui.getPlayerAttackPosition,
+    ui.getPlayerShipPositions.bind(ui),
+    ui.getPlayerAttackPosition.bind(ui),
     ui.displayWinner
   );
 }
