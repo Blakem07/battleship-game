@@ -24,7 +24,6 @@ describe("GameController Class Tests", () => {
   let uiMock;
   let displayWinnerMock;
   let mockGetPlayerShipPositions;
-  let mockPlayerAttackPosition;
   let mockGetPlayerAttackPosition;
 
   beforeEach(() => {
@@ -286,12 +285,13 @@ describe("GameController Class Tests", () => {
 
   // Tests for playGame
 
-  test("GameController.playGame is passed a getShipPlayerPositions dependency injection and calls setupGame with it.", () => {
+  test("GameController.playGame is passed a getShipPlayerPositions dependency injection and calls setupGame with it.", async () => {
     playRoundSpy.mockImplementation(() => {
       gameController.gameOver = true; // Prevents infinite loop
+      return Promise.resolve(); // Important for async compatibility
     });
 
-    gameController.playGame(
+    await gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       displayWinnerMock
@@ -301,14 +301,17 @@ describe("GameController Class Tests", () => {
     expect(setupGameSpy).toHaveBeenCalledWith(getValidPlayerShipPositionsMock);
   });
 
-  test("GameController.playGame calls playRound repeatedly until game is over (with dependency injection", () => {
+  test("GameController.playGame calls playRound repeatedly until game is over (with dependency injection", async () => {
     let callCount = 0;
     playRoundSpy.mockImplementation(() => {
       callCount++;
-      if (callCount >= 5) gameController.gameOver = true; // Imitates while loop
+      if (callCount === 5) {
+        gameController.gameOver = true;
+        return Promise.resolve();
+      } // Imitates while loop
     });
 
-    gameController.playGame(
+    await gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       displayWinnerMock
@@ -318,12 +321,13 @@ describe("GameController Class Tests", () => {
     expect(playRoundSpy).toHaveBeenCalledTimes(5);
   });
 
-  test("GameController.playGame calls the declare winner dependency injection once the game is over.", () => {
+  test("GameController.playGame calls the declare winner dependency injection once the game is over.", async () => {
     playRoundSpy.mockImplementation(() => {
       gameController.gameOver = true; // Prevents infinite loop
+      return Promise.resolve();
     });
 
-    gameController.playGame(
+    await gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
       displayWinnerMock
