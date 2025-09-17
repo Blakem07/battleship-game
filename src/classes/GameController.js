@@ -111,13 +111,15 @@ export default class GameController {
    * Plays one turn (player and computer firing shots)
    * and updates game state.
    *
-   * @param {Function} getPlayerAttackPositon - UI Dependency Injection
+   * @param {Function} getPlayerAttackPosition - UI Dependency Injection
    */
-  async playRound(getPlayerAttackPositon) {
+  async playRound(getPlayerAttackPosition) {
     if (this.isGameOver()) return;
 
     // Player's attack
-    const [row, col] = await this.waitForPlayerAttack(getPlayerAttackPositon); // Need to write await for waitForPlayerAttack
+    const { row, col } = await this.waitForPlayerAttack(
+      getPlayerAttackPosition
+    ); // Need to write await for waitForPlayerAttack
     this.takeTurn(row, col);
 
     if (this.isGameOver()) return;
