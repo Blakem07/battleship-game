@@ -45,22 +45,21 @@ describe("GameController Class Tests", () => {
     takeTurnSpy = jest.spyOn(gameController, "takeTurn");
     placePlayerShipsSpy = jest.spyOn(gameController, "placePlayerShips");
     placeComputerShipsSpy = jest.spyOn(gameController, "placeComputerShips");
-
-    uiMock = { playerShipPositions: [] };
     displayWinnerMock = jest.fn();
+    uiMock = { playerShipPositions: [], playerAttackPosition: null };
     mockGetPlayerShipPositions = jest.fn(() => {
       return uiMock.playerShipPositions;
     });
     getValidPlayerShipPositionsMock = jest.fn(() => {
       return validShipPositions;
     });
-    mockPlayerAttackPosition = [0, 1];
-    mockGetPlayerAttackPosition = jest.fn(() => mockPlayerAttackPosition);
+    mockGetPlayerAttackPosition = jest.fn(() => uiMock.playerAttackPosition);
 
     jest.useFakeTimers();
   });
 
   afterEach(() => {
+    jest.clearAllTimers();
     jest.restoreAllMocks();
   });
 
@@ -92,6 +91,26 @@ describe("GameController Class Tests", () => {
 
     // Check that the result matches the expected final state
     expect(result).toEqual(uiMock.playerShipPositions);
+  });
+
+  // waitForPlayerAttack
+
+  test("GameController.waitForPlayerAttack waits and returns playerAttackPosition once the attack is recorded.", async () => {
+    const waitPromise = gameController.waitForPlayerAttack(
+      mockGetPlayerAttackPosition
+    );
+
+    // Simulate player attack input after some "time"
+    setTimeout(() => {
+      uiMock.playerAttackPosition = { row: 3, col: 5 };
+    }, 300);
+
+    // Fast-forward the timers to trigger setInterval checks and the setTimeout above
+    jest.advanceTimersByTime(500);
+
+    const result = await waitPromise;
+
+    expect(result).toEqual({ row: 3, col: 5 });
   });
 
   // Tests for GameController.placePlayerShips
@@ -442,7 +461,7 @@ describe("GameController Class Tests", () => {
 
   // Tests for playRound
 
-  test("GameController.playRound checks if the game is over before and in between player turns", () => {
+  test("GameController.playRound checks if the game is over before and in between player turns", async () => {
     const isGameOverSpy = jest.spyOn(gameController, "isGameOver");
 
     gameController.playRound(mockGetPlayerAttackPosition);
@@ -458,7 +477,7 @@ describe("GameController Class Tests", () => {
     );
   });
 
-  test("GameController.playRound calls takeTurn for the player.", () => {
+  test("GameController.playRound calls takeTurn for the player.", async () => {
     gameController.playRound(mockGetPlayerAttackPosition);
 
     expect(mockGetPlayerAttackPosition).toHaveBeenCalledTimes(1); // Dependency injection, passing player attack position

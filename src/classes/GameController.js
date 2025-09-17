@@ -27,6 +27,24 @@ export default class GameController {
     });
   }
 
+  async waitForPlayerAttack(getPlayerAttackPosition) {
+    return new Promise((resolve) => {
+      const interval = setInterval(() => {
+        const position = getPlayerAttackPosition();
+
+        if (
+          position &&
+          typeof position === "object" &&
+          Number.isInteger(position.row) &&
+          Number.isInteger(position.col)
+        ) {
+          clearInterval(interval);
+          resolve(position);
+        }
+      }, 100);
+    });
+  }
+
   /**
    * Starts the game.
    *
@@ -97,7 +115,7 @@ export default class GameController {
     if (this.isGameOver()) return;
 
     // Player's attack
-    const [row, col] = await getPlayerAttackPositon(); // Need to write await for waitForPlayerAttack
+    const [row, col] = await this.waitForPlayerAttack(getPlayerAttackPositon); // Need to write await for waitForPlayerAttack
     this.takeTurn(row, col);
 
     if (this.isGameOver()) return;
