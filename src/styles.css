@@ -235,6 +235,35 @@ footer {
   background-color: #f0f8ff;
 }
 
+.hit {
+  transform: scale(1.05);
+  background-color: #e06666; /* soft aquamarine/red mix */
+  box-shadow: 0 0 10px 3px rgba(12, 12, 12, 0.7); /* soft dark glow */
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+  cursor: default;
+}
+.hit:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.9); /* red glow */
+  background-color: #e06666;
+}
+
+.missed {
+  background-color: #888888; /* grey */
+  box-shadow: 0 0 8px 2px rgba(50, 50, 50, 0.6);
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease,
+    background-color 0.3s ease;
+  cursor: default;
+}
+.missed:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px 4px rgba(100, 100, 100, 0.8);
+  background-color: #bbbbbb;
+}
+
 /* Utility classes */
 
 /* Media queries */

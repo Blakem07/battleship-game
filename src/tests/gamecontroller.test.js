@@ -326,10 +326,11 @@ describe("GameController Class Tests", () => {
       markCellBasedOnHitMock
     );
 
-    expect(playRoundSpy).toHaveBeenCalledWith(
-      mockGetPlayerAttackPosition,
-      markCellBasedOnHitMock
-    );
+    expect(playRoundSpy).toHaveBeenCalledWith({
+      getPlayerAttackPosition: mockGetPlayerAttackPosition,
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
+    
     expect(playRoundSpy).toHaveBeenCalledTimes(5);
   });
 
@@ -454,10 +455,15 @@ describe("GameController Class Tests", () => {
 
     const playerAttackSpy = jest.spyOn(gameController.player, "attack");
 
-    gameController.takeTurn({ row: row, col: col });
+    gameController.takeTurn({
+      row: row,
+      col: col,
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
 
     expect(playerAttackSpy).toHaveBeenCalledTimes(1);
     expect(playerAttackSpy).toHaveBeenCalledWith(mockOpponent, row, col);
+    expect(markCellBasedOnHitMock).toHaveBeenCalledTimes(1);
   });
 
   test("GameController.takeTurn calls computer's randomAttack with correct arguments", () => {
@@ -470,11 +476,16 @@ describe("GameController Class Tests", () => {
 
     expect(randomAttackSpy).toHaveBeenCalledTimes(1);
     expect(randomAttackSpy).toHaveBeenCalledWith(mockOpponent);
+    expect(markCellBasedOnHitMock).toHaveBeenCalledTimes(1);
   });
 
   test("GameController.takeTurn alterates current turn.", () => {
     const firstTurn = gameController.currentTurn;
-    gameController.takeTurn({ row: 0, col: 0 });
+    gameController.takeTurn({
+      row: 0,
+      col: 0,
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
     const secondTurn = gameController.currentTurn;
 
     expect(firstTurn).toBe("player");

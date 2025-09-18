@@ -20,7 +20,8 @@ function App() {
   gameController.playGame(
     ui.getPlayerShipPositions.bind(ui),
     ui.getPlayerAttackPosition.bind(ui),
-    ui.displayWinner
+    ui.displayWinner,
+    ui.markCellBasedOnHit.bind(ui)
   );
 }
 
@@ -90,6 +91,7 @@ function renderGrids(uiInstance) {
 
   uiInstance.populateGrid(uiInstance.playerGrid, defaultGridSetup);
   uiInstance.populateGrid(uiInstance.computerGrid, defaultGridSetup);
+  uiInstance.addGridClickListeners(uiInstance.computerGrid);
 }
 
 export default App;

@@ -73,7 +73,10 @@ export default class GameController {
     await this.setupGame(getPlayerShipPositions);
 
     while (!this.gameOver) {
-      await this.playRound(getPlayerAttackPositon, markCellBasedOnHit);
+      await this.playRound({
+        getPlayerAttackPosition: getPlayerAttackPositon,
+        markCellBasedOnHit: markCellBasedOnHit,
+      });
     }
 
     displayWinner(this.winner);
@@ -153,7 +156,11 @@ export default class GameController {
         : this.getDefaultAttackPosition();
 
     const { row, col } = playerAttackPosition;
-    this.takeTurn({ row: row, col: col, markCellBasedOnHit });
+    this.takeTurn({
+      row: row,
+      col: col,
+      markCellBasedOnHit: markCellBasedOnHit,
+    });
 
     if (this.isGameOver()) return;
 
@@ -180,26 +187,11 @@ export default class GameController {
       this.currentTurn === "player" ? this.computer : this.player;
 
     if (this.currentTurn == "player") {
-      player.attack(opponent, row, col);
+      const opponentHit = player.attack(opponent, row, col);
+      markCellBasedOnHit(row, col, this.currentTurn, opponentHit);
     } else if (this.currentTurn == "computer") {
-      computer.randomAttack(opponent);
-    }
-
-    this.currentTurn = this.currentTurn === "player" ? "computer" : "player";
-  }
-  takeTurn({ row: row, col: col, markCellBasedOnHit: markCellBasedOnHit }) {
-    const player = this.player;
-    const computer = this.computer;
-
-    if (this.gameOver) return;
-
-    const opponent =
-      this.currentTurn === "player" ? this.computer : this.player;
-
-    if (this.currentTurn == "player") {
-      player.attack(opponent, row, col);
-    } else if (this.currentTurn == "computer") {
-      computer.randomAttack(opponent);
+      const { playerHit, row, col } = computer.randomAttack(opponent);
+      markCellBasedOnHit(row, col, this.currentTurn, playerHit);
     }
 
     this.currentTurn = this.currentTurn === "player" ? "computer" : "player";
