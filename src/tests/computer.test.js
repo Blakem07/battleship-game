@@ -13,22 +13,24 @@ describe("Computer Class Tests", () => {
 
   // Tests for attack method
 
-  test("Computer.randomAttack method calls player.attack with and returns its results.", () => {
+  test("Computer.randomAttack calls player.attack with random coordinates and returns the correct result object", () => {
     const mockPlayer = { attack: jest.fn().mockReturnValue("attack result") };
     const computer = new Computer(mockPlayer);
     const mockOpponent = {};
 
     jest
       .spyOn(computer, "getRandomInt")
-      .mockReturnValueOnce(3)
-      .mockReturnValueOnce(7);
+      .mockReturnValueOnce(3) // row
+      .mockReturnValueOnce(7); // col
 
     const result = computer.randomAttack(mockOpponent);
 
     expect(computer.getRandomInt).toHaveBeenCalledTimes(2);
     expect(computer.getRandomInt).toHaveBeenCalledWith(0, 9);
-    expect(computer.player.attack).toHaveBeenCalledWith(mockOpponent, 3, 7);
-    expect(result).toBe("attack result");
+
+    expect(mockPlayer.attack).toHaveBeenCalledWith(mockOpponent, 3, 7);
+
+    expect(result).toEqual({ row: 3, col: 7, playerHit: "attack result" });
   });
 
   // Tests for tryPlaceShip

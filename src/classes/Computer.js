@@ -11,18 +11,20 @@ export default class Computer {
   }
 
   /**
-   * randomAttack method.
+   * Executes a random attack on the opponent.
    *
-   * Calls player.attack with randomly generated numbers.
+   * Generates a random row and column (0–9) and calls the player's attack
+   * method using those coordinates against the provided opponent.
    *
-   * @param {object} - Target of the attack.opponent
-   * @returns {*} - Result of player.attack()
+   * @param {object} opponent - The target of the attack.
+   * @returns {{ row: number, col: number, playerHit: * }} - The attack coordinates and the result of player.attack().
    */
   randomAttack(opponent) {
-    const rX = this.getRandomInt(0, 9);
-    const rY = this.getRandomInt(0, 9);
+    const row = this.getRandomInt(0, 9);
+    const col = this.getRandomInt(0, 9);
 
-    return this.player.attack(opponent, rX, rY);
+    const playerHit = this.player.attack(opponent, row, col);
+    return { row, col, playerHit };
   }
 
   /**
