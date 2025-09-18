@@ -79,6 +79,7 @@ describe("UI Class Tests", () => {
     VALID_COL = 0;
 
     gridContainer = document.createElement("div");
+    document.body.appendChild(gridContainer);
     gridOptions = { row: rows, col: cols, createCell: ui.createCell };
     createPlayerGrid = () => {
       const grid = document.createElement("div");
@@ -351,6 +352,37 @@ describe("UI Class Tests", () => {
     expect(recordShipPositionSpy).toHaveBeenCalledTimes(1);
     expect(markCellsAsPlacedSpy).toHaveBeenCalledTimes(1);
     expect(advanceToNextShipSpy).toHaveBeenCalledTimes(1);
+  });
+
+  // Tests for markCellBasedOnHit
+
+  test("UI.markCellBasedOnHit adds 'hit' class to a cell on successful hit", () => {
+    gridContainer.id = "computer-grid";
+    ui.populateGrid(gridContainer, gridOptions);
+
+    const currentTurn = "computer";
+    const isHit = true;
+
+    ui.markCellBasedOnHit(VALID_COL, VALID_ROW, currentTurn, isHit);
+
+    const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
+
+    expect(cell.classList).toContain("hit");
+    expect(cell.classList).not.toContain("miss");
+  });
+
+  test("UI.markCellBasedOnHit adds 'miss' class to a cell on unsuccessful hit", () => {
+    gridContainer.id = "computer-grid";
+    ui.populateGrid(gridContainer, gridOptions);
+
+    const currentTurn = "computer";
+    const isHit = false;
+    ui.markCellBasedOnHit(VALID_COL, VALID_ROW, currentTurn, isHit);
+
+    const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
+
+    expect(cell.classList).toContain("miss");
+    expect(cell.classList).not.toContain("hit");
   });
 
   // Tests for markCellsAsPlaced

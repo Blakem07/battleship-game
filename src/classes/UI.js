@@ -231,6 +231,21 @@ export default class UI {
     this.recordPlayerAttack(row, col);
   }
 
+  markCellBasedOnHit(row, col, currentTurn, isHit) {
+    const grid =
+      currentTurn == "player"
+        ? document.querySelector("#player-grid")
+        : document.querySelector("#computer-grid");
+
+    const cell = this.getCell(grid, row, col);
+
+    if (isHit) {
+      cell.classList.add("hit");
+    } else {
+      cell.classList.add("miss");
+    }
+  }
+
   /**
    * Adds the 'placed' CSS class to all grid cells corresponding to the given row and column
    * in both the ship placement popup (#placeShipPopup) and the main player grid (#player-grid).
