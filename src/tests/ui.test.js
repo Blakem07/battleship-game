@@ -22,6 +22,7 @@ describe("UI Class Tests", () => {
   let createBlurOverlaySpy;
   let recordShipPositionSpy;
   let handleRecordShipClickSpy;
+  let handleRecordAttackClickSpy;
 
   let createSwitchMock;
   let createCellMock;
@@ -54,6 +55,7 @@ describe("UI Class Tests", () => {
     createBlurOverlaySpy = jest.spyOn(ui, "createBlurOverlay");
     recordShipPositionSpy = jest.spyOn(ui, "recordShipPosition");
     handleRecordShipClickSpy = jest.spyOn(ui, "handleRecordShipClick");
+    handleRecordAttackClickSpy = jest.spyOn(ui, "handleRecordAttackClick");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -282,6 +284,24 @@ describe("UI Class Tests", () => {
     expect(handleRecordShipClickSpy).toHaveBeenCalledTimes(rows * cols);
   });
 
+  test("UI.addGridClickListeners applies handleRecordShipClick to the (opponent) computer grid", () => {
+    ui.populateGrid(gridContainer, gridOptions);
+    gridContainer.id = "computer-grid";
+
+    ui.addGridClickListeners(gridContainer, verifyShipPlacementMock);
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        const event = new MouseEvent("click", { bubbles: true });
+        const cell = ui.getCell(gridContainer, row, col);
+
+        cell.dispatchEvent(event);
+      }
+    }
+    expect(handleRecordShipClickSpy).not.toHaveBeenCalled(); // Should only be called on initial placement popup
+    expect(handleRecordAttackClickSpy).toHaveBeenCalledTimes(rows * cols);
+  });
+
   // Tests for handleRecordShipClick
 
   test("UI.handleRecordShipClick calls recordShipPosition correctly", () => {
@@ -384,6 +404,8 @@ describe("UI Class Tests", () => {
       expect(isMarked).toBe(true);
     }
   });
+
+  // Tests for handleRecordAttackClick
 
   // Tests for helper: getCell
 

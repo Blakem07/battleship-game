@@ -176,23 +176,28 @@ export default class UI {
 
   /**
    * Adds click event listeners to all cells in a grid.
-   * Only triggers the callback if the correct grid is used for its purpose.
+   * Attatches handlers depening on grid id.
    *
    * @param {HTMLElement} gridContainer - The grid DOM element.
    * @param {Function} verifyShipPlacementFn - Dependency Injection.
    */
   addGridClickListeners(gridContainer, verifyShipPlacementFn) {
     const isShipPlacementGrid = gridContainer.id === "shipPlacement";
+    const isOpponentGrid = gridContainer.id === "computer-grid";
+
+    if (!isShipPlacementGrid && !isOpponentGrid) return;
+
+    const handler = isShipPlacementGrid
+      ? this.handleRecordShipClick.bind(this)
+      : this.handleRecordAttackClick.bind(this);
 
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
       for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
         const cell = this.getCell(gridContainer, row, col);
 
-        if (isShipPlacementGrid) {
-          cell.addEventListener("click", () => {
-            this.handleRecordShipClick(row, col, verifyShipPlacementFn);
-          });
-        }
+        cell.addEventListener("click", () => {
+          handler(row, col, verifyShipPlacementFn);
+        });
       }
     }
   }
@@ -221,6 +226,8 @@ export default class UI {
     this.markCellsAsPlaced(row, col);
     this.advanceToNextShip();
   }
+
+  handleRecordAttackClick(row, col) {}
 
   /**
    * Adds the 'placed' CSS class to all grid cells corresponding to the given row and column
