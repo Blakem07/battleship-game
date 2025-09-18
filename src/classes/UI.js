@@ -231,6 +231,18 @@ export default class UI {
     this.recordPlayerAttack(row, col);
   }
 
+  /**
+   * Adds a 'hit' or 'miss' class to a grid cell based on attack result.
+   *
+   * Selects the player's or computer's grid depending on `currentTurn`, then
+   * marks the cell at (`row`, `col`) as hit or miss. If the cell doesn't exist, does nothing.
+   *
+   * @param {number} row - Row index of the target cell.
+   * @param {number} col - Column index of the target cell.
+   * @param {'player'|'computer'} currentTurn - Whose grid to update.
+   * @param {boolean} isHit - True if attack was a hit; false if a miss.
+   * @returns {void}
+   */
   markCellBasedOnHit(row, col, currentTurn, isHit) {
     const grid =
       currentTurn == "player"
@@ -239,10 +251,14 @@ export default class UI {
 
     const cell = this.getCell(grid, row, col);
 
+    if (!cell) return;
+
     if (isHit) {
       cell.classList.add("hit");
+      cell.classList.remove("miss");
     } else {
       cell.classList.add("miss");
+      cell.classList.remove("hit");
     }
   }
 

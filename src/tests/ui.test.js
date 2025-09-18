@@ -385,6 +385,28 @@ describe("UI Class Tests", () => {
     expect(cell.classList).not.toContain("hit");
   });
 
+  test("UI.markCellBasedOnHit returns safely if cell does not exist", () => {
+    gridContainer.id = "computer-grid";
+    ui.populateGrid(gridContainer, gridOptions);
+
+    const currentTurn = "computer";
+    const isHit = false;
+
+    const invalidRow = 999;
+    const invalidCol = 999;
+
+    expect(() => {
+      ui.markCellBasedOnHit(invalidRow, invalidCol, currentTurn, isHit);
+    }).not.toThrow();
+
+    // Check all existing cells to ensure none were wrongly modified
+    const allCells = gridContainer.querySelectorAll(".grid-cell");
+    for (const cell of allCells) {
+      expect(cell.classList).not.toContain("hit");
+      expect(cell.classList).not.toContain("miss");
+    }
+  });
+
   // Tests for markCellsAsPlaced
 
   test("UI.markCellsAsPlaced adds the 'placed' class to the shipPopup cells", () => {
