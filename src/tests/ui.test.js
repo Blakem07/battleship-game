@@ -23,6 +23,7 @@ describe("UI Class Tests", () => {
   let recordShipPositionSpy;
   let handleRecordShipClickSpy;
   let handleRecordAttackClickSpy;
+  let recordPlayerAttackSpy;
 
   let createSwitchMock;
   let createCellMock;
@@ -56,6 +57,7 @@ describe("UI Class Tests", () => {
     recordShipPositionSpy = jest.spyOn(ui, "recordShipPosition");
     handleRecordShipClickSpy = jest.spyOn(ui, "handleRecordShipClick");
     handleRecordAttackClickSpy = jest.spyOn(ui, "handleRecordAttackClick");
+    recordPlayerAttackSpy = jest.spyOn(ui, "recordPlayerAttack");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -406,6 +408,13 @@ describe("UI Class Tests", () => {
   });
 
   // Tests for handleRecordAttackClick
+
+  test("UI.handleRecordAttackClick calls recordPlayerAttack with the correct args", () => {
+    ui.handleRecordAttackClick(VALID_ROW, VALID_COL);
+
+    expect(recordPlayerAttackSpy).toHaveBeenCalledWith(VALID_ROW, VALID_COL);
+    expect(recordPlayerAttackSpy).toHaveBeenCalledTimes(1);
+  });
 
   // Tests for helper: getCell
 

@@ -227,7 +227,9 @@ export default class UI {
     this.advanceToNextShip();
   }
 
-  handleRecordAttackClick(row, col) {}
+  handleRecordAttackClick(row, col) {
+    this.recordPlayerAttack(row, col);
+  }
 
   /**
    * Adds the 'placed' CSS class to all grid cells corresponding to the given row and column
