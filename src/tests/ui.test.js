@@ -20,10 +20,11 @@ describe("UI Class Tests", () => {
   let advanceToNextShipSpy;
   let createWinnerPopupSpy;
   let createBlurOverlaySpy;
+  let recordShipPositionSpy;
+  let handleRecordShipClickSpy;
 
   let createSwitchMock;
   let createCellMock;
-  let placeShipMock;
   let verifyShipPlacementMock;
 
   let rows;
@@ -51,6 +52,8 @@ describe("UI Class Tests", () => {
     advanceToNextShipSpy = jest.spyOn(ui, "advanceToNextShip");
     createWinnerPopupSpy = jest.spyOn(ui, "createWinnerPopup");
     createBlurOverlaySpy = jest.spyOn(ui, "createBlurOverlay");
+    recordShipPositionSpy = jest.spyOn(ui, "recordShipPosition");
+    handleRecordShipClickSpy = jest.spyOn(ui, "handleRecordShipClick");
 
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
@@ -64,7 +67,6 @@ describe("UI Class Tests", () => {
       return { horizontalInput, verticalInput };
     });
     createCellMock = jest.fn(() => document.createElement("div"));
-    placeShipMock = jest.fn();
     verifyShipPlacementMock = jest.fn(() => true);
 
     rows = Gameboard.BOARD_ROWS; // 10
@@ -201,7 +203,7 @@ describe("UI Class Tests", () => {
   // Tests for closePlaceShipPopup
 
   test("UI.closeShipPopup closes the ship popup used to place ships at the start of the game.", () => {
-    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+    ui.createShipPopup(verifyShipPlacementMock);
     const placeShipOverlay = document.querySelector("#placeShipOverlay");
 
     ui.closeShipPopup();
@@ -266,13 +268,7 @@ describe("UI Class Tests", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
 
-    const callback = placeShipMock;
-
-    ui.addGridClickListeners(
-      gridContainer,
-      placeShipMock,
-      verifyShipPlacementMock
-    );
+    ui.addGridClickListeners(gridContainer, verifyShipPlacementMock);
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -283,72 +279,54 @@ describe("UI Class Tests", () => {
       }
     }
 
-    expect(callback).toHaveBeenCalledTimes(rows * cols);
+    expect(handleRecordShipClickSpy).toHaveBeenCalledTimes(rows * cols);
   });
 
-  // Tests for handlePlaceShipClick
+  // Tests for handleRecordShipClick
 
-  test("UI.handlePlaceShipClick calls placeShip correctly", () => {
+  test("UI.handleRecordShipClick calls recordShipPosition correctly", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
-    const callback = placeShipMock;
 
-    ui.addGridClickListeners(
-      gridContainer,
-      placeShipMock,
-      verifyShipPlacementMock
-    );
+    ui.addGridClickListeners(gridContainer, verifyShipPlacementMock);
 
     const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
     const event = new MouseEvent("click", { bubbles: true });
     cell.dispatchEvent(event);
 
-    expect(callback).toHaveBeenCalledWith(
-      VALID_ROW,
-      VALID_COL,
-      expect.stringMatching(new RegExp(`^(${Ship.VALID_NAMES.join("|")})$`)),
-      expect.stringMatching(/^(horizontal|vertical)$/)
-    );
+    expect(recordShipPositionSpy).toHaveBeenCalledWith(VALID_ROW, VALID_COL);
   });
 
-  test("UI.handlePlaceShipClick placeShip does not proceed when verifyShipPlacement returns false", () => {
+  test("UI.handleRecordShipClick recordShipPositon does not proceed when verifyShipPlacement returns false", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
 
     verifyShipPlacementMock.mockReturnValue(false);
 
-    ui.addGridClickListeners(
-      gridContainer,
-      placeShipMock,
-      verifyShipPlacementMock
-    );
+    ui.addGridClickListeners(gridContainer, verifyShipPlacementMock);
 
     const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
     const event = new MouseEvent("click", { bubbles: true });
     cell.dispatchEvent(event);
 
     expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
-    expect(placeShipMock).not.toHaveBeenCalled();
+    expect(recordShipPositionSpy).not.toHaveBeenCalled();
   });
 
-  test("UI.handlePlaceShipClick placeShip proceeds when verifyShipPlacement returns true", () => {
+  test("UI.handleRecordShipClick recordShipPosition proceeds when verifyShipPlacement returns true", () => {
     ui.populateGrid(gridContainer, gridOptions);
     gridContainer.id = "shipPlacement";
 
     verifyShipPlacementMock.mockReturnValue(true);
 
-    ui.addGridClickListeners(
-      gridContainer,
-      placeShipMock,
-      verifyShipPlacementMock
-    );
+    ui.addGridClickListeners(gridContainer, verifyShipPlacementMock);
 
     const cell = ui.getCell(gridContainer, VALID_ROW, VALID_COL);
     const event = new MouseEvent("click", { bubbles: true });
     cell.dispatchEvent(event);
 
     expect(verifyShipPlacementMock).toHaveBeenCalledTimes(1);
-    expect(placeShipMock).toHaveBeenCalledTimes(1);
+    expect(recordShipPositionSpy).toHaveBeenCalledTimes(1);
     expect(markCellsAsPlacedSpy).toHaveBeenCalledTimes(1);
     expect(advanceToNextShipSpy).toHaveBeenCalledTimes(1);
   });
@@ -356,7 +334,7 @@ describe("UI Class Tests", () => {
   // Tests for markCellsAsPlaced
 
   test("UI.markCellsAsPlaced adds the 'placed' class to the shipPopup cells", () => {
-    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+    ui.createShipPopup(verifyShipPlacementMock);
 
     const grid = document.querySelector("#placeShipPopup");
     const playerGrid = createPlayerGrid(); // Required because markCellsAsPlaced also affects #player-grid
@@ -373,7 +351,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.markCellsAsPlaced adds the 'placed' class to the player-grid", () => {
-    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+    ui.createShipPopup(verifyShipPlacementMock);
 
     const playerGrid = createPlayerGrid();
 
@@ -389,7 +367,7 @@ describe("UI Class Tests", () => {
   });
 
   test("UI.markCellsAsPlaced does not throw if a grid is missing", () => {
-    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+    ui.createShipPopup(verifyShipPlacementMock);
 
     const grid = document.querySelector("#placeShipPopup");
     // Exclude the player grid
@@ -594,8 +572,8 @@ describe("UI Class Tests", () => {
     expect(placementGridDiv instanceof HTMLElement).toBe(true);
   });
 
-  test("UI.createShipPopup renders grid cells and attatches placeShip click events", () => {
-    ui.createShipPopup(placeShipMock, verifyShipPlacementMock);
+  test("UI.createShipPopup renders grid cells and attatches recordShipPositon click events", () => {
+    ui.createShipPopup(verifyShipPlacementMock);
 
     // Check grid population
     expect(populateGridSpy).toHaveBeenCalledTimes(1);
@@ -607,7 +585,6 @@ describe("UI Class Tests", () => {
     expect(addGridClickListenersSpy).toHaveBeenCalledTimes(1);
     expect(addGridClickListenersSpy).toHaveBeenCalledWith(
       expect.anything(),
-      expect.any(Function),
       expect.any(Function)
     );
   });

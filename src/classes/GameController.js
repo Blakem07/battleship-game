@@ -135,7 +135,7 @@ export default class GameController {
 
     // Player's attack
     const playerAttackPosition = getPlayerAttackPosition
-      ? await getPlayerAttackPosition()
+      ? await this.waitForPlayerAttack(getPlayerAttackPosition)
       : this.getDefaultAttackPosition();
 
     const { row, col } = playerAttackPosition;

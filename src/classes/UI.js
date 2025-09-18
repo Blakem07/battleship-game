@@ -179,10 +179,9 @@ export default class UI {
    * Only triggers the callback if the correct grid is used for its purpose.
    *
    * @param {HTMLElement} gridContainer - The grid DOM element.
-   * @param {Function} placeShipFn - Dependency Injection.
    * @param {Function} verifyShipPlacementFn - Dependency Injection.
    */
-  addGridClickListeners(gridContainer, placeShipFn, verifyShipPlacementFn) {
+  addGridClickListeners(gridContainer, verifyShipPlacementFn) {
     const isShipPlacementGrid = gridContainer.id === "shipPlacement";
 
     for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
@@ -191,12 +190,7 @@ export default class UI {
 
         if (isShipPlacementGrid) {
           cell.addEventListener("click", () => {
-            this.handlePlaceShipClick(
-              row,
-              col,
-              placeShipFn,
-              verifyShipPlacementFn
-            );
+            this.handleRecordShipClick(row, col, verifyShipPlacementFn);
           });
         }
       }
@@ -205,14 +199,13 @@ export default class UI {
 
   /**
    * Handles a single click event for placing a ship on the gameboard.
-   * Verifies the placement, places the ship if valid, and advances to the next ship.
+   * Verifies the placement, records the ship position if valid, and advances to the next ship.
    *
    * @param {number} row - The row index of the clicked cell.
    * @param {number} col - The column index of the clicked cell.
-   * @param {Function} placeShipFn - Function to place the ship on the board.
    * @param {Function} verifyShipPlacementFn - Function to check if the ship can be placed at the given location.
    */
-  handlePlaceShipClick(row, col, placeShipFn, verifyShipPlacementFn) {
+  handleRecordShipClick(row, col, verifyShipPlacementFn) {
     const isValidPlacement = verifyShipPlacementFn(
       row,
       col,
@@ -223,7 +216,7 @@ export default class UI {
 
     if (!isValidPlacement) return;
 
-    placeShipFn(row, col, this.currentShip, this.shipPlacementOrientation);
+    this.recordShipPosition(row, col);
 
     this.markCellsAsPlaced(row, col);
     this.advanceToNextShip();
@@ -331,14 +324,12 @@ export default class UI {
    * - An orientation switch (horizontal/vertical)
    * - A grid for ship placement
    *
-   * It also attaches necessary event listeners for hover effects and click events
-   * that invoke the provided `placeShipFn` when a ship is placed.
+   * It also attaches necessary event listeners for hover effects and click events.
    *
-   * @param {Function} placeShipFn - A callback function that handles placing a ship on the gameboard.
-   *                                 It is called when the user clicks a valid placement cell.
+   * It is called when the user clicks a valid placement cell.
    * @returns {HTMLElement} The DOM element representing the popup (for possible later reference or removal).
    */
-  createShipPopup(placeShipFn, verifyShipPlacementFn) {
+  createShipPopup(verifyShipPlacementFn) {
     const HTMLBody = document.querySelector("body");
     const popup = document.createElement("div");
 
@@ -373,11 +364,7 @@ export default class UI {
       createCell: this.createCell,
     });
     this.addGridHoverListeners(placementGridDiv);
-    this.addGridClickListeners(
-      placementGridDiv,
-      placeShipFn,
-      verifyShipPlacementFn
-    );
+    this.addGridClickListeners(placementGridDiv, verifyShipPlacementFn);
     popup.append(placementGridDiv);
 
     // Blur Overlay
