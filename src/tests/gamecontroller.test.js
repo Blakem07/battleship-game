@@ -26,6 +26,7 @@ describe("GameController Class Tests", () => {
   let displayWinnerMock;
   let mockGetPlayerShipPositions;
   let mockGetPlayerAttackPosition;
+  let markCellBasedOnHitMock;
 
   beforeEach(() => {
     player = new Player(new Gameboard());
@@ -61,6 +62,7 @@ describe("GameController Class Tests", () => {
       return validShipPositions;
     });
     mockGetPlayerAttackPosition = jest.fn(() => uiMock.playerAttackPosition);
+    markCellBasedOnHitMock = jest.fn();
 
     jest.useFakeTimers();
   });
@@ -320,10 +322,14 @@ describe("GameController Class Tests", () => {
     await gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
-      displayWinnerMock
+      displayWinnerMock,
+      markCellBasedOnHitMock
     );
 
-    expect(playRoundSpy).toHaveBeenCalledWith(mockGetPlayerAttackPosition);
+    expect(playRoundSpy).toHaveBeenCalledWith(
+      mockGetPlayerAttackPosition,
+      markCellBasedOnHitMock
+    );
     expect(playRoundSpy).toHaveBeenCalledTimes(5);
   });
 
@@ -448,7 +454,7 @@ describe("GameController Class Tests", () => {
 
     const playerAttackSpy = jest.spyOn(gameController.player, "attack");
 
-    gameController.takeTurn(row, col);
+    gameController.takeTurn({ row: row, col: col });
 
     expect(playerAttackSpy).toHaveBeenCalledTimes(1);
     expect(playerAttackSpy).toHaveBeenCalledWith(mockOpponent, row, col);
@@ -460,7 +466,7 @@ describe("GameController Class Tests", () => {
     const randomAttackSpy = jest.spyOn(gameController.computer, "randomAttack");
 
     gameController.currentTurn = "computer";
-    gameController.takeTurn();
+    gameController.takeTurn({ markCellBasedOnHit: markCellBasedOnHitMock });
 
     expect(randomAttackSpy).toHaveBeenCalledTimes(1);
     expect(randomAttackSpy).toHaveBeenCalledWith(mockOpponent);
@@ -468,7 +474,7 @@ describe("GameController Class Tests", () => {
 
   test("GameController.takeTurn alterates current turn.", () => {
     const firstTurn = gameController.currentTurn;
-    gameController.takeTurn(0, 0);
+    gameController.takeTurn({ row: 0, col: 0 });
     const secondTurn = gameController.currentTurn;
 
     expect(firstTurn).toBe("player");
@@ -489,7 +495,9 @@ describe("GameController Class Tests", () => {
   test("GameController.playRound checks if the game is over before and in between player turns", async () => {
     const isGameOverSpy = jest.spyOn(gameController, "isGameOver");
 
-    await gameController.playRound();
+    await gameController.playRound({
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
 
     expect(isGameOverSpy).toHaveBeenCalledTimes(2);
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
@@ -503,20 +511,28 @@ describe("GameController Class Tests", () => {
   });
 
   test("GameController.playRound calls takeTurn for the player.", async () => {
-    await gameController.playRound();
+    await gameController.playRound({
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
   });
 
   test("GameController.play round calls takeTurn for the computer.", async () => {
-    await gameController.playRound();
+    await gameController.playRound({
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
 
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);
-    expect(takeTurnSpy).toHaveBeenCalledWith(); // Computer's implementation takes no args
+    expect(takeTurnSpy).toHaveBeenNthCalledWith(2, {
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
   });
 
   test("GameController.playRound calls getDefaultAttackPosition when no DI is provided", async () => {
-    await gameController.playRound();
+    await gameController.playRound({
+      markCellBasedOnHit: markCellBasedOnHitMock,
+    });
 
     expect(getDefaultAttackPositionSpy).toHaveBeenCalledTimes(1);
     expect(takeTurnSpy).toHaveBeenCalledTimes(2);

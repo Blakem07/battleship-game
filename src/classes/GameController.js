@@ -62,16 +62,18 @@ export default class GameController {
    * @param {Function} getPlayerShipPositions - UI Dependency Injection
    * @param {Function} getPlayerAttackPositon - UI Dependency Injection
    * @param {Function} displayWinner - UI Dependency Injection
+   * @param {function} markCellBasedOnHit - UI DI used to mark cells on an attack.
    */
   async playGame(
     getPlayerShipPositions,
     getPlayerAttackPositon,
-    displayWinner
+    displayWinner,
+    markCellBasedOnHit
   ) {
     await this.setupGame(getPlayerShipPositions);
 
     while (!this.gameOver) {
-      await this.playRound(getPlayerAttackPositon);
+      await this.playRound(getPlayerAttackPositon, markCellBasedOnHit);
     }
 
     displayWinner(this.winner);
@@ -125,26 +127,38 @@ export default class GameController {
   }
 
   /**
-   * Plays one turn (player and computer firing shots)
-   * and updates game state.
+   * Executes a full round of gameplay consisting of one player attack
+   * followed by one computer attack. Updates the game state accordingly.
    *
-   * @param {Function} getPlayerAttackPosition - UI Dependency Injection
+   * - Skips execution if the game is already over.
+   * - Waits for player's input (via injected UI method) or defaults to a fallback.
+   * - Applies hit/miss logic and updates the board using the injected UI handler.
+   *
+   * @param {Object} params
+   * @param {Function} params.getPlayerAttackPosition - UI dependency to get player's attack input.
+   * @param {Function} params.markCellBasedOnHit - UI dependency used to update the board with hit/miss.
+   *
+   * @returns {Promise<void>}
    */
-  async playRound(getPlayerAttackPosition) {
+  async playRound({
+    getPlayerAttackPosition: getPlayerAttackPosition,
+    markCellBasedOnHit: markCellBasedOnHit,
+  }) {
     if (this.isGameOver()) return;
 
     // Player's attack
-    const playerAttackPosition = getPlayerAttackPosition
-      ? await this.waitForPlayerAttack(getPlayerAttackPosition)
-      : this.getDefaultAttackPosition();
+    const playerAttackPosition =
+      typeof getPlayerAttackPosition === "function"
+        ? await this.waitForPlayerAttack(getPlayerAttackPosition)
+        : this.getDefaultAttackPosition();
 
     const { row, col } = playerAttackPosition;
-    this.takeTurn(row, col);
+    this.takeTurn({ row: row, col: col, markCellBasedOnHit });
 
     if (this.isGameOver()) return;
 
     // Computer's attack
-    this.takeTurn();
+    this.takeTurn({ markCellBasedOnHit: markCellBasedOnHit });
   }
 
   /**
@@ -154,8 +168,26 @@ export default class GameController {
    *
    * @param {number} [row] - The row coordinate of the attack (player only).
    * @param {number} [col] - The column coordinate of the attack (player only).
+   * @param {function} markCellBasedOnHit - UI DI used to mark cells on an attack.
    */
-  takeTurn(row, col) {
+  takeTurn({ row: row, col: col, markCellBasedOnHit: markCellBasedOnHit }) {
+    const player = this.player;
+    const computer = this.computer;
+
+    if (this.gameOver) return;
+
+    const opponent =
+      this.currentTurn === "player" ? this.computer : this.player;
+
+    if (this.currentTurn == "player") {
+      player.attack(opponent, row, col);
+    } else if (this.currentTurn == "computer") {
+      computer.randomAttack(opponent);
+    }
+
+    this.currentTurn = this.currentTurn === "player" ? "computer" : "player";
+  }
+  takeTurn({ row: row, col: col, markCellBasedOnHit: markCellBasedOnHit }) {
     const player = this.player;
     const computer = this.computer;
 
