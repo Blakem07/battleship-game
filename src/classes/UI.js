@@ -94,7 +94,10 @@ export default class UI {
   }
 
   getPlayerAttackPosition() {
-    return this.#playerAttackPosition;
+    const position = this.#playerAttackPosition;
+    this.#playerAttackPosition = null;
+
+    return position;
   }
 
   getPlayerShipPositions() {

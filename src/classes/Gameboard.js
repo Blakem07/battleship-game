@@ -224,16 +224,22 @@ export default class Gameboard {
   }
 
   /**
-   * get grid Getter.
+   * Getter for the grid.
    *
-   * Returns a deep clone of this.#grid
+   * Returns a deep clone of the private #grid property.
+   * Each element in the grid is cloned to prevent external mutation.
+   * - If the element is an instance of Ship, it uses the Ship's clone method.
+   * - Otherwise, it uses structuredClone to deep clone the element.
    *
-   * @return {array<Object>} - Deep clone of grid.
+   * @returns {Array<Array<Object|null>>} Deep clone of the grid.
    */
   get grid() {
     return this.#grid.map((row) => {
       return row.map((col) => {
-        return structuredClone(col);
+        if (col != null && col instanceof Ship) return col.clone();
+        else {
+          return structuredClone(col);
+        }
       });
     });
   }

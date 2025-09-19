@@ -1,7 +1,22 @@
 import Ship from "../classes/Ship";
+import Gameboard from "../classes/Gameboard";
+import Player from "../classes/Player";
 import Computer from "../classes/Computer";
 
 describe("Computer Class Tests", () => {
+  let computerPlayer;
+  let computer;
+
+  beforeEach(() => {
+    computerPlayer = new Player(new Gameboard());
+    computer = new Computer(computerPlayer);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
   test("Computer is initialized with a Player and exposes its gameboard by reference", () => {
     const mockGameboard = {};
     const mockPlayer = { gameboard: mockGameboard };
@@ -54,6 +69,29 @@ describe("Computer Class Tests", () => {
       Ship.VALID_NAMES[0],
       expect.any(String) // direction
     );
+  });
+
+  test("(integration) Computer.tryPlaceShip actually places a ship on the gameboard.", () => {
+    computer.tryPlaceShip("carrier");
+
+    const placedShips = computerPlayer.gameboard.ships;
+
+    expect(placedShips.length).toBe(1);
+    expect(placedShips[0].name).toBe("carrier");
+
+    const grid = computerPlayer.gameboard.grid;
+
+    const shipsInGrid = [];
+
+    for (const row of grid) {
+      for (const cell of row) {
+        if (cell != null && cell._name === "carrier") {
+          shipsInGrid.push(cell);
+        }
+      }
+    }
+    expect(shipsInGrid.length).toBe(5); // Carrier length is 5
+    expect(shipsInGrid[0].name).toBe("carrier");
   });
 
   test("Computer.tryPlaceShip returns false after exceeding placement retries.", () => {
