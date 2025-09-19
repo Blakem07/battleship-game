@@ -20,7 +20,7 @@ function App() {
   gameController.playGame(
     ui.getPlayerShipPositions.bind(ui),
     ui.getPlayerAttackPosition.bind(ui),
-    ui.displayWinner,
+    ui.displayWinner.bind(ui),
     ui.markCellBasedOnHit.bind(ui)
   );
 }

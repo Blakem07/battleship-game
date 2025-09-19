@@ -312,20 +312,6 @@ describe("Gameboard Class Tests", () => {
     expect(missedAttacks[`${row},${column}`]).toStrictEqual(true);
   });
 
-  test("Gameboard.recieveAttack checks prevents repeat attacks in same cell", () => {
-    const gameboard = new Gameboard();
-
-    const row = 3;
-    const column = 2;
-
-    gameboard.placeShip(row, column, Ship.VALID_NAMES[0]);
-    gameboard.receiveAttack(row, column);
-
-    expect(() => {
-      gameboard.receiveAttack(row, column);
-    }).toThrow();
-  });
-
   // Tests for report ship status method.
 
   test("Gameboard.reportShipStatus method return false if no ships have been placed", () => {

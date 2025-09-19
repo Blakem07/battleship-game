@@ -187,12 +187,6 @@ export default class Gameboard {
       );
     }
 
-    if (this.#landedAttacks[key]) {
-      throw new Error(
-        "Invalid attack, this position has been attacked before."
-      );
-    }
-
     if (this.#grid[row][column] !== null) {
       this.#grid[row][column].hit();
       this.#landedAttacks[key] = true;
