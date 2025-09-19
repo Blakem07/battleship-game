@@ -185,13 +185,14 @@ export default class GameController {
 
     const opponent =
       this.currentTurn === "player" ? this.computer : this.player;
+    const opponentType = this.currentTurn === "player" ? "computer" : "player";
 
     if (this.currentTurn == "player") {
       const opponentHit = player.attack(opponent, row, col);
-      markCellBasedOnHit(row, col, this.currentTurn, opponentHit);
+      markCellBasedOnHit(row, col, opponentType, opponentHit);
     } else if (this.currentTurn == "computer") {
       const { playerHit, row, col } = computer.randomAttack(opponent);
-      markCellBasedOnHit(row, col, this.currentTurn, playerHit);
+      markCellBasedOnHit(row, col, opponentType, playerHit);
     }
 
     this.currentTurn = this.currentTurn === "player" ? "computer" : "player";

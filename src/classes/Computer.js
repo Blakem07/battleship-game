@@ -5,8 +5,8 @@ export default class Computer {
   static MAX_SHIP_PLACEMENT_ATTEMPTS = 100;
   static PLACEMENT_METHODS = ["randomly"];
 
-  constructor(player) {
-    this.player = player;
+  constructor(computerPlayer) {
+    this.player = computerPlayer;
     this.gameboard = this.player.gameboard;
   }
 
