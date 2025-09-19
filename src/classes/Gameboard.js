@@ -291,4 +291,23 @@ export default class Gameboard {
   getShipAt(row, col) {
     return this.#grid[row][col];
   }
+
+  printGrid() {
+    let gridString = "";
+
+    for (let row = 0; row < Gameboard.BOARD_ROWS; row++) {
+      let rowString = "";
+      for (let col = 0; col < Gameboard.BOARD_COLS; col++) {
+        const ship = this.#grid[row][col];
+        if (ship !== null) {
+          rowString += "S "; // Mark as part of a ship
+        } else {
+          rowString += "~ "; // Empty space
+        }
+      }
+      gridString += rowString.trim() + "\n";
+    }
+
+    console.log(gridString);
+  }
 }

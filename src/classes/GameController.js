@@ -183,6 +183,8 @@ export default class GameController {
 
     if (this.gameOver) return;
 
+    computer.gameboard.printGrid();
+
     const opponent =
       this.currentTurn === "player" ? this.computer : this.player;
     const opponentType = this.currentTurn === "player" ? "computer" : "player";
@@ -199,18 +201,25 @@ export default class GameController {
   }
 
   /**
-   * PlaceAllShips Method.
+   * placeAllShips Method.
    *
-   * Places all of the players and computers ships on the board.
+   * Places all of the player's and computer's ships on the board.
    *
-   * @param {Array<object>} - shipPositons (belonging to the player).
-   * @return {Boolean} - Returns true on success, else false.
+   * @param {Array<object>} shipPositions - An array of ship positions for the player.
+   * @return {Boolean} - Returns true if all ships are placed successfully, false otherwise.
    */
   placeAllShips(shipPositions) {
-    return (
-      this.placePlayerShips(shipPositions) &&
-      this.placeComputerShips("randomly")
-    );
+    let success = true;
+
+    if (!this.placePlayerShips(shipPositions)) {
+      success = false;
+    }
+
+    if (!this.placeComputerShips("randomly")) {
+      success = false;
+    }
+
+    return success;
   }
 
   /**
