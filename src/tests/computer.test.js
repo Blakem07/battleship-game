@@ -2,6 +2,7 @@ import Ship from "../classes/Ship";
 import Gameboard from "../classes/Gameboard";
 import Player from "../classes/Player";
 import Computer from "../classes/Computer";
+import { forEach } from "neo-async";
 
 describe("Computer Class Tests", () => {
   let computerPlayer;
@@ -180,6 +181,35 @@ describe("Computer Class Tests", () => {
     ).toBeGreaterThan(
       spy.mock.invocationCallOrder[Ship.VALID_NAMES.length - 1]
     );
+  });
+
+  test("(integration) Computer.placeShipsRandomly actually places ships on the gameboard ", () => {
+    const isSuccessful = computer.placeShipsRandomly();
+
+    expect(isSuccessful).toBe(true);
+
+    const shipFleet = computer.gameboard.ships;
+    expect(shipFleet.length).toBe(5);
+
+    Ship.VALID_NAMES.forEach((name) => {
+      const shipNames = shipFleet.map((ship) => ship.name); // Extract names of all ships
+      expect(shipNames).toContain(name);
+    });
+
+    const grid = computer.gameboard.grid;
+
+    // Check all ships have been placed in the grid
+    shipFleet.forEach((ship) => {
+      const shipCells = [];
+      for (const row of grid) {
+        for (const cell of row) {
+          if (cell && cell.name === ship.name) {
+            shipCells.push(cell);
+          }
+        }
+      }
+      expect(shipCells.length).toBe(ship.length);
+    });
   });
 
   // Tests for getRandomInt
