@@ -277,4 +277,12 @@ export default class GameController {
   capitalize(methodName) {
     return methodName.charAt(0).toUpperCase() + methodName.slice(1);
   }
+  
+  /*
+   * Resets gamestate and UI allowing the game to be replayed
+   */
+  playAgain(resetGameUIFn, appFn) {
+    if (typeof resetGameUIFn === "function") resetGameUIFn();
+    if (typeof appFn === "function") appFn();
+  }
 }

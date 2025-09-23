@@ -22,11 +22,13 @@ describe("GameController Class Tests", () => {
   let getDefaultAttackPositionSpy;
   let waitForFiveShipsSpy;
 
+  let AppMock;
   let uiMock;
   let displayWinnerMock;
   let mockGetPlayerShipPositions;
   let mockGetPlayerAttackPosition;
   let markCellBasedOnHitMock;
+  let resetGameUIMock;
 
   beforeEach(() => {
     player = new Player(new Gameboard());
@@ -53,6 +55,7 @@ describe("GameController Class Tests", () => {
     );
     waitForFiveShipsSpy = jest.spyOn(gameController, "waitForFiveShips");
 
+    AppMock = jest.fn();
     displayWinnerMock = jest.fn();
     uiMock = { playerShipPositions: [], playerAttackPosition: null };
     mockGetPlayerShipPositions = jest.fn(() => {
@@ -63,6 +66,7 @@ describe("GameController Class Tests", () => {
     });
     mockGetPlayerAttackPosition = jest.fn(() => uiMock.playerAttackPosition);
     markCellBasedOnHitMock = jest.fn();
+    resetGameUIMock = jest.fn();
 
     jest.useFakeTimers();
   });
@@ -330,7 +334,7 @@ describe("GameController Class Tests", () => {
       getPlayerAttackPosition: mockGetPlayerAttackPosition,
       markCellBasedOnHit: markCellBasedOnHitMock,
     });
-    
+
     expect(playRoundSpy).toHaveBeenCalledTimes(5);
   });
 
@@ -560,5 +564,14 @@ describe("GameController Class Tests", () => {
     expect(col).toBeGreaterThanOrEqual(0);
     expect(row).toBeLessThan(Gameboard.BOARD_ROWS);
     expect(col).toBeLessThan(Gameboard.BOARD_COLS);
+  });
+
+  // Tests for playAgain
+
+  test("GameController.playAgain calls App and resetGameUI", () => {
+    gameController.playAgain(resetGameUIMock, AppMock);
+
+    expect(resetGameUIMock).toHaveBeenCalledTimes(1);
+    expect(AppMock).toHaveBeenCalledTimes(1);
   });
 });

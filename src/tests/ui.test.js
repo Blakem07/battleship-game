@@ -759,4 +759,56 @@ describe("UI Class Tests", () => {
 
     expect(orientationSetterSpy).toHaveBeenCalledTimes(2);
   });
+
+  // Tests for resetGameUI
+
+  test("UI.resetGameUI clears the player and computer grids.", () => {
+    const playerGrid = document.createElement("div");
+    playerGrid.id = "player-grid";
+    playerGrid.classList.add("grid");
+    ui.populateGrid(playerGrid, gridOptions);
+    document.body.append(playerGrid);
+
+    expect(playerGrid.children.length).toBeGreaterThan(0);
+
+    const computerGrid = document.createElement("div");
+    computerGrid.id = "computer-grid";
+    ui.populateGrid(computerGrid, gridOptions);
+    document.body.append(computerGrid);
+    computerGrid.classList.add("grid");
+
+    expect(computerGrid.children.length).toBeGreaterThan(0);
+
+    ui.resetGameUI();
+
+    const selectors = ["#player-grid", "#computer-grid"];
+
+    selectors.forEach((selector) => {
+      const grid = document.querySelector(selector);
+
+      expect(grid.children.length).toBe(0);
+    });
+  });
+
+  test("UI.resetGameUI deletes all popups and blurOverlays.", () => {
+    const shipPopup = ui.createShipPopup(); // Automatically appends
+    expect(document.body.contains(shipPopup)).toBe(true);
+
+    const displayWinner = ui.displayWinner();
+    expect(document.body.contains(displayWinner)).toBe(true);
+
+    const allBlurOverlays = Array.from(
+      document.querySelectorAll(".blurOverlay")
+    );
+    expect(allBlurOverlays.length).toBeGreaterThan(0);
+
+    ui.resetGameUI();
+
+    expect(document.body.contains(shipPopup)).toBe(false);
+
+    expect(document.body.contains(displayWinner)).toBe(false);
+
+    const remainingBlurOverlays = document.querySelectorAll(".blurOverlay");
+    expect(remainingBlurOverlays.length).toBe(0);
+  });
 });

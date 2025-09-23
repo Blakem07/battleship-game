@@ -1,5 +1,6 @@
 import Ship from "./Ship";
 import Gameboard from "./Gameboard";
+import { forEach } from "neo-async";
 
 export default class UI {
   #currentShipIndex;
@@ -433,6 +434,8 @@ export default class UI {
     const overlay = this.createBlurOverlay();
 
     overlay.append(popup);
+
+    return overlay;
   }
 
   /**
@@ -452,6 +455,7 @@ export default class UI {
 
     popup.append(header);
     popup.id = "winnerPopup";
+    popup.classList = "popup";
 
     return popup;
   }
@@ -543,5 +547,30 @@ export default class UI {
     });
 
     return inputEle;
+  }
+
+  /**
+   * Clears all grids and removes all popups and blur overlays from the DOM.
+   */
+  resetGameUI() {
+    const allGrids = Array.from(document.querySelectorAll(".grid"));
+    const popups = Array.from(document.querySelectorAll(".popup"));
+    const overlays = Array.from(document.querySelectorAll(".blurOverlay"));
+
+    if (allGrids) {
+      allGrids.forEach((grid) => {
+        grid.innerHTML = "";
+      });
+    }
+
+    if (popups) {
+      popups.forEach((popup) => {
+        popup.remove();
+      });
+    }
+
+    overlays.forEach((overlay) => {
+      overlay.remove();
+    });
   }
 }
