@@ -312,6 +312,22 @@ describe("Gameboard Class Tests", () => {
     expect(missedAttacks[`${row},${column}`]).toStrictEqual(true);
   });
 
+  test("Gameboard.recieveAttack does not allow repeat attacks on the same cell and returns null.", () => {
+    const gameboard = new Gameboard();
+
+    gameboard.placeShip(0, 0, Ship.VALID_NAMES[0], "horizontal");
+
+    const length = Ship.VALID_LENGTHS[Ship.VALID_NAMES[0]];
+    for (let count = 0; count <= length; count++) {
+      gameboard.receiveAttack(0, 0);
+    }
+
+    const ship = gameboard.ships[0];
+
+    expect(gameboard.receiveAttack(0, 0)).toBeNull();
+    expect(ship.isSunk()).toBe(false);
+  });
+
   // Tests for report ship status method.
 
   test("Gameboard.reportShipStatus method return false if no ships have been placed", () => {

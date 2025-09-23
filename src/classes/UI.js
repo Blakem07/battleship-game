@@ -244,10 +244,12 @@ export default class UI {
    * @param {number} row - Row index of the target cell.
    * @param {number} col - Column index of the target cell.
    * @param {'player'|'computer'} currentTurn - Whose grid to update.
-   * @param {boolean} isHit - True if attack was a hit; false if a miss.
+   * @param {boolean | null} isHit - True if attack was a hit; false if a miss or null on already attacked.
    * @returns {void}
    */
   markCellBasedOnHit(row, col, currentTurn, isHit) {
+    if (isHit == null) return;
+
     const grid =
       currentTurn == "player"
         ? document.querySelector("#player-grid")

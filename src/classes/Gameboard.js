@@ -187,9 +187,15 @@ export default class Gameboard {
       );
     }
 
+    const alreadyAttacked =
+      this.#landedAttacks[key] || this.#missedAttacks[key];
+
+    if (alreadyAttacked) return null;
+
     if (this.#grid[row][column] !== null) {
       this.#grid[row][column].hit();
       this.#landedAttacks[key] = true;
+      // console.log(this.ships);
       return true;
     } else {
       this.#missedAttacks[key] = true;
