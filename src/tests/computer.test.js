@@ -8,9 +8,25 @@ describe("Computer Class Tests", () => {
   let computerPlayer;
   let computer;
 
+  let getRandomIntSpy;
+  let attackSpy;
+
+  let opponentPlayerMock;
+  let opponentGameboardMock;
+
   beforeEach(() => {
     computerPlayer = new Player(new Gameboard());
     computer = new Computer(computerPlayer);
+
+    getRandomIntSpy = jest.spyOn(computer, "getRandomInt");
+    attackSpy = jest.spyOn(computerPlayer, "attack");
+
+    opponentGameboardMock = {
+      receiveAttack: function () {
+        return "attack received";
+      },
+    };
+    opponentPlayerMock = { gameboard: opponentGameboardMock };
   });
 
   afterEach(() => {
@@ -27,7 +43,7 @@ describe("Computer Class Tests", () => {
     expect(computer.gameboard).toBe(mockGameboard);
   });
 
-  // Tests for attack method
+  // Tests for randomAttack method
 
   test("Computer.randomAttack calls player.attack with random coordinates and returns the correct result object", () => {
     const mockPlayer = { attack: jest.fn().mockReturnValue("attack result") };
@@ -47,6 +63,26 @@ describe("Computer Class Tests", () => {
     expect(mockPlayer.attack).toHaveBeenCalledWith(mockOpponent, 3, 7);
 
     expect(result).toEqual({ row: 3, col: 7, playerHit: "attack result" });
+  });
+
+  test("Computer.randomAttack re-rolls until generated coordinates are a new pair", () => {
+    getRandomIntSpy.mockReturnValueOnce(0);
+    getRandomIntSpy.mockReturnValueOnce(0);
+
+    computer.randomAttack(opponentPlayerMock);
+
+    for (let count = 0; count < 5; count++) {
+      getRandomIntSpy.mockReturnValueOnce(0);
+      getRandomIntSpy.mockReturnValueOnce(0);
+    }
+
+    getRandomIntSpy.mockReturnValueOnce(1);
+    getRandomIntSpy.mockReturnValueOnce(1);
+
+    computer.randomAttack(opponentPlayerMock);
+
+    expect(getRandomIntSpy).toHaveBeenCalledTimes(14);
+    expect(attackSpy).toHaveBeenCalledTimes(2);
   });
 
   // Tests for tryPlaceShip

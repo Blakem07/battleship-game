@@ -5,9 +5,13 @@ export default class Computer {
   static MAX_SHIP_PLACEMENT_ATTEMPTS = 100;
   static PLACEMENT_METHODS = ["randomly"];
 
+  #previousAttacks;
+
   constructor(computerPlayer) {
     this.player = computerPlayer;
     this.gameboard = this.player.gameboard;
+
+    this.#previousAttacks = new Set();
   }
 
   /**
@@ -20,8 +24,15 @@ export default class Computer {
    * @returns {{ row: number, col: number, playerHit: * }} - The attack coordinates and the result of player.attack().
    */
   randomAttack(opponent) {
-    const row = this.getRandomInt(0, 9);
-    const col = this.getRandomInt(0, 9);
+    let row, col, key;
+
+    do {
+      row = this.getRandomInt(0, 9);
+      col = this.getRandomInt(0, 9);
+      key = `${row},${col}`;
+    } while (this.#previousAttacks.has(key));
+
+    this.#previousAttacks.add(key);
 
     const playerHit = this.player.attack(opponent, row, col);
     return { row, col, playerHit };
