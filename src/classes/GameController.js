@@ -63,12 +63,14 @@ export default class GameController {
    * @param {Function} getPlayerAttackPositon - UI Dependency Injection
    * @param {Function} displayWinner - UI Dependency Injection
    * @param {function} markCellBasedOnHit - UI DI used to mark cells on an attack.
+   * @param {function} AppFn
    */
   async playGame(
     getPlayerShipPositions,
     getPlayerAttackPositon,
     displayWinner,
-    markCellBasedOnHit
+    markCellBasedOnHit,
+    AppFn
   ) {
     await this.setupGame(getPlayerShipPositions);
 
@@ -79,7 +81,7 @@ export default class GameController {
       });
     }
 
-    displayWinner(this.winner);
+    displayWinner(this.winner, this.playAgain, AppFn);
   }
 
   /**
@@ -277,7 +279,7 @@ export default class GameController {
   capitalize(methodName) {
     return methodName.charAt(0).toUpperCase() + methodName.slice(1);
   }
-  
+
   /*
    * Resets gamestate and UI allowing the game to be replayed
    */

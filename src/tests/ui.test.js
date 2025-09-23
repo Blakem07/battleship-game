@@ -24,10 +24,14 @@ describe("UI Class Tests", () => {
   let handleRecordShipClickSpy;
   let handleRecordAttackClickSpy;
   let recordPlayerAttackSpy;
+  let createPlayAgainButtonSpy;
+  let resetGameUISpy;
 
+  let AppMock;
   let createSwitchMock;
   let createCellMock;
   let verifyShipPlacementMock;
+  let playAgainMock;
 
   let rows;
   let cols;
@@ -58,7 +62,10 @@ describe("UI Class Tests", () => {
     handleRecordShipClickSpy = jest.spyOn(ui, "handleRecordShipClick");
     handleRecordAttackClickSpy = jest.spyOn(ui, "handleRecordAttackClick");
     recordPlayerAttackSpy = jest.spyOn(ui, "recordPlayerAttack");
+    createPlayAgainButtonSpy = jest.spyOn(ui, "createPlayAgainButton");
+    resetGameUISpy = jest.spyOn(ui, "resetGameUI");
 
+    AppMock = jest.fn();
     createSwitchMock = jest.fn(() => {
       const horizontalInput = document.createElement("input");
       horizontalInput.type = "radio";
@@ -72,6 +79,7 @@ describe("UI Class Tests", () => {
     });
     createCellMock = jest.fn(() => document.createElement("div"));
     verifyShipPlacementMock = jest.fn(() => true);
+    playAgainMock = jest.fn();
 
     rows = Gameboard.BOARD_ROWS; // 10
     cols = Gameboard.BOARD_COLS; // 10
@@ -698,6 +706,17 @@ describe("UI Class Tests", () => {
     expect(header.textContent).toContain(winner);
   });
 
+  test("UI.createWinnerPopup calls and appends the playAgainButton", () => {
+    const winner = "player";
+    const popup = ui.createWinnerPopup(winner);
+
+    expect(createPlayAgainButtonSpy).toHaveBeenCalledTimes(1);
+
+    const playAgainButton = popup.querySelector("#playAgainButton");
+
+    expect(popup.children).toContain(playAgainButton);
+  });
+
   // Tests for createPlayAgainButton
 
   test("UI.createPlayAgainButton creates a button and returns it", () => {
@@ -705,6 +724,68 @@ describe("UI Class Tests", () => {
 
     expect(button instanceof HTMLButtonElement).toBe(true);
     expect(button.textContent).toEqual("Play Again");
+    expect(button.id).toBe("playAgainButton");
+  });
+
+  test("UI.createPlayAgainButton returns a button which call back is called with AppFn as an arg", () => {
+    const button = ui.createPlayAgainButton(playAgainMock, AppMock);
+
+    button.click();
+
+    expect(playAgainMock).toHaveBeenCalledTimes(1);
+    expect(playAgainMock).toHaveBeenCalledWith(resetGameUISpy, AppMock);
+  });
+
+  // Tests for resetGameUI
+
+  test("UI.resetGameUI clears the player and computer grids.", () => {
+    const playerGrid = document.createElement("div");
+    playerGrid.id = "player-grid";
+    playerGrid.classList.add("grid");
+    ui.populateGrid(playerGrid, gridOptions);
+    document.body.append(playerGrid);
+
+    expect(playerGrid.children.length).toBeGreaterThan(0);
+
+    const computerGrid = document.createElement("div");
+    computerGrid.id = "computer-grid";
+    ui.populateGrid(computerGrid, gridOptions);
+    document.body.append(computerGrid);
+    computerGrid.classList.add("grid");
+
+    expect(computerGrid.children.length).toBeGreaterThan(0);
+
+    ui.resetGameUI();
+
+    const selectors = ["#player-grid", "#computer-grid"];
+
+    selectors.forEach((selector) => {
+      const grid = document.querySelector(selector);
+
+      expect(grid.children.length).toBe(0);
+    });
+  });
+
+  test("UI.resetGameUI deletes all popups and blurOverlays.", () => {
+    const shipPopup = ui.createShipPopup(); // Automatically appends
+    expect(document.body.contains(shipPopup)).toBe(true);
+
+    const displayWinner = ui.displayWinner();
+    expect(document.body.contains(displayWinner)).toBe(true);
+
+    const allBlurOverlays = Array.from(
+      document.querySelectorAll(".blurOverlay")
+    );
+    expect(allBlurOverlays.length).toBeGreaterThan(0);
+
+    ui.resetGameUI();
+
+    expect(document.body.contains(shipPopup)).toBe(false);
+
+    expect(document.body.contains(displayWinner)).toBe(false);
+
+    const remainingBlurOverlays = document.querySelectorAll(".blurOverlay");
+    expect(remainingBlurOverlays.length).toBe(0);
   });
 
   // Tests for createBlurOverlay
@@ -758,57 +839,5 @@ describe("UI Class Tests", () => {
     expect(ui.shipPlacementOrientation).toEqual("horizontal");
 
     expect(orientationSetterSpy).toHaveBeenCalledTimes(2);
-  });
-
-  // Tests for resetGameUI
-
-  test("UI.resetGameUI clears the player and computer grids.", () => {
-    const playerGrid = document.createElement("div");
-    playerGrid.id = "player-grid";
-    playerGrid.classList.add("grid");
-    ui.populateGrid(playerGrid, gridOptions);
-    document.body.append(playerGrid);
-
-    expect(playerGrid.children.length).toBeGreaterThan(0);
-
-    const computerGrid = document.createElement("div");
-    computerGrid.id = "computer-grid";
-    ui.populateGrid(computerGrid, gridOptions);
-    document.body.append(computerGrid);
-    computerGrid.classList.add("grid");
-
-    expect(computerGrid.children.length).toBeGreaterThan(0);
-
-    ui.resetGameUI();
-
-    const selectors = ["#player-grid", "#computer-grid"];
-
-    selectors.forEach((selector) => {
-      const grid = document.querySelector(selector);
-
-      expect(grid.children.length).toBe(0);
-    });
-  });
-
-  test("UI.resetGameUI deletes all popups and blurOverlays.", () => {
-    const shipPopup = ui.createShipPopup(); // Automatically appends
-    expect(document.body.contains(shipPopup)).toBe(true);
-
-    const displayWinner = ui.displayWinner();
-    expect(document.body.contains(displayWinner)).toBe(true);
-
-    const allBlurOverlays = Array.from(
-      document.querySelectorAll(".blurOverlay")
-    );
-    expect(allBlurOverlays.length).toBeGreaterThan(0);
-
-    ui.resetGameUI();
-
-    expect(document.body.contains(shipPopup)).toBe(false);
-
-    expect(document.body.contains(displayWinner)).toBe(false);
-
-    const remainingBlurOverlays = document.querySelectorAll(".blurOverlay");
-    expect(remainingBlurOverlays.length).toBe(0);
   });
 });

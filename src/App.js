@@ -21,7 +21,8 @@ function App() {
     ui.getPlayerShipPositions.bind(ui),
     ui.getPlayerAttackPosition.bind(ui),
     ui.displayWinner.bind(ui),
-    ui.markCellBasedOnHit.bind(ui)
+    ui.markCellBasedOnHit.bind(ui),
+    App
   );
 }
 

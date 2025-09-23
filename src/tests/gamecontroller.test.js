@@ -21,6 +21,7 @@ describe("GameController Class Tests", () => {
   let placeComputerShipsSpy;
   let getDefaultAttackPositionSpy;
   let waitForFiveShipsSpy;
+  let playAgainSpy;
 
   let AppMock;
   let uiMock;
@@ -54,6 +55,7 @@ describe("GameController Class Tests", () => {
       "getDefaultAttackPosition"
     );
     waitForFiveShipsSpy = jest.spyOn(gameController, "waitForFiveShips");
+    playAgainSpy = jest.spyOn(gameController, "playAgain");
 
     AppMock = jest.fn();
     displayWinnerMock = jest.fn();
@@ -349,13 +351,19 @@ describe("GameController Class Tests", () => {
     await gameController.playGame(
       getValidPlayerShipPositionsMock,
       mockGetPlayerAttackPosition,
-      displayWinnerMock
+      displayWinnerMock,
+      markCellBasedOnHitMock,
+      AppMock
     );
 
     expect(setupGameSpy).toHaveBeenCalledTimes(1);
     expect(playRoundSpy).toHaveBeenCalledTimes(1);
     expect(displayWinnerMock).toHaveBeenCalledTimes(1);
-    expect(displayWinnerMock).toHaveBeenCalledWith(gameController.winner);
+    expect(displayWinnerMock).toHaveBeenCalledWith(
+      gameController.winner,
+      playAgainSpy,
+      AppMock
+    );
   });
 
   // Tests for resetGame

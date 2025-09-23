@@ -424,13 +424,17 @@ export default class UI {
   /**
    * Displays the winner announcement popup on the screen.
    *
-   * This method creates a popup element containing winner information
-   * and an overlay to blur the background. It appends the popup to the overlay.
+   * This method creates a popup element showing the winner's information,
+   * along with an overlay that blurs the background for focus.
+   * It appends the popup to the overlay and returns the overlay element.
    *
    * @param {string} winner - The name or identifier of the winner to display.
+   * @param {Function} playAgainFn - Callback function to invoke when the user chooses to play again.
+   * @param {Function} AppFn - Callback function related to the app's main functionality (e.g., to reset or navigate).
+   * @returns {HTMLElement} The overlay element containing the winner popup.
    */
-  displayWinner(winner) {
-    const popup = this.createWinnerPopup(winner);
+  displayWinner(winner, playAgainFn, AppFn) {
+    const popup = this.createWinnerPopup(winner, playAgainFn, AppFn);
     const overlay = this.createBlurOverlay();
 
     overlay.append(popup);
@@ -445,9 +449,12 @@ export default class UI {
    * the provided winner's name. The popup is assigned the ID "winnerPopup".
    *
    * @param {string} winner - The name or identifier of the winner.
+   * @param {Function} playAgainFn - Callback function to invoke when the play-again button is clicked.
+   * @param {Function} AppFn - Callback function to handle additional app logic on play again.
    * @returns {HTMLDivElement} The DOM element representing the winner popup.
+   *
    */
-  createWinnerPopup(winner) {
+  createWinnerPopup(winner, playAgainFn, AppFn) {
     const popup = document.createElement("div");
     const header = document.createElement("h1");
 
@@ -457,13 +464,28 @@ export default class UI {
     popup.id = "winnerPopup";
     popup.classList = "popup";
 
+    const button = this.createPlayAgainButton(playAgainFn, AppFn);
+    popup.append(button);
+
     return popup;
   }
 
-  createPlayAgainButton() {
+  /**
+   * Creates a "Play Again" button for restarting the Battleship game.
+   *
+   * @param {Function} playAgainFn - Callback function to reset the game state and UI.
+   *                                 It receives `resetGameUI` and `AppFn` as parameters.
+   * @param {Function} AppFn - Additional callback function related to the app's main logic.
+   * @returns {HTMLButtonElement} The configured "Play Again" button element.
+   */
+  createPlayAgainButton(playAgainFn, AppFn) {
     const button = document.createElement("button");
-
+    button.id = "playAgainButton";
     button.textContent = "Play Again";
+
+    button.addEventListener("click", () => {
+      playAgainFn(this.resetGameUI, AppFn);
+    });
 
     return button;
   }
