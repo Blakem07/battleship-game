@@ -123,8 +123,8 @@ main {
 }
 
 .grid {
-  height: 640px;
-  width: 640px;
+  height: 65vh;
+  width: 65vh;
   border: 5px var(--secondary-color) solid;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
 
@@ -179,7 +179,7 @@ footer {
   text-align: center;
 
   /* Size */
-  width: 300px;
+  width: 400px;
   height: 300px;
   max-width: 90%;
   max-height: 90%;
@@ -267,3 +267,11 @@ footer {
 /* Utility classes */
 
 /* Media queries */
+
+/* For screens between 1024px and 1366px */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .grid {
+    height: 50vh;
+    width: 50vh;
+  }
+}
