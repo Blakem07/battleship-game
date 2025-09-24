@@ -1,5 +1,23 @@
 import Ship from "./Ship";
 
+/**
+ * Computer AI Controller for Battleship.
+ *
+ * This class serves as an autonomous wrapper for the computer player,
+ * managing its ship placement and attack behavior.
+ *
+ * Responsibilities include:
+ * - Placing the entire fleet on the board using retry logic to ensure valid placement.
+ * - Executing random attacks on the opponent while avoiding duplicate attacks by
+ *   tracking previous moves.
+ *
+ * Constants:
+ * - MAX_FLEET_PLACEMENT_ATTEMPTS: Maximum retries to place the entire fleet.
+ * - MAX_SHIP_PLACEMENT_ATTEMPTS: Maximum retries to place a single ship.
+ *
+ * Usage:
+ * Instantiate with a computer player object, then call methods to place ships and perform attacks.
+ */
 export default class Computer {
   static MAX_FLEET_PLACEMENT_ATTEMPTS = 5;
   static MAX_SHIP_PLACEMENT_ATTEMPTS = 100;

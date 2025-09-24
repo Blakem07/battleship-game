@@ -1,3 +1,28 @@
+/**
+ * GameController
+ *
+ * This class manages the core gameplay logic for a Battleship-style game,
+ * coordinating between the player and computer entities, their gameboards,
+ * and handling turns, attacks, and game state transitions.
+ *
+ * Responsibilities include:
+ * - Managing game state (current turn, game over status, winner)
+ * - Handling asynchronous player input for ship placement and attacks
+ * - Executing game rounds with alternating turns between player and computer
+ * - Placing ships for both player and computer
+ * - Checking for game over conditions
+ * - Resetting and replaying the game
+ *
+ * The class relies heavily on dependency injection for UI interactions,
+ * such as obtaining player inputs and updating the UI based on game events,
+ * allowing the core game logic to be independent of any specific UI framework.
+ *
+ * Usage typically involves:
+ * 1. Instantiating with player and computer objects (each with gameboards)
+ * 2. Starting the game loop via playGame, providing UI callbacks for input/output
+ * 3. Handling game rounds until a winner is declared
+ * 4. Offering ability to reset and replay the game
+ */
 export default class GameController {
   constructor(player, computer) {
     this.player = player;
@@ -184,8 +209,6 @@ export default class GameController {
     const computer = this.computer;
 
     if (this.gameOver) return;
-
-    computer.gameboard.printGrid();
 
     const opponent =
       this.currentTurn === "player" ? this.computer : this.player;

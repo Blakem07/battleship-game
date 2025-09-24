@@ -6,8 +6,6 @@ import Ship from "../classes/Ship.js";
 import Gameboard from "../classes/Gameboard.js";
 import UI from "../classes/UI.js";
 
-import { validShipPositions } from "../classes/constants.js";
-
 describe("UI Class Tests", () => {
   let ui;
 
@@ -29,7 +27,6 @@ describe("UI Class Tests", () => {
 
   let AppMock;
   let createSwitchMock;
-  let createCellMock;
   let verifyShipPlacementMock;
   let playAgainMock;
 

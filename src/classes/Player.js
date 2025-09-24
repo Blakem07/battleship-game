@@ -1,3 +1,13 @@
+/**
+ * Represents a player in the Battleship game.
+ *
+ * Encapsulates a gameboard and provides methods to:
+ * - Attack an opponent's gameboard.
+ * - Place ships on the player's own gameboard.
+ *
+ * This class acts as an interface between the game controller and the underlying gameboard,
+ * abstracting gameboard operations behind player actions.
+ */
 export default class Player {
   constructor(gameboard) {
     this.gameboard = gameboard;

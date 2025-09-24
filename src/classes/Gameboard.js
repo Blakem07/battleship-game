@@ -1,5 +1,18 @@
 import Ship from "./Ship";
 
+/**
+ * Represents the Battleship gameboard.
+ *
+ * Manages a 10x10 grid where ships are placed and attacks are recorded.
+ * Provides functionality to:
+ * - Initialize and reset the gameboard.
+ * - Place ships with validation to avoid overlaps and out-of-bound placements.
+ * - Receive attacks and track hits or misses.
+ * - Report overall ship status (sunk or afloat).
+ * - Expose safe, deep-cloned views of the board state to prevent external mutation.
+ *
+ * Encapsulates private data including ship positions, attack records, and ship instances.
+ */
 export default class Gameboard {
   static BOARD_ROWS = 10;
   static BOARD_COLS = 10;

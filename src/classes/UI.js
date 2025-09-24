@@ -1,7 +1,17 @@
 import Ship from "./Ship";
 import Gameboard from "./Gameboard";
-import { forEach } from "neo-async";
 
+/**
+ * UI class manages the user interface for the Battleship game.
+ *
+ * It handles rendering and interacting with the player and computer grids,
+ * tracking ship placement and attack positions, and managing popup modals
+ * such as ship placement prompts and winner announcements.
+ *
+ * This class encapsulates private state related to ship placement and attacks,
+ * provides methods to populate grids, add event listeners for user actions,
+ * and update the UI based on game state changes.
+ */
 export default class UI {
   #currentShipIndex;
   #shipPlacementOrientation;

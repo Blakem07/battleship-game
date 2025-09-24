@@ -1,57 +1,51 @@
-# Webpack Template
+# Battleship Game
 
-## Description
+A web-based version of the classic Battleship game, built with JavaScript, HTML, CSS, and Webpack. The game features modular classes for the player, AI, gameboard, and ships with clean separation of concerns and includes basic AI logic for computer opponent ship placement and attacks.
 
-Webpack template allowing for a quicker start to development when using webpack
+## 📸 Screenshots
 
-This webpack template handles:
+![Battleship gameplay](./assets/battleship-gameplay.gif)
 
-- HTML
-- CSS
-- JavaScript
-- IMGs (linked via css url())
-- Fonts
-- Webpack dev server
+## 🎯 Features
 
-## Installation Instructions
+- Dynamic ship placement with validation (no overlaps or out-of-bounds)
+- Player vs. Computer gameplay with turn-based mechanics
+- Computer AI that places ships randomly with retry logic and avoids duplicate attacks
+- Attack tracking with hit/miss feedback
+- Victory detection based on sunk ships
+- Modular JavaScript structure using ES6 classes and Webpack
+- Unit testing with Jest for game logic
 
-1. Clone this repo:
+## 🧰 Tech Stack
 
-   git clone clone https://github.com/Blakem07/webpack-template.git
+- HTML5 / CSS3
+- JavaScript (ES6 Classes & Modules)
+- Webpack
+- Jest (unit testing)
 
-2. Install dependencies:
+## 🚀 Live Demo
 
-   npm install
-   npm init -y
-   npm install --save-dev webpack webpack-cli
-   npm install --save-dev html-webpack-plugin
-   npm install --save-dev style-loader css-loader
-   npm install --save-dev webpack-dev-server
+👉 [Play Battleship](https://your-username.github.io/battleship) (add this once deployed)
 
-## Usage
+## 🛠️ Installation & Setup
 
-    To rebundle - npx webpack
-    To run on live server - npx webpack serve
-    To run server & jest concurrently - npm run dev
-
-# Using Jest & Babel
-
-npm install --save-dev babel-jest @babel/core @babel/preset-env
-
-## Usage
-
-    To run one test - npx jest
-    To auto run tests on changes - npx jest --watchAll
-    To run server & jest concurrently - npm run dev
-
-## Running Tests
-
-This project uses [Jest](https://jestjs.io/) for unit testing.
-
-The `jsdom` environment is used to simulate a browser-like environment for tests involving the DOM or browser APIs. This is configured using a file-level directive:
-
-```js
-/**
- * @jest-environment jsdom
- */
+```bash
+git clone https://github.com/Blakem07/battleship.git
+cd battleship
+npm install
 ```
+
+## 💻 Running the Project
+
+To start the development server and run tests simultaneously:
+
+```bash
+npm run dev
+```
+
+## 📦 Project Structure Overview
+
+- **Ship**: Represents individual ships, tracks hits and sunk status.
+- **Gameboard**: Manages 10x10 grid, ship placement, attack resolution, and board state.
+- **Player**: Encapsulates gameboard, handles attacking and ship placement interfaces.
+- **Computer**: AI controller for ship placement and attacks with retry logic and attack memory.

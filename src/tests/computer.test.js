@@ -2,7 +2,6 @@ import Ship from "../classes/Ship";
 import Gameboard from "../classes/Gameboard";
 import Player from "../classes/Player";
 import Computer from "../classes/Computer";
-import { forEach } from "neo-async";
 
 describe("Computer Class Tests", () => {
   let computerPlayer;
