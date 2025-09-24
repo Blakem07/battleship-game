@@ -25,7 +25,7 @@ A web-based version of the classic Battleship game, built with JavaScript, HTML,
 
 ## 🚀 Live Demo
 
-👉 [Play Battleship](https://your-username.github.io/battleship) (add this once deployed)
+👉 [Play Battleship](https://Blakem07.github.io/battleship-game/)
 
 ## 🛠️ Installation & Setup
 
