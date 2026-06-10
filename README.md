@@ -1,51 +1,105 @@
 # Battleship Game
 
-A web-based version of the classic Battleship game, built with JavaScript, HTML, CSS, and Webpack. The game features modular classes for the player, AI, gameboard, and ships with clean separation of concerns and includes basic AI logic for computer opponent ship placement and attacks.
+A browser-based implementation of Battleship focused on JavaScript fundamentals, modular design, and unit-tested game logic.
 
-## 📸 Screenshots
+## Summary
 
-![Battleship gameplay](./assets/battleship-gameplay.gif)
+- Modular ES6 class architecture using `Ship`, `Gameboard`, `Player`, `Computer`, `GameController`, and `UI`
+- Validated ship placement with overlap and out-of-bounds prevention
+- Turn-based player vs computer gameplay
+- Hit, miss, sunk-ship, and victory-state tracking
+- Duplicate-attack prevention for both player and computer actions
+- Basic computer opponent logic with randomized placement, attack selection, retry logic, and attack memory
+- Webpack-based build setup
+- Jest unit tests covering core game behaviour
 
-## 🎯 Features
+## Demo
 
-- Dynamic ship placement with validation (no overlaps or out-of-bounds)
-- Player vs. Computer gameplay with turn-based mechanics
-- Computer AI that places ships randomly with retry logic and avoids duplicate attacks
-- Attack tracking with hit/miss feedback
-- Victory detection based on sunk ships
-- Modular JavaScript structure using ES6 classes and Webpack
-- Unit testing with Jest for game logic
+![Battleship gameplay](assets/battleship-gameplay.gif)
 
-## 🧰 Tech Stack
+## Technical Highlights
 
-- HTML5 / CSS3
-- JavaScript (ES6 Classes & Modules)
+### Modular JavaScript Architecture
+
+The project separates core game rules from DOM interaction. Game entities are modelled with ES6 classes, keeping placement, attack resolution, player behaviour, and UI updates easier to test and reason about.
+
+### Ship Placement Validation
+
+`Gameboard` validates ship placement before updating board state, preventing overlapping ships and out-of-bounds placement.
+
+### Attack Tracking
+
+`receiveAttack` records hit and miss outcomes, updates ship state, prevents duplicate attacks, and supports victory detection when all ships are sunk.
+
+### Computer Behaviour
+
+The computer opponent uses randomized ship placement and attack selection, with retry logic and memory of previous attacks to avoid duplicate moves.
+
+### Testing
+
+Jest tests cover constructors, ship placement, attack resolution, duplicate attack handling, computer behaviour, and controller flow.
+
+## Tech Stack
+
+- JavaScript
+- HTML5
+- CSS3
 - Webpack
-- Jest (unit testing)
+- Jest
+- Babel
 
-## 🚀 Live Demo
-
-👉 [Play Battleship](https://Blakem07.github.io/battleship-game/)
-
-## 🛠️ Installation & Setup
+## Installation
 
 ```bash
-git clone https://github.com/Blakem07/battleship.git
-cd battleship
+git clone https://github.com/Blakem07/battleship-game.git
+cd battleship-game
 npm install
 ```
 
-## 💻 Running the Project
+## Development
 
-To start the development server and run tests simultaneously:
+Start the development server:
 
 ```bash
-npm run dev
+npm run start
 ```
 
-## 📦 Project Structure Overview
+Run tests:
 
-- **Ship**: Represents individual ships, tracks hits and sunk status.
-- **Gameboard**: Manages 10x10 grid, ship placement, attack resolution, and board state.
-- **Player**: Encapsulates gameboard, handles attacking and ship placement interfaces.
-- **Computer**: AI controller for ship placement and attacks with retry logic and attack memory.
+```bash
+npm test
+```
+
+## Repository Structure
+
+```text
+.
+├── assets/                 Static project assets
+├── dist/                   Production build output
+├── src/
+│   ├── classes/            Core game modules
+│   │   ├── Ship.js         Ship state, hits, and sunk status
+│   │   ├── Gameboard.js    Grid state, placement validation, and attack handling
+│   │   ├── Player.js       Human player model
+│   │   ├── Computer.js     Computer opponent behaviour
+│   │   ├── GameController.js
+│   │   ├── UI.js           DOM interaction and rendering
+│   │   ├── constants.js
+│   │   └── index.js
+│   ├── font/               Font assets
+│   ├── img/                Image assets
+│   ├── tests/              Jest test suites
+│   ├── App.js              Application setup
+│   ├── index.js            Entry point
+│   ├── styles.css          Global styles
+│   └── css-reset.css       CSS reset
+├── template.html           HTML template
+├── webpack.config.mjs      Webpack configuration
+├── jest.config.js          Jest configuration
+├── babel.config.js         Babel configuration
+└── package.json            Scripts and dependencies
+```
+
+## Purpose
+
+This project demonstrates modular JavaScript design, object-oriented programming, state management, DOM interaction, and unit testing without relying on a front-end framework.
